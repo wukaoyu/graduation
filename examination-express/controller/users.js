@@ -6,7 +6,13 @@ const login = (username, password) => {
         return row[0] || {}
     })
 }
-
+const queryAllUsers = () => {
+    let sql = `SELECT * FROM users`
+    return exec(sql).then(row => {
+        return row || {}
+    })
+}
 module.exports = {
-    login
+    login,
+    queryAllUsers
 }
