@@ -22,5 +22,4 @@ if (env === 'production') {
         database: "graduation"
     }
 }
-
 module.exports = { MYSQL_CONF }
