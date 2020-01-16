@@ -4,9 +4,8 @@ const { SuccessModel, ErrorModel } = require("../model/resModel");
 const { login, queryAllUsers } = require("../controller/users")
 
 router.post('/login', function(req, res, next) {
-  const {username, password} = req.body
-    // console.log(username)
-    const result = login(username,password);
+  const {username, password, identity} = req.body
+    const result = login(username,password,identity);
     const resultData = result.then(data => {
         if (data.username) {
             //存入cookie
@@ -26,7 +25,7 @@ router.get('/queryAllUsers', function(req, res, next) {
           if (data) {
               return new SuccessModel(data)
           }
-          return new ErrorModel('登录失败')
+          return new ErrorModel('查询失败')
       })
       resultData.then(data => {
           res.json(data)
