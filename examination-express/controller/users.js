@@ -2,7 +2,7 @@ const { exec } = require('../db/mysql')
 
 const login = (username, password, identity) => {
     let queryTable
-    console.log(identity)
+    // console.log(identity)
     if (identity === 1) {
         queryTable = 'users'
     }else if (identity === 2) {

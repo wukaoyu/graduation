@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const JwtUtil = require('./public/utils/jwt');
 
 var usersRouter = require('./routes/users');
 
@@ -27,13 +28,31 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function (req, res, next) {
+  // 我这里知识把登录请求去掉了，其他的多有请求都需要进行token校验 
+  if (req.url != '/api/user/login') {
+      let token = req.headers.token;
+      let jwt = new JwtUtil(token);
+      let result = jwt.verifyToken();
+      // 如果考验通过就next，否则就返回登陆信息不正确
+      if (result == 'err') {
+          console.log(result);
+          res.send({status: 403, msg: '登录已过期,请重新登录'});
+          // res.render('login.html');
+      } else {
+          next();
+      }
+  } else {
+      next();
+  }
+});
+
 app.use('/api/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development

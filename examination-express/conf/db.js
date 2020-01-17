@@ -9,7 +9,8 @@ if (env === 'dev') {
         user: "root",
         password: "7777",
         port: "3306",
-        database: "graduation"
+        database: "graduation",
+        dateStrings: true
     }
 }
 
@@ -19,7 +20,8 @@ if (env === 'production') {
         user: "root",
         password: "7777",
         port: "3306",
-        database: "graduation"
+        database: "graduation",
+        dateStrings: true
     }
 }
 module.exports = { MYSQL_CONF }

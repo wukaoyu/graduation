@@ -360,6 +360,27 @@ module.exports = function(webpackEnv) {
           // match the requirements. When no loader matches it will fall
           // back to the "file" loader at the end of the loader list.
           oneOf: [
+            {
+              test: /\.less$/,
+              use: [{
+                loader: 'style-loader',
+              }, {
+                loader: 'css-loader', // translates CSS into CommonJS
+              }, {
+                loader: 'less-loader', // compiles Less to CSS
+                options: {
+                  modifyVars: {
+                    'primary-color': '#1DA57A',
+                    'link-color': '#1DA57A',
+                    'border-radius-base': '2px',
+                    // or
+                    'hack': `true;`, // Override with less file
+                  },
+                  javascriptEnabled: true,
+               },
+              }],
+              // ...other rules
+            },
             // "url" loader works like "file" loader except that it embeds assets
             // smaller than specified limit in bytes as data URLs to avoid requests.
             // A missing `test` is equivalent to a match.
@@ -381,8 +402,8 @@ module.exports = function(webpackEnv) {
                 customize: require.resolve(
                   'babel-preset-react-app/webpack-overrides'
                 ),
-                
                 plugins: [
+                  ['import',{libraryName:'antd', style:true}],
                   [
                     require.resolve('babel-plugin-named-asset-import'),
                     {

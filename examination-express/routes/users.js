@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const JwtUtil = require('../public/utils/jwt');
 const { SuccessModel, ErrorModel } = require("../model/resModel");
 const { login, queryAllUsers } = require("../controller/users")
 
@@ -9,7 +10,11 @@ router.post('/login', function(req, res, next) {
     const resultData = result.then(data => {
         if (data.username) {
             //存入cookie
-            // res.setHeader("Set-Cookie", `name=${data.name};path=/; httpOnly; expires=${getCookieTime()}`);
+            let _id = data.id;
+            // 将用户id传入并生成token
+            let jwt = new JwtUtil(_id);
+            let token = jwt.generateToken();
+            data.token = token
             return new SuccessModel(data)
         }
         return new ErrorModel('登录失败')
