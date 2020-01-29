@@ -22,6 +22,7 @@ function checkStatus(response){
 
 export default  function request(options = {}){
   const {data,url} = options
+  let token = localStorage.getItem("token") || '';
   options = {...options}
   options.mode = 'cors'//跨域
   delete options.url
@@ -30,7 +31,8 @@ export default  function request(options = {}){
     options.body = JSON.stringify(data)
   }
   options.headers={
-    'Content-Type':'application/json'
+    'Content-Type':'application/json',
+    token
   }
   return fetch(commonUrl+url,options,{credentials: 'include'})
     .then(checkStatus)

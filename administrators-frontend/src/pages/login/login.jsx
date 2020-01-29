@@ -1,15 +1,9 @@
 import React from 'react'
 import { Button, Form, Input, Icon } from 'antd'
-import {FormComponentProps} from 'antd/lib/form/Form';
 import { login } from '../../api/login'
 import './login.less'
 const FormItem = Form.Item
-interface CreateNoticeModalProps extends FormComponentProps {
-    isShow: boolean
-    onCancel: any
-    onOk: any
-}
-class Login extends React.Component<CreateNoticeModalProps, {}>  {
+class Login extends React.Component  {
     constructor(props) {
         super(props)
     }
@@ -17,7 +11,16 @@ class Login extends React.Component<CreateNoticeModalProps, {}>  {
         let userInfo = this.props.form.getFieldsValue()
         userInfo.identity = 1
         login(userInfo).then(res => {
-            console.log(res)
+            if (res.errno === 0) {
+                localStorage.setItem('token',res.data.token)
+                const userInfo = {
+                    name: res.data.name,
+                    createName: res.data.createName,
+                    identity: res.data.identity
+                }
+                localStorage.setItem('userInfo', JSON.stringify(userInfo))
+                this.props.history.push('/admin')
+            }
         })
     }
     render() {
@@ -59,4 +62,4 @@ class Login extends React.Component<CreateNoticeModalProps, {}>  {
     }
 }
 
-export default Form.create<CreateNoticeModalProps>()(Login)
+export default Form.create()(Login)

@@ -12,7 +12,7 @@ var app = express();
 
 app.all('*', function (req, res, next) {    
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Content-type");
+  res.header("Access-Control-Allow-Headers", "Content-type,token");
   res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
   res.header("X-Powered-By", ' 3.2.1');
   res.header("Content-Type", "application/json;charset=utf-8");
@@ -30,13 +30,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function (req, res, next) {
   // 我这里知识把登录请求去掉了，其他的多有请求都需要进行token校验 
-  if (req.url != '/api/user/login') {
+  if (req.url != '/api/users/login') {
       let token = req.headers.token;
       let jwt = new JwtUtil(token);
       let result = jwt.verifyToken();
       // 如果考验通过就next，否则就返回登陆信息不正确
       if (result == 'err') {
-          console.log(result);
           res.send({status: 403, msg: '登录已过期,请重新登录'});
           // res.render('login.html');
       } else {
