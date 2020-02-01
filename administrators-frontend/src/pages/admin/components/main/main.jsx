@@ -3,6 +3,7 @@ import {Row, Col} from 'antd'
 import ScrollView from 'react-custom-scrollbars'
 import NavLeft from '../navLeft/navLeft'
 import Footer from '../footer/footer'
+import Header from '../header/header'
 import './main.less'
 export default class Main extends React.Component {
     render() {
@@ -12,6 +13,7 @@ export default class Main extends React.Component {
                     <NavLeft></NavLeft>
                 </Col>
                 <Col span={19}>
+                    <Header></Header>
                     <Row className="cont-content">
                         <div className="content-scroll"> 
                             <ScrollView>
