@@ -5,7 +5,7 @@ export default class Header extends React.Component{
     state={
         userInfo: JSON.parse(localStorage.getItem('userInfo'))
     }
-    componentWillMount(){
+    UNSAFE_componentWillMount(){
         this.setState({
             userName:this.state.userInfo.name
         })

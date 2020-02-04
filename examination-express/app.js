@@ -6,6 +6,7 @@ var logger = require('morgan');
 const JwtUtil = require('./public/utils/jwt');
 
 var usersRouter = require('./routes/users');
+var adminRouter = require('./routes/admin');
 
 
 var app = express();
@@ -47,6 +48,7 @@ app.use(function (req, res, next) {
 });
 
 app.use('/api/users', usersRouter);
+app.use('/api/admin', adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

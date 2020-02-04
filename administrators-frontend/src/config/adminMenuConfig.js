@@ -1,15 +1,15 @@
 const adminMenuList = [
     {
-        title:'教师账号管理',
+        title:'账号管理',
         key:'/admin/teacherAccount',
         children:[
             {
-                title:'用户账号',
-                key:'/main/teacherAccount/account',
+                title:'教师账号',
+                key:'/admin/account/teacher',
             },
             {
                 title:'管理员账号',
-                key:'/main/account/admin',
+                key:'/admin/account/admin',
             },
         ]
     },

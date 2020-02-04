@@ -6,6 +6,12 @@ const FormItem = Form.Item
 class Login extends React.Component  {
     constructor(props) {
         super(props)
+        const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+        if (userInfo) { 
+            if (userInfo.identity === 1) {
+                window.location.href = '/#/admin/account/teacher'
+            }
+        }
     }
     userLogin = () => {
         let userInfo = this.props.form.getFieldsValue()
@@ -19,7 +25,7 @@ class Login extends React.Component  {
                     identity: res.data.identity
                 }
                 localStorage.setItem('userInfo', JSON.stringify(userInfo))
-                this.props.history.push('/admin')
+                this.props.history.push('/admin/account/teacher')
             }
         })
     }

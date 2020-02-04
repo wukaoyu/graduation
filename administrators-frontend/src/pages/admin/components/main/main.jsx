@@ -1,5 +1,5 @@
 import React from 'react'
-import {Row, Col} from 'antd'
+import { Row } from 'antd'
 import ScrollView from 'react-custom-scrollbars'
 import NavLeft from '../navLeft/navLeft'
 import Footer from '../footer/footer'
@@ -8,11 +8,11 @@ import './main.less'
 export default class Main extends React.Component {
     render() {
         return(
-            <Row>
-                <Col span={5} className="nav-left">
+            <div className="nav-box">
+                <div className="nav-left">
                     <NavLeft></NavLeft>
-                </Col>
-                <Col span={19}>
+                </div>
+                <div className="nav-right">
                     <Header></Header>
                     <Row className="cont-content">
                         <div className="content-scroll"> 
@@ -22,8 +22,8 @@ export default class Main extends React.Component {
                         </div>
                     </Row>
                     <Footer></Footer>
-                </Col>
-            </Row>
+                </div>
+            </div>
         )
     }
 }

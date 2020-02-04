@@ -34,8 +34,16 @@ export default  function request(options = {}){
     'Content-Type':'application/json',
     token
   }
-  return fetch(commonUrl+url,options,{credentials: 'include'})
+
+  const result = fetch(commonUrl+url,options,{credentials: 'include'})
     .then(checkStatus)
     .then(parseJSON)
     .catch(err=>({err}))
+  result.then(res => {
+    if (res.status === 403) {
+      localStorage.removeItem('userInfo');
+      localStorage.removeItem('token');
+    }
+  })
+  return result
 }
