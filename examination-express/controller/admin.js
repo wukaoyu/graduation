@@ -17,16 +17,16 @@ const queryTeacherAccount = (username, createBy, sex, account, startTime, endTim
     if (createBy !== undefined) {
         sql += `and a.createBy like '%${createBy}%' `
     }
-    if (sex !== undefined) {
-        sql += `and a.sex=${sex}`
+    if (sex !== undefined && sex !== '') {
+        sql += `and a.sex=${sex} `
     }
     if (account !== undefined) {
         sql += `and a.account like '%${account}%' `
     }
     if (startTime !== undefined && endTime !==undefined) {
-        sql += `and a.createTime BETWEEN ${startTime} AND ${endTime} `
+        sql += `and a.createTime BETWEEN '${startTime}' AND '${endTime}' `
     }
-    console.log(sql)
+    // console.log(sql)
     return exec(sql).then(row => {
         return row || []
     })
@@ -42,7 +42,50 @@ const queryAllAdmin = () => {
     })
 }
 
+/**
+ * 增加教师账号
+ * @param {String} username 姓名 
+ * @param {String} password 密码
+ * @param {Number} createBy 创建人的id
+ * @param {String} createTime 创建时间
+ * @param {Number} identity 身份
+ * @param {Number} account 账号
+ * @param {Number}} sex 性别 1为男，0为女
+ */
+const insertTeacherAccount = (username, password, createBy, createTime, identity, account, sex) => {
+    let sql = `INSERT INTO teacher (username, password, createBy, createTime, identity, account, sex) VALUES ('${username}', '${password}', ${createBy}, '${createTime}', ${identity}, '${account}', ${sex})`
+    return exec(sql).then(row => {
+        return row || {}
+    })
+}
+/**
+ * 更新教师账号
+ * @param {String} username 用户名
+ * @param {String} password 密码
+ * @param {String} account 账号
+ * @param {Number} sex 性别
+ * @param {Number} id 更改的ID
+ */
+const updataTeacherAccount = (username, password, account, sex, id) => {
+    let sql = `UPDATE teacher SET username='${username}', password = '${password}', account='${account}', sex=${sex}  WHERE id = ${id}`
+    return exec(sql).then(row => {
+        return row || {}
+    })
+}
+/**
+ * 删除教师账号
+ * @param {*} id 删除的教师id
+ */
+const deleteTeacherAccount = (id) => {
+    let sql = `DELETE FROM teacher WHERE id = ${id}`
+    return exec(sql).then(row => {
+        return row || {}
+    })
+}
 module.exports = {
     queryTeacherAccount,
-    queryAllAdmin
+    queryAllAdmin,
+    insertTeacherAccount,
+    updataTeacherAccount,
+    deleteTeacherAccount
 }

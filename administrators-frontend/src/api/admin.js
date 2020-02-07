@@ -20,3 +20,37 @@ export async function queryAllAdmin(data = {}) {
       data: data
     })
 }
+
+/**
+ * 添加教师账号
+ * @param {*} data 
+ */
+export async function insertTeacherAccount(data = {}) {
+    return request({
+        url:'/admin/insertTeacherAccount',
+        method:'POST',
+        data: data
+      })
+}
+/**
+ * 修改教师账号
+ * @param {*} data 
+ */
+export async function updataTeacherAccount(data = {}) {
+    return request({
+        url:'/admin/updataTeacherAccount',
+        method:'POST',
+        data: data
+      })
+}
+/**
+ * 删除教师账号
+ * @param {*} data 
+ */
+export async function deleteTeacherAccount(data = {}) {
+    return request({
+        url:'/admin/deleteTeacherAccount',
+        method:'POST',
+        data: data
+      })
+}

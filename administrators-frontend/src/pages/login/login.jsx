@@ -22,7 +22,8 @@ class Login extends React.Component  {
                 const userInfo = {
                     name: res.data.name,
                     createName: res.data.createName,
-                    identity: res.data.identity
+                    identity: res.data.identity,
+                    id: res.data.id
                 }
                 localStorage.setItem('userInfo', JSON.stringify(userInfo))
                 this.props.history.push('/admin/account/teacher')

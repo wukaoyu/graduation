@@ -1,7 +1,10 @@
 import React  from 'react';
-import { Table, Button, Form, Input } from 'antd'
-import { queryTeacherPage, queryAllAdmin } from '../../../../api/admin'
+import { Table, Button, Form, Input, Select, DatePicker, Modal, message, Popover } from 'antd'
+import { queryTeacherPage, queryAllAdmin, insertTeacherAccount, updataTeacherAccount, deleteTeacherAccount } from '../../../../api/admin'
+import AddOrEditor from './addOrEditor'
 const { Column } = Table;
+const { Option } = Select;
+const { RangePicker } = DatePicker
 const FormItem = Form.Item
 class TeacherAccount extends React.Component {
     constructor(props) {
@@ -13,7 +16,12 @@ class TeacherAccount extends React.Component {
                 total: 0,// 数据总数
             },
             teacherData: [],
-            adminList: []
+            adminList: [],
+            visible: false, // 是否显示编辑账号的弹窗
+            addOrEditorTitle: '',
+            editorData: {},
+            userInfo: JSON.parse(localStorage.getItem('userInfo')),
+            isShowTeacherForm: true
         }
         this.funTeacherPage()
         this.funQueryAllAdmin()
@@ -47,7 +55,7 @@ class TeacherAccount extends React.Component {
                                 initialValue: '',
                                 rules: []
                             })(
-                                <Input onChange={(e) => this.changeSelect()}/>
+                                <Input style={{ width: 150 }} onChange={() => this.changeSelect()}/>
                             )
                         }
                     </FormItem>
@@ -57,24 +65,72 @@ class TeacherAccount extends React.Component {
                                 initialValue: '',
                                 rules: []
                             })(
-                                <Input onChange={(e) => this.changeSelect()}/>
+                                <Input style={{ width: 150 }} onChange={() => this.changeSelect()}/>
                             )
                         }
                     </FormItem>
                     <FormItem label='创建者'>
-                        <Input/>
+                        {
+                            getFieldDecorator('createBy',{
+                                initialValue: '',
+                                rules: []
+                            })(
+                                <Select
+                                showSearch
+                                allowClear
+                                onChange={() => this.changeSelect()}
+                                filterOption={(input, option) =>
+                                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                }
+                                style={{ width: 150 }}>
+                                    {
+                                        this.state.adminList.map(item => {
+                                            return <Option key={item.id} value={item.id}>{item.name}</Option>
+                                        })
+                                    }
+                                </Select>
+                            )
+                        }
                     </FormItem>
                     <FormItem label='性别'>
-                        <Input/>
+                        {
+                            getFieldDecorator('sex',{
+                                initialValue: '',
+                                rules: []
+                            })(
+                                <Select
+                                allowClear
+                                style={{ width: 150 }}
+                                onChange={() => this.changeSelect()}>
+                                <Option key={1} value={1}>男</Option>
+                                <Option key={0} value={0}>女</Option>
+                                </Select>
+                            )
+                        }
                     </FormItem>
-                    <FormItem label='创建时间'>
-                        <Input/>
+                    <FormItem label='创建时间'
+                        labelCol={{
+                            xs: { span: 24 },
+                            sm: { span: 4 },
+                        }}
+                        wrapperCol={{
+                            xs: { span: 24 },
+                            sm: { span: 20 },
+                        }}>
+                        {
+                            getFieldDecorator('time',{
+                                initialValue: '',
+                                rules: []
+                            })(
+                               <RangePicker onChange={() => this.changeSelect()}/> 
+                            )
+                        }
                     </FormItem>
-                    <FormItem>
-                        <Button type="primary" onClick={ () => this.handAddOrEditor()}>新增</Button>
+                    <FormItem colon={false} label=' '>
+                        <Button type="primary" onClick={ () => this.handAddAccount()}>新增</Button>
                     </FormItem>
                 </Form>
-                <Table dataSource={this.state.teacherData} rowKey={record => record.id} pagination={paginationProps}>
+                <Table style={{marginTop: '20px'}} dataSource={this.state.teacherData} rowKey={record => record.id} pagination={paginationProps}>
                     <Column title="序号" dataIndex="index" key="index" align='center' width='150' render={(text,record,index) => (
                         index+1
                     )} />
@@ -85,11 +141,31 @@ class TeacherAccount extends React.Component {
                     <Column title='性别' dataIndex='sex' key='sex' align='center'/>
                     <Column title='操作' dataIndex='handle' key='handle' align='center' render={(text,record,index) => (
                         <div>
-                            <Button style={{marginRight:'10px'}}>编辑</Button>
-                            <Button type="danger">删除</Button>
+                            <Button style={{marginRight:'10px'}} onClick={ () => this.handAddAccount(record)}>编辑</Button>
+                            <Popover trigger='click' content = {
+                                <div>
+                                    <p>删除后将无法复原数据，确认删除吗？</p>
+                                    <Button type="danger" size={'small'} onClick={ () => this.handDeleteAccount(record.id)}>确认</Button>
+                                </div>
+                            }>
+                                <Button type="danger">删除</Button>
+                            </Popover>
                         </div>
                     )}/>
                 </Table>
+                <Modal
+                title={this.state.addOrEditorTitle}
+                visible={this.state.visible}
+                onCancel={this.handCloseAccount}
+                footer={
+                    [] // 设置footer为空，去掉 取消 确定默认按钮
+                }>
+                    {
+                        this.state.isShowTeacherForm ? 
+                        <AddOrEditor editorData={this.state.editorData} handleCloseAccount={this.handCloseAccount} addOrEditorAccount={this.addOrEditorAccount}/>
+                        : null
+                    }
+                </Modal>
             </div>
         )
     }
@@ -98,6 +174,11 @@ class TeacherAccount extends React.Component {
      */
     funTeacherPage = () => {
         const formData = this.props.form.getFieldsValue()
+        if (formData.time && formData.time.length !== 0) {
+            formData.startTime = formData.time[0].format('YYYY-MM-DD') + ' 00:00:00'
+            formData.endTime = formData.time[1].format('YYYY-MM-DD')+ ' 23:59:59'
+            delete formData.time
+        }
         let selectData = Object.assign({}, this.state.pageData, formData) 
         queryTeacherPage(selectData).then(res => {
             if (res.errno === 0) {
@@ -160,6 +241,78 @@ class TeacherAccount extends React.Component {
         let timeout = setTimeout(() => {
             this.funTeacherPage()
             clearTimeout(timeout)
+        })
+    }
+    /**
+     * 跳出编辑账号的弹窗
+     */
+    handAddAccount = (data = {}) => {
+        let title
+        if (data.id) {
+            title = '修改账号'
+        }else {
+            title = '增加账号'
+        }
+        this.setState({
+            visible: true,
+            addOrEditorTitle: title,
+            editorData: data,
+            isShowTeacherForm: true
+        });
+    }
+    /**
+     * 关闭编辑账号的弹窗
+     */
+    handCloseAccount = () => {
+        this.setState({
+            visible: false
+        });
+        let timeout = setTimeout(() => {
+            this.setState({
+                isShowTeacherForm: false
+            });
+            clearTimeout(timeout)
+        },200)
+    }
+    /**
+     * 添加教师账号
+     * @param {*} value 账号信息
+     */
+    addOrEditorAccount = (value) => {
+        if (this.state.editorData.id) {
+            value.id = this.state.editorData.id
+            updataTeacherAccount(value).then(res => {
+                if (res.errno === 0) {
+                    message.success('修改成功');
+                }else {
+                    message.success('修改失败');
+                }
+                this.funTeacherPage()
+            })
+        }else {
+            value.createBy = this.state.userInfo.id
+            insertTeacherAccount(value).then(res => {
+                if (res.errno === 0) {
+                    message.success('添加成功');
+                }else {
+                    message.success('添加失败');
+                }
+                this.funTeacherPage()
+            })
+        }
+    }
+    /**
+     * 删除教师账号
+     * @param {Number} id 删除的ID
+     */
+    handDeleteAccount = (id) => {
+        deleteTeacherAccount({id: id}).then(res => {
+            if (res.errno === 0) {
+                message.success('删除成功');
+            }else {
+                message.success('删除失败');
+            }
+            this.funTeacherPage()
         })
     }
 }
