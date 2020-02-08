@@ -1,13 +1,15 @@
 import React from 'react'
 import { Button, Form, Input, Icon } from 'antd'
 import { login } from '../../api/login'
+// 引入解析token方法
+import jwt_decode from 'jwt-decode'
 import './login.less'
 const FormItem = Form.Item
 class Login extends React.Component  {
     constructor(props) {
         super(props)
-        const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-        if (userInfo) { 
+        if (localStorage.getItem('token')) { 
+            const userInfo = jwt_decode(localStorage.getItem('token')).data
             if (userInfo.identity === 1) {
                 window.location.href = '/#/admin/account/teacher'
             }
@@ -19,13 +21,8 @@ class Login extends React.Component  {
         login(userInfo).then(res => {
             if (res.errno === 0) {
                 localStorage.setItem('token',res.data.token)
-                const userInfo = {
-                    name: res.data.name,
-                    createName: res.data.createName,
-                    identity: res.data.identity,
-                    id: res.data.id
-                }
-                localStorage.setItem('userInfo', JSON.stringify(userInfo))
+                const userInfo = jwt_decode(localStorage.getItem('token')).data
+                window.userInfo = userInfo
                 this.props.history.push('/admin/account/teacher')
             }
         })

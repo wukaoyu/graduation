@@ -4,15 +4,23 @@ import App from './App'
 import Login from './pages/login/login.jsx'
 import AdminMain from './pages/admin/components/main/main.jsx'
 import TeacherAccount from './pages/admin/account/teacherAccount/index'
+import jwt_decode from 'jwt-decode'
 
 export default class Router extends React.Component {
     constructor(props) {
         super(props)
-        if (!localStorage.getItem('token') || !localStorage.getItem('userInfo')) {
-            window.location.href = '/#/';
-        } 
     }
-
+    UNSAFE_componentWillMount() {
+        if (!localStorage.getItem('token')) {
+            window.location.href = '/#/';
+        }else {
+            const userInfo = jwt_decode(localStorage.getItem('token')).data
+            window.userInfo = userInfo
+            if (userInfo.identity === 1) {
+                window.location.href = '/#/admin/account/teacher'
+            }
+        }
+    }
     render() {
         return (
             <HashRouter>

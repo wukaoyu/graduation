@@ -2,6 +2,7 @@ import React  from 'react';
 import { Table, Button, Form, Input, Select, DatePicker, Modal, message, Popover } from 'antd'
 import { queryTeacherPage, queryAllAdmin, insertTeacherAccount, updataTeacherAccount, deleteTeacherAccount } from '../../../../api/admin'
 import AddOrEditor from './addOrEditor'
+import './index.less'
 const { Column } = Table;
 const { Option } = Select;
 const { RangePicker } = DatePicker
@@ -20,7 +21,7 @@ class TeacherAccount extends React.Component {
             visible: false, // 是否显示编辑账号的弹窗
             addOrEditorTitle: '',
             editorData: {},
-            userInfo: JSON.parse(localStorage.getItem('userInfo')),
+            userInfo: window.userInfo,
             isShowTeacherForm: true
         }
         this.funTeacherPage()
@@ -142,10 +143,12 @@ class TeacherAccount extends React.Component {
                     <Column title='操作' dataIndex='handle' key='handle' align='center' render={(text,record,index) => (
                         <div>
                             <Button style={{marginRight:'10px'}} onClick={ () => this.handAddAccount(record)}>编辑</Button>
-                            <Popover trigger='click' content = {
+                            <Popover placement="topRight" trigger='click' content = {
                                 <div>
-                                    <p>删除后将无法复原数据，确认删除吗？</p>
-                                    <Button type="danger" size={'small'} onClick={ () => this.handDeleteAccount(record.id)}>确认</Button>
+                                    <p>删除后将无法复原数据，<br/>确认删除吗？</p>
+                                    <div className='teacher-delete-btn'>
+                                        <Button type="danger" size={'small'} onClick={ () => this.handDeleteAccount(record.id)}>确认</Button>
+                                    </div>
                                 </div>
                             }>
                                 <Button type="danger">删除</Button>

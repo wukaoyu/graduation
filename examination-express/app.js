@@ -30,12 +30,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function (req, res, next) {
-  // 我这里知识把登录请求去掉了，其他的多有请求都需要进行token校验 
   if (req.url != '/api/users/login') {
       let token = req.headers.token;
       let jwt = new JwtUtil(token);
       let result = jwt.verifyToken();
-      // 如果考验通过就next，否则就返回登陆信息不正确
+      // 如果考验通过就next，否则就返回登录信息不正确
       if (result == 'err') {
           res.send({status: 403, msg: '登录已过期,请重新登录'});
           // res.render('login.html');

@@ -2,16 +2,12 @@ import React from 'react'
 import { Row,Col } from "antd"
 import './header.less'
 export default class Header extends React.Component{
-    state={
-        userInfo: JSON.parse(localStorage.getItem('userInfo'))
-    }
     UNSAFE_componentWillMount(){
         this.setState({
-            userName:this.state.userInfo.name
+            userName:window.userInfo.name
         })
     }
     loginOut = () => {
-        localStorage.removeItem('userInfo');
         localStorage.removeItem('token');
     }
     render(){

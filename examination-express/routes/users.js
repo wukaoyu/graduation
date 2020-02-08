@@ -9,10 +9,17 @@ router.post('/login', function(req, res, next) {
     const result = login(username,password,identity);
     const resultData = result.then(data => {
         if (data.username) {
-            //存入cookie
-            let _id = data.id;
-            // 将用户id传入并生成token
-            let jwt = new JwtUtil(_id);
+            // 将用户信息传入并生成token
+            const tokenData = {
+                id: data.id,
+                username: data.username,
+                name: data.name,
+                createBy: data.createBy,
+                createTime: data.createTime,
+                identity: data.identity,
+                createName: data.createName
+            }
+            let jwt = new JwtUtil(tokenData);
             let token = jwt.generateToken();
             data.token = token
             return new SuccessModel(data)

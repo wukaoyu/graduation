@@ -8,7 +8,7 @@ class addOrEditorTeacher extends React.Component {
     constructor(props) {
         super(props)
     }
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         const { editorData } = this.props
         const newData = Object.assign({}, editorData)
         if (newData.sex === '男') {
@@ -82,7 +82,7 @@ class addOrEditorTeacher extends React.Component {
                 <FormItem label='性别'>
                     {
                         getFieldDecorator('sex',{
-                            initialValue:this.state.editorData.sex || '',
+                            initialValue:this.state.editorData.sex >= 0 ? this.state.editorData.sex : '',
                             rules: [
                                 {
                                     required: true,
