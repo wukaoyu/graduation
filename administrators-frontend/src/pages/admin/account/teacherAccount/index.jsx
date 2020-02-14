@@ -1,11 +1,12 @@
 import React  from 'react';
-import { Table, Button, Form, Input, Select, DatePicker, Modal, message, Popover } from 'antd'
-import { queryTeacherPage, queryAllAdmin, insertTeacherAccount, updataTeacherAccount, deleteTeacherAccount } from '../../../../api/admin'
+import { Table, Button, Form, Input, Select, DatePicker, Modal, message, Popover, Upload, Icon } from 'antd'
+import { queryTeacherPage, queryAllAdmin, insertTeacherAccount, updataTeacherAccount, deleteTeacherAccount, fileTeacherAccount } from '../../../../api/admin'
 import AddOrEditor from './addOrEditor'
 import './index.less'
 const { Column } = Table;
 const { Option } = Select;
 const { RangePicker } = DatePicker
+const { Dragger } = Upload;
 const FormItem = Form.Item
 class TeacherAccount extends React.Component {
     constructor(props) {
@@ -22,7 +23,8 @@ class TeacherAccount extends React.Component {
             addOrEditorTitle: '',
             editorData: {},
             userInfo: window.userInfo,
-            isShowTeacherForm: true
+            isShowTeacherForm: true,
+            uploadFile: '',
         }
         this.funTeacherPage()
         this.funQueryAllAdmin()
@@ -123,7 +125,7 @@ class TeacherAccount extends React.Component {
                                 initialValue: '',
                                 rules: []
                             })(
-                               <RangePicker onChange={() => this.changeSelect()}/> 
+                               <RangePicker onChange={ () => this.changeSelect()}/> 
                             )
                         }
                     </FormItem>
@@ -169,6 +171,19 @@ class TeacherAccount extends React.Component {
                         : null
                     }
                 </Modal>
+                <Modal
+                title={'批量导入'}
+                visible={true}
+                onCancel={this.handCloseAccount}
+                onOk={this.fileUpload}>
+                    <Dragger
+                    beforeUpload={this.getFile}>
+                        <p className="ant-upload-drag-icon">
+                            <Icon type="inbox" />
+                        </p>
+                        <p className="ant-upload-text">单击或拖动文件到此区域上传文件</p>
+                    </Dragger>
+                </Modal>
             </div>
         )
     }
@@ -187,7 +202,7 @@ class TeacherAccount extends React.Component {
             if (res.errno === 0) {
                 res.data.newData.forEach(item => {
                     if (item.sex === 1) {
-                        item.sex = '男'
+                        item.sex = "男"
                     }else {
                         item.sex = '女'
                     }
@@ -316,6 +331,32 @@ class TeacherAccount extends React.Component {
                 message.success('删除失败');
             }
             this.funTeacherPage()
+        })
+    }
+    /**
+     * 文件赋值
+     */
+    getFile = (file) => {
+        this.setState({
+            uploadFile: file
+        })
+        return false
+    }
+    /**
+     * 关闭上传文件的弹窗
+     */
+    closeFile = () => {
+        
+    }
+    /**
+     * 上传文件
+     */
+    fileUpload = () => {
+        let formData = new FormData()
+        formData.append('file', this.state.uploadFile)
+        formData.append('createBy', this.state.userInfo.id)
+        fileTeacherAccount(formData).then(res => {
+            console.log(res)
         })
     }
 }

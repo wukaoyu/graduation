@@ -1,4 +1,4 @@
-import request from '../util/apiHelps'
+import { request } from '../util/apiHelps'
 
 // 登录
 export async function login(data = {}) {

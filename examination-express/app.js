@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const JwtUtil = require('./public/utils/jwt');
+var FileUpload = require('express-fileupload')
 
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
@@ -24,6 +25,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(logger('dev'));
+app.use(FileUpload());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

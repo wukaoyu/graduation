@@ -4,41 +4,56 @@ import 'es6-promise'
 //全局路径
 let commonUrl
 if (process.env.NODE_ENV === 'development') {
-    commonUrl = 'http://localhost:8000/api'
+  commonUrl = 'http://localhost:5000/api'
+}
+export const baseUrl = () => {
+  return commonUrl
 }
 //解析json
-function parseJSON(response){
+function parseJSON(response) {
   return response.json()
 }
 //检查请求状态
-function checkStatus(response){
-  if(response.status >= 200 && response.status < 500){
+function checkStatus(response) {
+  if (response.status >= 200 && response.status < 500) {
     return response
   }
   const error = new Error(response.statusText)
   error.response = response
   throw error
 }
-
-export default  function request(options = {}){
-  const {data,url} = options
+let isFormData = (v) => {
+  return Object.prototype.toString.call(v) === '[object FormData]';
+}
+export const request = (options = {}) => {
+  const { data, url } = options
   let token = localStorage.getItem("token") || '';
-  options = {...options}
+  options = { ...options }
   options.mode = 'cors'//跨域
   delete options.url
-  if(data){
+  if (data) {
     delete options.data
-    options.body = JSON.stringify(data)
+    if (isFormData(data)) {
+      options.body = data
+    } else {
+      options.body = JSON.stringify(data)
+    }
   }
-  options.headers={
-    'Content-Type':'application/json',
-    token
+  if (!options.headers) {
+    if (isFormData(data)) {
+      options.headers = {}
+    }else {
+      options.headers = {
+        'Content-Type': 'application/json'
+      }
+    }
   }
-
-  const result = fetch(commonUrl+url,options,{credentials: 'include'})
+  options.headers.token = token
+  console.log(options)
+  const result = fetch(commonUrl + url, options, { credentials: 'include' })
     .then(checkStatus)
     .then(parseJSON)
-    .catch(err=>({err}))
+    .catch(err => ({ err }))
   result.then(res => {
     if (res.status === 403) {
       localStorage.removeItem('userInfo');

@@ -1,4 +1,4 @@
-import request from '../util/apiHelps'
+import { request } from '../util/apiHelps'
 
 // 查询教师分页信息
 export async function queryTeacherPage(data = {}) {
@@ -53,4 +53,16 @@ export async function deleteTeacherAccount(data = {}) {
         method:'POST',
         data: data
       })
+}
+
+/**
+ * 上传excel表格
+ * @param {*} data 
+ */
+export async function fileTeacherAccount(data = {}) {
+  return request({
+      url:'/admin/fileTeacherAccount',
+      method:'POST',
+      data: data
+    })
 }
