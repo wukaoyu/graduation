@@ -25,6 +25,7 @@ class TeacherAccount extends React.Component {
             userInfo: window.userInfo,
             isShowTeacherForm: true,
             uploadFile: '',
+            fileVisible: false
         }
         this.funTeacherPage()
         this.funQueryAllAdmin()
@@ -129,8 +130,11 @@ class TeacherAccount extends React.Component {
                             )
                         }
                     </FormItem>
-                    <FormItem colon={false} label=' '>
+                    <FormItem colon={false} label=' ' >
                         <Button type="primary" onClick={ () => this.handAddAccount()}>新增</Button>
+                    </FormItem>
+                    <FormItem>
+                        <Button type="primary" onClick={ () => this.handAddFile()}>批量导入</Button>
                     </FormItem>
                 </Form>
                 <Table style={{marginTop: '20px'}} dataSource={this.state.teacherData} rowKey={record => record.id} pagination={paginationProps}>
@@ -173,15 +177,23 @@ class TeacherAccount extends React.Component {
                 </Modal>
                 <Modal
                 title={'批量导入'}
-                visible={true}
-                onCancel={this.handCloseAccount}
-                onOk={this.fileUpload}>
+                visible={this.state.fileVisible}
+                footer={
+                    <div>
+                        <Button onClick={this.handCloseAccount}>取消</Button>
+                        <a href="https://wkydegraduation.oss-cn-beijing.aliyuncs.com/teacherAccount.xls?Expires=1581843377&OSSAccessKeyId=TMP.hhgExt3pBe7jjwaQHmHax1hoDfKxNrj7mK2NFJZAZ7taX4PnVJ5BFLohaPFDH4Pjq9TxctCHXJ7k3PwJVaVXPqDgXYfDCU85R994mEzqYcRiwBaEZqVBcfug2mnoyE.tmp&Signature=A4v3ciwV6nHAUtvwLU53s12vOtU%3D" style={{margin: '0 8px'}}>
+                            <Button type="primary" onClick={this.handCloseAccount}>下载模板</Button>
+                        </a>
+                        <Button type="primary" onClick={this.fileUpload}>上传文件</Button>
+                    </div>
+                }>
                     <Dragger
+                    accept='.xls,.xlsx'
                     beforeUpload={this.getFile}>
                         <p className="ant-upload-drag-icon">
                             <Icon type="inbox" />
                         </p>
-                        <p className="ant-upload-text">单击或拖动文件到此区域上传文件</p>
+                        <p className="ant-upload-text">单击或拖动Excel文件到此区域上传文件</p>
                     </Dragger>
                 </Modal>
             </div>
@@ -346,7 +358,17 @@ class TeacherAccount extends React.Component {
      * 关闭上传文件的弹窗
      */
     closeFile = () => {
-        
+        this.setState({
+            fileVisible: false
+        })
+    }
+    /**
+     * 跳出批量导入文件的弹窗
+     */
+    handAddFile = () => {
+        this.setState({
+            fileVisible: true
+        })
     }
     /**
      * 上传文件
@@ -356,7 +378,16 @@ class TeacherAccount extends React.Component {
         formData.append('file', this.state.uploadFile)
         formData.append('createBy', this.state.userInfo.id)
         fileTeacherAccount(formData).then(res => {
-            console.log(res)
+            if (res.errno === 0) {
+                this.funTeacherPage()
+                this.setState({
+                    fileVisible: false,
+                    uploadFile: []
+                })
+                message.success(res.data)
+            }else {
+                message.warning(res.data)
+            }
         })
     }
 }

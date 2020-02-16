@@ -49,7 +49,6 @@ export const request = (options = {}) => {
     }
   }
   options.headers.token = token
-  console.log(options)
   const result = fetch(commonUrl + url, options, { credentials: 'include' })
     .then(checkStatus)
     .then(parseJSON)
