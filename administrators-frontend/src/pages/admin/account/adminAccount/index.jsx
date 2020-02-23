@@ -1,6 +1,6 @@
 import React  from 'react';
 import { Table, Button, Form, Input, Select, DatePicker, Modal, message, Popover, Upload, Icon } from 'antd'
-import { queryTeacherPage, queryAllAdmin, insertTeacherAccount, updataTeacherAccount, deleteTeacherAccount, fileTeacherAccount } from '../../../../api/admin/account'
+import { queryAdminPage, queryAllAdmin, insertAdminAccount, updataAdminAccount, deleteAdminAccount, fileAdminAccount } from '../../../../api/admin/account'
 import AddOrEditor from './addOrEditor'
 import './index.less'
 const { Column } = Table;
@@ -8,7 +8,7 @@ const { Option } = Select;
 const { RangePicker } = DatePicker
 const { Dragger } = Upload;
 const FormItem = Form.Item
-class TeacherAccount extends React.Component {
+class AdminAccount extends React.Component {
     constructor(props) {
         super(props)
         this.state={
@@ -183,7 +183,7 @@ class TeacherAccount extends React.Component {
                     <div>
                         <Button onClick={this.handCloseFile}>取消</Button>
                         <a href="https://wkydegraduation.oss-cn-beijing.aliyuncs.com/teacherAccount.xls?Expires=1581843377&OSSAccessKeyId=TMP.hhgExt3pBe7jjwaQHmHax1hoDfKxNrj7mK2NFJZAZ7taX4PnVJ5BFLohaPFDH4Pjq9TxctCHXJ7k3PwJVaVXPqDgXYfDCU85R994mEzqYcRiwBaEZqVBcfug2mnoyE.tmp&Signature=A4v3ciwV6nHAUtvwLU53s12vOtU%3D" style={{margin: '0 8px'}}>
-                            <Button>下载模板</Button>
+                            <Button type="primary" >下载模板</Button>
                         </a>
                         <Button type="primary" onClick={this.fileUpload}>上传文件</Button>
                     </div>
@@ -212,7 +212,7 @@ class TeacherAccount extends React.Component {
             delete formData.time
         }
         let selectData = Object.assign({}, this.state.pageData, formData) 
-        queryTeacherPage(selectData).then(res => {
+        queryAdminPage(selectData).then(res => {
             if (res.errno === 0) {
                 res.data.newData.forEach(item => {
                     if (item.sex === 1) {
@@ -313,21 +313,22 @@ class TeacherAccount extends React.Component {
     addOrEditorAccount = (value) => {
         if (this.state.editorData.id) {
             value.id = this.state.editorData.id
-            updataTeacherAccount(value).then(res => {
+            updataAdminAccount(value).then(res => {
                 if (res.errno === 0) {
                     message.success('修改成功');
                 }else {
-                    message.error('修改失败');
+                    message.success('修改失败');
                 }
                 this.funTeacherPage()
             })
         }else {
             value.createBy = this.state.userInfo.id
-            insertTeacherAccount(value).then(res => {
+            value.createName = this.state.userInfo.username
+            insertAdminAccount(value).then(res => {
                 if (res.errno === 0) {
                     message.success('添加成功');
                 }else {
-                    message.error(res.data);
+                    message.success('添加失败');
                 }
                 this.funTeacherPage()
             })
@@ -338,7 +339,7 @@ class TeacherAccount extends React.Component {
      * @param {Number} id 删除的ID
      */
     handDeleteAccount = (id) => {
-        deleteTeacherAccount({id: id}).then(res => {
+        deleteAdminAccount({id: id}).then(res => {
             if (res.errno === 0) {
                 message.success('删除成功');
             }else {
@@ -379,7 +380,8 @@ class TeacherAccount extends React.Component {
         let formData = new FormData()
         formData.append('file', this.state.fileList[0])
         formData.append('createBy', this.state.userInfo.id)
-        fileTeacherAccount(formData).then(res => {
+        formData.append('createName', this.state.userInfo.username)
+        fileAdminAccount(formData).then(res => {
             if (res.errno === 0) {
                 this.funTeacherPage()
                 this.setState({
@@ -402,4 +404,4 @@ class TeacherAccount extends React.Component {
     }
 }
 
-export default Form.create()(TeacherAccount);
+export default Form.create()(AdminAccount);

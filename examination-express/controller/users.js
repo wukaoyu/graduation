@@ -1,6 +1,6 @@
 const { exec } = require('../db/mysql')
 
-const login = (username, password, identity) => {
+const login = (account, password, identity) => {
     let queryTable
     // console.log(identity)
     if (identity === 1) {
@@ -10,7 +10,7 @@ const login = (username, password, identity) => {
     }else if (identity === 3) {
         queryTable = 'student'
     }
-    let sql = `SELECT * FROM ${queryTable} where username='${username}' and password='${password}'`
+    let sql = `SELECT * FROM ${queryTable} where account='${account}' and password='${password}'`
     return exec(sql).then(row => {
         return row[0] || {}
     })

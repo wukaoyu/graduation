@@ -5,15 +5,16 @@ const { SuccessModel, ErrorModel } = require("../model/resModel");
 const { login, queryAllUsers } = require("../controller/users")
 
 router.post('/login', function(req, res, next) {
-  const {username, password, identity} = req.body
-    const result = login(username,password,identity);
+  const {account, password, identity} = req.body
+    const result = login(account,password,identity);
     const resultData = result.then(data => {
+        console.log(data)
         if (data.username) {
             // 将用户信息传入并生成token
             const tokenData = {
                 id: data.id,
                 username: data.username,
-                name: data.name,
+                account: data.account,
                 createBy: data.createBy,
                 createTime: data.createTime,
                 identity: data.identity,

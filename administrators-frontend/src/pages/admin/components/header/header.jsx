@@ -4,8 +4,9 @@ import './header.less'
 export default class Header extends React.Component{
     UNSAFE_componentWillMount(){
         this.setState({
-            userName:window.userInfo.name
+            userName:window.userInfo.username
         })
+        console.log(window.userInfo)
     }
     loginOut = () => {
         localStorage.removeItem('token');

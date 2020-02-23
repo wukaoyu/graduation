@@ -36,7 +36,7 @@ class Login extends React.Component  {
                         label='用户名:'
                         className="login-item">
                         {
-                            getFieldDecorator('username', {
+                            getFieldDecorator('account', {
                                 initialValue: '',
                                 rules: []
                             })(
