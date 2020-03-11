@@ -34,7 +34,7 @@ export default class NavLeft extends React.Component{
         return (
             <div>
                 <div className="logo">
-                    <img src="/assets/logo-ant.svg"/>
+                    <img src="/assets/logo-ant.svg" alt='logo'/>
                     <h1>考试管理系统</h1>
                 </div>
                 <Menu theme="dark">

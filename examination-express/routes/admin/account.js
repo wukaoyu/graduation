@@ -10,7 +10,8 @@ const {
     queryAdminAccount, 
     insertAdminAccount, 
     updataAdminAccount, 
-    deleteAdminAccount } = require("../../controller/admin/account");
+    deleteAdminAccount,
+    queryAllTeacher } = require("../../controller/admin/account");
 const { getPage, nowDate } = require("../../public/utils/main")
 const multer  = require('multer');
 const XLSX= require('xlsx');
@@ -40,6 +41,22 @@ router.post('/queryTeacherPage', function (req, res, next) {
  */
 router.post('/queryAllAdmin', function (req, res, next) {
     const result = queryAllAdmin()
+    const resultData = result.then(data => {
+        if (data) {
+            return new SuccessModel(data)
+        }
+        return new ErrorModel('异常错误')
+    })
+    resultData.then(data => {
+        res.json(data)
+    })
+})
+
+/**
+ * 查询所有管理员
+ */
+router.post('/queryAllTeacher', function (req, res, next) {
+    const result = queryAllTeacher()
     const resultData = result.then(data => {
         if (data) {
             return new SuccessModel(data)

@@ -22,6 +22,18 @@ export async function queryAllAdmin(data = {}) {
 }
 
 /**
+ * 查询所有管理员
+ * @param {*} data 
+ */
+export async function queryAllTeacher(data = {}) {
+  return request({
+    url:'/admin/account/queryAllTeacher',
+    method:'POST',
+    data: data
+  })
+}
+
+/**
  * 添加教师账号
  * @param {*} data 
  */

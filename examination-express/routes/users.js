@@ -8,7 +8,7 @@ router.post('/login', function(req, res, next) {
   const {account, password, identity} = req.body
     const result = login(account,password,identity);
     const resultData = result.then(data => {
-        console.log(data)
+        // console.log(data)
         if (data.username) {
             // 将用户信息传入并生成token
             const tokenData = {

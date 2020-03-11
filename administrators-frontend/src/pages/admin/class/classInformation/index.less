@@ -1,0 +1,42 @@
+.classMain{
+  display: flex;
+  align-items: center;
+  clear: both;
+  &-head{
+    min-width: 50px;
+    border-radius: 100%;
+    overflow: hidden;
+    &-img{
+      width: 100%;
+    }
+  }
+  &-describe{
+    margin-left: 10px;
+    display: flex;
+    font-size: 13px;
+    &-key{
+      width: 65px;
+      color: #000;
+    }
+    &-val{
+      width: 120px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+}
+.queryName{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  &-search{
+    width: 220px;
+  }
+  &-insert{
+    margin-left: 20px;
+  }
+}
+.scrollBox{
+  min-height: 100%;
+}

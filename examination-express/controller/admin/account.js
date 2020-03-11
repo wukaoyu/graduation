@@ -43,6 +43,16 @@ const queryAllAdmin = () => {
 }
 
 /**
+ * 查询所有管理员
+ */
+const queryAllTeacher = () => {
+    let sql = `SELECT id, username, account, createBy, createTime, headPortraitUrl FROM teacher`
+    return exec(sql).then(row => {
+        return row || []
+    })
+}
+
+/**
  * 增加教师账号
  * @param {String} username 姓名 
  * @param {String} password 密码
@@ -195,5 +205,6 @@ module.exports = {
     queryAdminAccount,
     insertAdminAccount,
     updataAdminAccount,
-    deleteAdminAccount
+    deleteAdminAccount,
+    queryAllTeacher
 }

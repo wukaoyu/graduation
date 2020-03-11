@@ -6,7 +6,6 @@ export default class Header extends React.Component{
         this.setState({
             userName:window.userInfo.username
         })
-        console.log(window.userInfo)
     }
     loginOut = () => {
         localStorage.removeItem('token');

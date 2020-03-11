@@ -2,11 +2,11 @@ import React from 'react';
 import { Form, Input, Button, Radio } from 'antd'
 const FormItem = Form.Item
 class addOrEditorTeacher extends React.Component {
-    state={
-        editorData: {}
-    }
     constructor(props) {
         super(props)
+        this.state = {
+            editorData: {}
+        }
     }
     UNSAFE_componentWillMount() {
         const { editorData } = this.props
