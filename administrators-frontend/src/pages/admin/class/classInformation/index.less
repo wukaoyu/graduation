@@ -37,6 +37,87 @@
     margin-left: 20px;
   }
 }
+.studentQueryName{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  &-search{
+    width: 220px;
+  }
+  &-insert{
+    margin-left: 10px;
+  }
+}
 .scrollBox{
   min-height: 100%;
+}
+.studentHeadImg{
+  width: 20px;
+  height: 20px;
+}
+
+.studentMain{
+  display: flex;
+  align-items: center;
+  clear: both;
+  &-head{
+    min-width: 50px;
+    border-radius: 100%;
+    overflow: hidden;
+    &-img{
+      width: 100%;
+    }
+  }
+  &-describe{
+    margin-left: 10px;
+    display: flex;
+    font-size: 13px;
+    align-items: center;
+    &-key{
+      min-width: 40px;
+      color: #000;
+    }
+    &-val{
+      width: 120px;
+    }
+  }
+  &-operation{
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+    color: #000;
+    &-key{
+      min-width: 45px;
+      margin-top: -3px;
+    }
+    &-val{
+      display: flex;
+      align-items: center;
+      &-btn{
+        margin: 0 3px 3px 0;
+        font-size: 12px;
+        &:nth-child(1) {
+          color: #fff;
+          background-color: #00CC99;
+          border-color: #00CC99;
+          text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+          box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+        }
+        &:nth-child(2) {
+          color: #fff;
+          background-color: #F58A07;
+          border-color: #F58A07;
+          text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+          box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+        }
+        &:nth-child(3) {
+          color: #fff;
+          background-color: #D17B88;
+          border-color: #D17B88;
+          text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+          box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+        }
+      }
+    }
+  }
 }

@@ -13,7 +13,6 @@ const {
     deleteAdminAccount,
     queryAllTeacher } = require("../../controller/admin/account");
 const { getPage, nowDate } = require("../../public/utils/main")
-const multer  = require('multer');
 const XLSX= require('xlsx');
 
 // var upload = multer({ dest: 'uploads/' })
@@ -124,7 +123,6 @@ router.post('/deleteTeacherAccount', function (req, res, next) {
 /**
  * 解析上传的excel 批量导入管理员账号
  */
-// var upload = multer({ dest: 'uploads/'}) // 文件储存路径
 router.post('/fileTeacherAccount', function (req, res, next) {
     let excelFile = req.files.file.data;
     let excelData = [];

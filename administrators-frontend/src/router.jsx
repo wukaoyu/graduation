@@ -6,6 +6,7 @@ import AdminMain from './pages/admin/components/main/main.jsx'
 import TeacherAccount from './pages/admin/account/teacherAccount/index'
 import AdminAccount from './pages/admin/account/adminAccount/index'
 import ClassInformation from './pages/admin/class/classInformation/index'
+import ClassEditor from './pages/admin/class/classInformation/classEditor'
 import jwt_decode from 'jwt-decode'
 
 export default class Router extends React.Component {
@@ -34,6 +35,7 @@ export default class Router extends React.Component {
                                 <Route path='/admin/account/teacher' component={TeacherAccount}/>
                                 <Route path='/admin/account/admin' component={AdminAccount}/>
                                 <Route path='/admin/class/classTable' component={ClassInformation}/>
+                                <Route path='/admin/class/classEditor' component={ClassEditor}/>
                             </AdminMain>
                         }/>
                         <Route path='/' component={Login}/>

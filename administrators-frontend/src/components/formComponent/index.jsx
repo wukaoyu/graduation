@@ -6,7 +6,10 @@ const FormItem = Form.Item
 class CreateForm extends React.Component {
   constructor(props) {
     super(props)
-    const { fromList, fromLayout } = this.props
+    if(props.onRef){//如果父组件传来该方法 则调用方法将子组件this指针传过去
+      props.onRef(this)
+    }
+    const { fromList, fromLayout, cancelText } = this.props
     this.state = {
       fromList: fromList || [],
       formItemLayout: fromLayout || {
@@ -18,7 +21,8 @@ class CreateForm extends React.Component {
           xs: { span: 24 },
           sm: { span: 16 },
         },
-      }
+      },
+      cancelText: cancelText || '取消'
     }
   }
   render() {
@@ -43,11 +47,11 @@ class CreateForm extends React.Component {
             })
           }
           <FormItem label=' ' colon={false}>
-              <Button type="primary" onClick={this.clickOk} >
-                  确认
+              <Button  onClick={this.clickCancel} >
+                  {this.state.cancelText}
               </Button>
-              <Button style={{marginLeft:'10px'}} onClick={this.clickCancel} >
-                  取消
+              <Button style={{marginLeft:'10px'}} type="primary" onClick={this.clickOk} >
+                  确认
               </Button>
           </FormItem>
         </Form>
@@ -63,7 +67,6 @@ class CreateForm extends React.Component {
         if (!err) {
             // console.log('Received values of form: ', values);
             this.props.clickOk(values)
-            this.props.form.resetFields()
         }
     });
   }
@@ -72,6 +75,12 @@ class CreateForm extends React.Component {
    */
   clickCancel = () => {
       this.props.clickCancel()
+  }
+  /**
+   * 重置数据
+   */
+  handleResetFields = () => {
+    this.props.form.resetFields()
   }
 }
 

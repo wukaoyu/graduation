@@ -60,7 +60,7 @@ const queryAllTeacher = () => {
  * @param {String} createTime 创建时间
  * @param {Number} identity 身份
  * @param {Number} account 账号
- * @param {Number}} sex 性别 1为男，0为女
+ * @param {Number} sex 性别 1为男，0为女
  */
 const insertTeacherAccount = (username, password, createBy, createTime, identity, account, sex) => {
     let querySql = `SELECT * from teacher where account = '${account}'`

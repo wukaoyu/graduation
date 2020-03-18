@@ -182,7 +182,7 @@ class AdminAccount extends React.Component {
                 footer={
                     <div>
                         <Button onClick={this.handCloseFile}>取消</Button>
-                        <a href="https://wkydegraduation.oss-cn-beijing.aliyuncs.com/teacherAccount.xls?Expires=1581843377&OSSAccessKeyId=TMP.hhgExt3pBe7jjwaQHmHax1hoDfKxNrj7mK2NFJZAZ7taX4PnVJ5BFLohaPFDH4Pjq9TxctCHXJ7k3PwJVaVXPqDgXYfDCU85R994mEzqYcRiwBaEZqVBcfug2mnoyE.tmp&Signature=A4v3ciwV6nHAUtvwLU53s12vOtU%3D" style={{margin: '0 8px'}}>
+                        <a href="https://wkydegraduation.oss-cn-beijing.aliyuncs.com/teacherAccount.xls" style={{margin: '0 8px'}}>
                             <Button type="primary" >下载模板</Button>
                         </a>
                         <Button type="primary" onClick={this.fileUpload}>上传文件</Button>
@@ -190,6 +190,7 @@ class AdminAccount extends React.Component {
                 }>
                     <Dragger
                     accept='.xls,.xlsx'
+                    onChange={this.changeFile}
                     fileList={this.state.fileList}
                     beforeUpload={this.getFile}>
                         <p className="ant-upload-drag-icon">
@@ -356,6 +357,13 @@ class AdminAccount extends React.Component {
             fileList: [file]
         })
         return false
+    }
+    changeFile = (info) => {
+        if (info.fileList.length === 0) {
+            this.setState({
+              fileList: info.fileList
+            })
+          }
     }
     /**
      * 关闭上传文件的弹窗

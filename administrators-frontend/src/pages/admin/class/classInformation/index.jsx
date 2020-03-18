@@ -1,10 +1,12 @@
 import React from 'react';
 import ScrollView from 'react-custom-scrollbars'
 import QueueAnim from 'rc-queue-anim';
-import { queryClassesPage, insertClasses } from 'api/admin/classes'
+import { queryClassesPage, insertClasses,deleteClasses } from 'api/admin/classes'
 import { queryAllTeacher } from 'api/admin/account'
-import { Card, Input, Button, Modal, DatePicker, Select, message } from 'antd' 
+import { Card, Input, Button, Modal, DatePicker, Select, message, Popover } from 'antd' 
 import CreateForm from 'components/formComponent/index.jsx'
+import { DeleteOutlined } from '@ant-design/icons'
+
 
 import './index.less'
 
@@ -26,7 +28,8 @@ class ClassInformation extends React.Component {
         current: 1
       },
       hasMore: false,
-      isScroll: true
+      isScroll: true,
+      CreateForm: ''
     }
     this.funQueryClassesPage()
     this.funQueryAllTeacher()
@@ -55,8 +58,20 @@ class ClassInformation extends React.Component {
                 return (
                   <div key={index}>
                     <Card style={{ width: 280, marginTop: 16, marginRight: 16 }} hoverable 
+                      actions={[
+                          <Popover placement="top" trigger='click' content = {
+                            <div>
+                                <p>删除后将无法复原数据，<br/>确认删除改班级吗？</p>
+                                <div className='teacher-delete-btn'>
+                                    <Button type="danger" size={'small'} onClick={() => this.deleteClasses(item.id)}>确认</Button>
+                                </div>
+                            </div>
+                        }>
+                            <DeleteOutlined />
+                        </Popover>
+                      ]}
                       title={item.className}
-                      extra={<a href={"###"+item.id}>详细信息</a>}>
+                      extra={<div style={{color: '#1DA57A'}} onClick={() => this.toEditor(item.id)}>详细信息</div>}>
                         <div className="classMain">
                           <div className='classMain-head'>
                             <img className='classMain-head-img' src={item.headPortraitUrl || "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"} alt="head"/>
@@ -93,6 +108,7 @@ class ClassInformation extends React.Component {
         onCancel={() =>this.handOpenOrCloseModel('addClassModel', false)}
         footer={''}>
           <CreateForm
+          onRef={this.getCreateForm}
           clickCancel={() => this.handOpenOrCloseModel('addClassModel', false)}
           clickOk={(val) => this.addClass(val)}
           fromList={[
@@ -188,6 +204,7 @@ class ClassInformation extends React.Component {
   }
   // 增加班级
   addClass = (val) => {
+    // this.CreateForm.handleResetFields()
     let data = {
       className: val.className,
       mainTeacher: val.mainTeacher,
@@ -199,6 +216,16 @@ class ClassInformation extends React.Component {
       if (res.errno === 0) {
         this.handOpenOrCloseModel('addClassModel', false)
         message.success('添加成功');
+        this.funQueryClassesPage()
+        this.state.CreateForm.handleResetFields()
+      }
+    })
+  }
+  // 删除班级
+  deleteClasses = (id) => {
+    deleteClasses({id}).then(res => {
+      if (res.errno === 0) {
+        message.success('删除成功');
         this.funQueryClassesPage()
       }
     })
@@ -259,6 +286,15 @@ class ClassInformation extends React.Component {
         }, 500)
       })
     }
+  }
+  // 路由跳转
+  toEditor = (id) => {
+    this.props.history.push('/admin/class/classEditor?id=' + id)
+  }
+  getCreateForm = (CreateForm) => {
+    this.setState({
+      CreateForm
+    })
   }
 }
 
