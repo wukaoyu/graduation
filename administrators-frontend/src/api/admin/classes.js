@@ -50,12 +50,24 @@ export async function upDataClasses(data = {}) {
 }
 
 /**
- * 修改班级信息
+ * 删除班级
  * @param {*} data 
  */
 export async function deleteClasses(data = {}) {
   return request({
     url:'/admin/classes/deleteClasses',
+    method:'POST',
+    data: data
+  })
+}
+
+/**
+ * 查询全部班级
+ * @param {*} data 
+ */
+export async function queryAllClass(data = {}) {
+  return request({
+    url:'/admin/classes/queryAllClass',
     method:'POST',
     data: data
   })

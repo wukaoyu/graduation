@@ -87,6 +87,16 @@ const deleteClasses = (id) => {
 }
 
 /**
+ * 查询全部班级
+ */
+const queryAllClass = () => {
+  let sql = `SELECT * FROM classes`
+  return exec(sql).then(row => {
+    return row || []
+  })
+}
+
+/**
  * 查询学生账号分页信息
  * @param {String} account 学生账号
  * @param {Number} classId 班级id
@@ -104,6 +114,8 @@ const queryStudentPage = (account, classId, username, sex, pageSize, current) =>
   }
   if (classId) {
     sql += `and classId=${classId} `
+  }else if (classId === 0) {
+    sql += `and b.className IS NULL `
   }
   if (username) {
     sql += `and username like '%${username}%' `
@@ -171,7 +183,7 @@ const insertStudent = (account, password, createBy, createTime, classId, usernam
  * @param {String} account 账号
  * @param {Number} id 学生id
  */
-const upDataStudent = (classId, sex, username, account, id) => {
+const upDataStudent = (classId=null, sex, username, account, id) => {
   let sql = `UPDATE student SET classId = ${classId}, sex = ${sex}, username='${username}', account='${account}' WHERE id = ${id}`
   return exec(sql).then(row => {
     return row || {}
@@ -207,6 +219,7 @@ module.exports = {
   queryClassId,
   upDataClasses,
   deleteClasses,
+  queryAllClass,
   upDataStudent,
   deleteStudent,
   insertStudent,

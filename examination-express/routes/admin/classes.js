@@ -11,7 +11,8 @@ const {
   upDataStudent,
   deleteStudent,
   insertStudent,
-  queryStudentId
+  queryStudentId,
+  queryAllClass
 } = require("../../controller/admin/classes");
 const XLSX= require('xlsx');
 
@@ -86,6 +87,19 @@ router.post('/deleteClasses', (req, res, next) => {
 router.post('/queryClassId', (req, res, next) => {
   const { id } = req.body
   const result = queryClassId(id)
+  const resultData = result.then(data => {
+    if (data) {
+      return new SuccessModel(data)
+    }
+    return new ErrorModel('异常错误')
+  })
+  resultData.then(data => {
+    res.json(data)
+  })
+})
+
+router.post('/queryAllClass', (req, res, next) => {
+  const result = queryAllClass()
   const resultData = result.then(data => {
     if (data) {
       return new SuccessModel(data)
