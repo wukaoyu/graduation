@@ -1,7 +1,7 @@
 import React from 'react';
 import ScrollView from 'react-custom-scrollbars'
 import QueueAnim from 'rc-queue-anim';
-import { queryClassesPage, insertClasses,deleteClasses } from 'api/admin/classes'
+import { queryClassesPage, insertClasses, deleteClasses } from 'api/admin/classes'
 import { queryAllTeacher } from 'api/admin/account'
 import { Card, Input, Button, Modal, DatePicker, Select, message, Popover } from 'antd' 
 import CreateForm from 'components/formComponent/index.jsx'
@@ -56,7 +56,7 @@ class ClassInformation extends React.Component {
             {
               this.state.classList.map((item, index) => {
                 return (
-                  <div key={index}>
+                  <div key={item.id}>
                     <Card style={{ width: 280, marginTop: 16, marginRight: 16 }} hoverable 
                       actions={[
                           <Popover placement="top" trigger='click' content = {

@@ -21,13 +21,13 @@ class ClassesEditor extends React.Component {
       <div>
         <Tabs defaultActiveKey="1">
           <TabPane tab="学生管理" key="1">
-            <ClassEditorStudent params={this.state.params}/>
+            <ClassEditorStudent params={this.state.params} history={this.props.history}/>
           </TabPane>
           <TabPane tab="课程管理" key="2">
             课程管理的组件
           </TabPane>
           <TabPane tab="班级信息" key="3">
-            <ClassesEditorChild params={this.state.params}/>
+            <ClassesEditorChild params={this.state.params} />
           </TabPane>
         </Tabs>
       </div>

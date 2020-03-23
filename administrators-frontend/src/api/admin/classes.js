@@ -145,3 +145,63 @@ export async function fileStudentAccount(data = {}) {
     data: data
   })
 }
+
+/**
+ * 添加课程安排信息
+ * @param {*} data 
+ */
+export async function insertTCCrelation(data = {}) {
+  return request({
+    url:'/admin/classes/insertTCCrelation',
+    method:'POST',
+    data: data
+  })
+}
+
+/**
+ * 删除课程安排计划
+ * @param {*} data 
+ */
+export async function deleteTCCrelation(data = {}) {
+  return request({
+    url:'/admin/classes/deleteTCCrelation',
+    method:'POST',
+    data: data
+  })
+}
+
+/**
+ * 修改课程安排
+ * @param {*} data 
+ */
+export async function updataTCCrelation(data = {}) {
+  return request({
+    url:'/admin/classes/updataTCCrelation',
+    method:'POST',
+    data: data
+  })
+}
+
+/**
+ * 查询课程安排分页信息
+ * @param {*} data 
+ */
+export async function queryTCCrelationPage(data = {}) {
+  return request({
+    url:'/admin/classes/queryTCCrelationPage',
+    method:'POST',
+    data: data
+  })
+}
+
+/**
+ * 根据id查询课程安排信息
+ * @param {*} data 
+ */
+export async function queryTCCrelationId(data = {}) {
+  return request({
+    url:'/admin/classes/queryTCCrelationId',
+    method:'POST',
+    data: data
+  })
+}

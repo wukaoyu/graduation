@@ -50,7 +50,7 @@ class ClassEditorStudent extends React.Component {
             loading={this.state.searchLoading}/>
             <Button type='primary' className='studentQueryName-insert' onClick={() => this.handOpenOrCloseModel('addStudentModel', true)}>增加学生</Button>
             <Button type='primary' className='studentQueryName-insert' onClick={() => this.handOpenOrCloseModel('fileVisible', true)}>批量导入</Button>
-            <Button type='primary' className='studentQueryName-insert'>选择学生</Button>
+            <Button type='primary' className='studentQueryName-insert' onClick={() => this.handGoChooseStudent()}>选择学生</Button>
             <Button className='studentQueryName-insert' onClick={() => this.goBack()}>返回</Button>
           </div>
           <QueueAnim
@@ -62,9 +62,9 @@ class ClassEditorStudent extends React.Component {
             {
               this.state.studentList.map((item, index) => {
                 return (
-                  <div key={index}>
+                  <div key={item.id}>
                     <Card style={{ width: 280, marginTop: 16, marginRight: 16 }} hoverable 
-                      title={item.username}
+                      title={item.account}
                       extra={
                         item.sex === 1 ? 
                         <img className='studentHeadImg' src="https://wkydegraduation.oss-cn-beijing.aliyuncs.com/image/man.png" alt="性别"/> : 
@@ -307,12 +307,12 @@ class ClassEditorStudent extends React.Component {
    * 退出班级
    */
   funOutClass = (param) => {
-    const data = {
+    const data = [{
       ...param,
       classId: 0
-    }
-    console.log(data)
-    upDataStudent(data).then(res => {
+    }]
+    
+    upDataStudent({studentArray:data}).then(res => {
       if (res.errno === 0) {
         message.success('操作成功')
         this.funQueryStudentPage()
@@ -374,6 +374,9 @@ class ClassEditorStudent extends React.Component {
   // 返回到班级首页
   goBack = () => {
     history.goBack(); 
+  }
+  handGoChooseStudent = () => {
+    this.props.history.push('/admin/class/classChooseStudent?id=' + this.state.params.id)
   }
 }
 

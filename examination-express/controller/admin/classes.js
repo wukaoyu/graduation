@@ -212,6 +212,126 @@ const queryStudentId = (id) => {
   })
 }
 
+/**
+ * 添加课程安排信息
+ * @param {Number} teacherId 教师id
+ * @param {Number} classId 班级id
+ * @param {Number} curriculumId 课程id
+ * @param {Number} examinationId 考试id 
+ */
+const insertTCCrelation = (teacherId, classId, curriculumId, examinationId) => {
+  let sql = `INSERT INTO TCCrelation (teacherId, classId, curriculumId, examinationId) 
+            VALUES (${teacherId ? `${teacherId},` : ''} ${classId}, ${curriculumId} ${examinationId ? `,${examinationId}` : ''})`
+  return exec(sql).then(row => {
+    return row || {}
+  })
+}
+
+/**
+ * 删除课程安排计划
+ * @param {Number} id 课程安排id
+ */
+const deleteTCCrelation = (id) => {
+  let sql = `DELETE FROM TCCrelation WHERE id = ${id}`
+  return exec(sql).then(row => {
+    return row || {}
+  })
+}
+
+/**
+ * 修改课程安排
+ * @param {Number} teacherId 教师id
+ * @param {Number} classId 班级id
+ * @param {Number} curriculumId 课程id
+ * @param {Number} examinationId 考试id
+ * @param {Number} id 课程安排id
+ */
+const updataTCCrelation = (teacherId, classId, curriculumId, examinationId, id) => {
+  let sql = `UPDATE curriculum SET `
+  if (teacherId) {
+    sql += `teacherId=${teacherId}, `
+  }
+  if (classId) {
+    sql += `classId=${classId},`
+  }
+  if (curriculumId) {
+    sql += `curriculumId=${curriculumId},`
+  }
+  if (examinationId) {
+    sql += `examinationId=${examinationId},`
+  }
+  sql = sql.substring(0, sql.length - 1)
+  sql += `WHERE id=${id}`
+  console.log(sql)
+  return exec(sql).then(row => {
+    return row || {}
+  })
+}
+
+/**
+ * 查询课程安排分页信息
+ * @param {Number} classId 班级ID
+ * @param {Number} teacherId 教师id
+ * @param {Number} curriculumId 课程id
+ * @param {Number} examinationId 考试id
+ * @param {Number} pageSize 每页显示的条数
+ * @param {Number} current 当前第几页
+ */
+const queryTCCrelationPage = (teacherId, classId, curriculumId,examinationId, pageSize, current) => {
+  let sql =`SELECT a.id, a.teacherId, b.username AS teacherName,a.classId, c.className,a.curriculumId, d.name AS courseName,a.examinationId, e.name AS examinationName FROM TCCrelation AS a 
+  LEFT JOIN teacher AS b ON a.teacherId=b.id 
+  LEFT JOIN classes AS c on a.classId=c.id
+  LEFT JOIN curriculum AS d on a.curriculumId=d.id
+  LEFT JOIN examination AS e on a.examinationId=e.id
+  where 1=1`
+  let countSql = `select count (*) from classes`
+  if (teacherId) {
+    sql += `and teacherId =${teacherId} `
+  }
+  if (classId) {
+    sql += `and classId =${classId} `
+  }
+  if (curriculumId) {
+    sql += `and curriculumId =${curriculumId} `
+  }
+  if (examinationId) {
+    sql += `and examinationId =${examinationId} `
+  }
+  if (pageSize && current) {
+    sql += ` limit ${(current - 1) * pageSize},${pageSize} `
+  }
+  let count = 0
+  exec(countSql).then(num => {
+    count = num[0]['count (*)']
+    return num
+  })
+  return exec(sql).then(row => {
+    let rowData = row || []
+    let resultData = {
+      row: rowData,
+      count: count
+    }
+    return resultData
+  })
+}
+
+/**
+ * 根据id查询课程安排信息
+ * @param {Number} id 
+ */
+const queryTCCrelationId = (id) => {
+  let sql =`SELECT a.id, a.teacherId, b.username AS teacherName,a.classId, c.className,a.curriculumId, d.name AS courseName,a.examinationId, e.name AS examinationName FROM TCCrelation AS a 
+  LEFT JOIN teacher AS b ON a.teacherId=b.id 
+  LEFT JOIN classes AS c on a.classId=c.id
+  LEFT JOIN curriculum AS d on a.curriculumId=d.id
+  LEFT JOIN examination AS e on a.examinationId=e.id
+  where id=${id}`
+  return exec(sql).then(row => {
+    return row[0] || {}
+  })
+}
+
+
 module.exports = {
   queryClassesPage,
   insertClasses,
@@ -223,5 +343,10 @@ module.exports = {
   upDataStudent,
   deleteStudent,
   insertStudent,
-  queryStudentId
+  queryStudentId,
+  insertTCCrelation,
+  deleteTCCrelation,
+  updataTCCrelation,
+  queryTCCrelationPage,
+  queryTCCrelationId
 }

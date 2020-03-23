@@ -12,7 +12,12 @@ const {
   deleteStudent,
   insertStudent,
   queryStudentId,
-  queryAllClass
+  queryAllClass,
+  insertTCCrelation,
+  deleteTCCrelation,
+  updataTCCrelation,
+  queryTCCrelationPage,
+  queryTCCrelationId
 } = require("../../controller/admin/classes");
 const XLSX= require('xlsx');
 
@@ -135,17 +140,23 @@ router.post('/queryStudentPage', (req, res, next) => {
 })
 
 router.post('/upDataStudent', (req, res, next) => {
-  const { id, classId, sex, username, account } = req.body
-  const result = upDataStudent(classId, sex, username, account, id)
-  const resultData = result.then(data => {
-    if (data) {
-      return new SuccessModel(data)
-    }
-    return new ErrorModel('异常错误')
+  const { studentArray } = req.body
+  let result, resultData = ''
+  studentArray.forEach((item, index) => {
+    result = upDataStudent(item.classId, item.sex, item.username, item.account, item.id)
+    result.then(data => {
+      if (data) {
+      }else {
+        resultData += `${index}，`
+      }
+    })
   })
-  resultData.then(data => {
-    res.json(data)
-  })
+  if (resultData === '') {
+    res.json(new SuccessModel(`成功修改${studentArray.length}条数据`))
+  }else {
+    resultData = resultData.substring(0, resultData.length - 1);
+    res.json(new ErrorModel(`第${resultData}行修改失败`))
+  }
 })
 
 router.post('/deleteStudent', (req, res, next) => {
@@ -251,6 +262,85 @@ router.post('/fileStudentAccount', function (req, res, next) {
       const errorData =  new ErrorModel('Excel内容有误')
       res.json(errorData)
   }
+})
+
+router.post('/insertTCCrelation', (req, res) => {
+  const {teacherId, classId, curriculumId, examinationId} = req.body
+  const result = insertTCCrelation(teacherId, classId, curriculumId, examinationId)
+  const resultData = result.then(data => {
+    if (data) {
+      return new SuccessModel(data)
+    }
+    return new ErrorModel('异常错误')
+  })
+  resultData.then(data => {
+    res.json(data)
+  })
+})
+
+router.post('/deleteTCCrelation', (req, res) => {
+  const {id} = req.body
+  const result = deleteTCCrelation(id)
+  const resultData = result.then(data => {
+    if (data) {
+      return new SuccessModel(data)
+    }
+    return new ErrorModel('异常错误')
+  })
+  resultData.then(data => {
+    res.json(data)
+  })
+})
+
+router.post('/updataTCCrelation', (req, res) => {
+  const {teacherId, classId, curriculumId, examinationId, id} = req.body
+  const result = updataTCCrelation(teacherId, classId, curriculumId, examinationId, id)
+  const resultData = result.then(data => {
+    if (data) {
+      return new SuccessModel(data)
+    }
+    return new ErrorModel('异常错误')
+  })
+  resultData.then(data => {
+    res.json(data)
+  })
+})
+
+router.post('/queryTCCrelationPage', (req, res) => {
+  const { teacherId, classId, curriculumId, examinationId, pageSize, current } = req.body
+  const result = queryTCCrelationPage(teacherId, classId, curriculumId, examinationId, pageSize, current)
+  const resultData = result.then(data => {
+    if (data) {
+      let pageCount = data.count / pageSize
+      let hasmore = true
+      if (current >= pageCount) {
+        hasmore = false
+      }
+      let pageData = {
+        ...data,
+        hasmore
+      }
+      return new SuccessModel(pageData)
+    }
+    return new ErrorModel('异常错误')
+  })
+  resultData.then(data => {
+    res.json(data)
+  })
+})
+
+router.post('/queryTCCrelationId', (req, res) => {
+  const {id} = req.body
+  const result = queryTCCrelationId(id)
+  const resultData = result.then(data => {
+    if (data) {
+      return new SuccessModel(data)
+    }
+    return new ErrorModel('异常错误')
+  })
+  resultData.then(data => {
+    res.json(data)
+  })
 })
 
 module.exports = router

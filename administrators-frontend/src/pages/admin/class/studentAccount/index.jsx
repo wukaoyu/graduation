@@ -76,7 +76,7 @@ class TeacherAccount extends React.Component {
                     <FormItem label='班级'>
                         {
                             getFieldDecorator('classId',{
-                                initialValue:this.state.editorData.classId || '',
+                                initialValue: '',
                                 rules: []
                             })(
                                 <Select
@@ -309,13 +309,14 @@ class TeacherAccount extends React.Component {
         },200)
     }
     /**
-     * 添加教师账号
+     * 添加或修改教师账号
      * @param {*} value 账号信息
      */
     addOrEditorAccount = (value) => {
         if (this.state.editorData.id) {
             value.id = this.state.editorData.id
-            upDataStudent(value).then(res => {
+            let studentData = [value]
+            upDataStudent({studentArray:studentData}).then(res => {
                 if (res.errno === 0) {
                     message.success('修改成功');
                 }else {
