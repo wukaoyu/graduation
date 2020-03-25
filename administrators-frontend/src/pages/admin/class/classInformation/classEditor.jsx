@@ -2,6 +2,7 @@ import React from 'react';
 import { Tabs } from 'antd'
 import ClassesEditorChild from './components/classEditorChild';
 import ClassEditorStudent from './components/classEditorStudent';
+import ClassesEditorCourse from './components/classEditorCourse';
 const { TabPane } = Tabs;
 
 class ClassesEditor extends React.Component {
@@ -19,12 +20,12 @@ class ClassesEditor extends React.Component {
   render () {
     return (
       <div>
-        <Tabs defaultActiveKey="1">
+        <Tabs defaultActiveKey="2">
           <TabPane tab="学生管理" key="1">
             <ClassEditorStudent params={this.state.params} history={this.props.history}/>
           </TabPane>
           <TabPane tab="课程管理" key="2">
-            课程管理的组件
+            <ClassesEditorCourse params={this.state.params} history={this.props.history}/>
           </TabPane>
           <TabPane tab="班级信息" key="3">
             <ClassesEditorChild params={this.state.params} />

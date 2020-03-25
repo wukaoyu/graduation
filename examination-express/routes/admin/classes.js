@@ -265,8 +265,8 @@ router.post('/fileStudentAccount', function (req, res, next) {
 })
 
 router.post('/insertTCCrelation', (req, res) => {
-  const {teacherId, classId, curriculumId, examinationId} = req.body
-  const result = insertTCCrelation(teacherId, classId, curriculumId, examinationId)
+  const {teacherId, classId, curriculumId} = req.body
+  const result = insertTCCrelation(teacherId, classId, curriculumId)
   const resultData = result.then(data => {
     if (data) {
       return new SuccessModel(data)
@@ -293,8 +293,8 @@ router.post('/deleteTCCrelation', (req, res) => {
 })
 
 router.post('/updataTCCrelation', (req, res) => {
-  const {teacherId, classId, curriculumId, examinationId, id} = req.body
-  const result = updataTCCrelation(teacherId, classId, curriculumId, examinationId, id)
+  const {teacherId, classId, curriculumId, id} = req.body
+  const result = updataTCCrelation(teacherId, classId, curriculumId, id)
   const resultData = result.then(data => {
     if (data) {
       return new SuccessModel(data)
@@ -307,8 +307,8 @@ router.post('/updataTCCrelation', (req, res) => {
 })
 
 router.post('/queryTCCrelationPage', (req, res) => {
-  const { teacherId, classId, curriculumId, examinationId, pageSize, current } = req.body
-  const result = queryTCCrelationPage(teacherId, classId, curriculumId, examinationId, pageSize, current)
+  const { teacherId, classId, curriculumId, pageSize, current } = req.body
+  const result = queryTCCrelationPage(teacherId, classId, curriculumId, pageSize, current)
   const resultData = result.then(data => {
     if (data) {
       let pageCount = data.count / pageSize

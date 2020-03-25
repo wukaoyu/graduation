@@ -217,11 +217,10 @@ const queryStudentId = (id) => {
  * @param {Number} teacherId 教师id
  * @param {Number} classId 班级id
  * @param {Number} curriculumId 课程id
- * @param {Number} examinationId 考试id 
  */
-const insertTCCrelation = (teacherId, classId, curriculumId, examinationId) => {
-  let sql = `INSERT INTO TCCrelation (teacherId, classId, curriculumId, examinationId) 
-            VALUES (${teacherId ? `${teacherId},` : ''} ${classId}, ${curriculumId} ${examinationId ? `,${examinationId}` : ''})`
+const insertTCCrelation = (teacherId, classId, curriculumId) => {
+  let sql = `INSERT INTO TCCrelation (teacherId, classId, curriculumId) 
+            VALUES (${teacherId ? `${teacherId},` : ''} ${classId}, ${curriculumId})`
   return exec(sql).then(row => {
     return row || {}
   })
@@ -243,13 +242,12 @@ const deleteTCCrelation = (id) => {
  * @param {Number} teacherId 教师id
  * @param {Number} classId 班级id
  * @param {Number} curriculumId 课程id
- * @param {Number} examinationId 考试id
  * @param {Number} id 课程安排id
  */
-const updataTCCrelation = (teacherId, classId, curriculumId, examinationId, id) => {
-  let sql = `UPDATE curriculum SET `
+const updataTCCrelation = (teacherId, classId, curriculumId, id) => {
+  let sql = `UPDATE TCCrelation SET `
   if (teacherId) {
-    sql += `teacherId=${teacherId}, `
+    sql += `teacherId=${teacherId},`
   }
   if (classId) {
     sql += `classId=${classId},`
@@ -257,11 +255,8 @@ const updataTCCrelation = (teacherId, classId, curriculumId, examinationId, id) 
   if (curriculumId) {
     sql += `curriculumId=${curriculumId},`
   }
-  if (examinationId) {
-    sql += `examinationId=${examinationId},`
-  }
   sql = sql.substring(0, sql.length - 1)
-  sql += `WHERE id=${id}`
+  sql += ` WHERE id=${id}`
   console.log(sql)
   return exec(sql).then(row => {
     return row || {}
@@ -273,29 +268,25 @@ const updataTCCrelation = (teacherId, classId, curriculumId, examinationId, id) 
  * @param {Number} classId 班级ID
  * @param {Number} teacherId 教师id
  * @param {Number} curriculumId 课程id
- * @param {Number} examinationId 考试id
  * @param {Number} pageSize 每页显示的条数
  * @param {Number} current 当前第几页
  */
-const queryTCCrelationPage = (teacherId, classId, curriculumId,examinationId, pageSize, current) => {
-  let sql =`SELECT a.id, a.teacherId, b.username AS teacherName,a.classId, c.className,a.curriculumId, d.name AS courseName,a.examinationId, e.name AS examinationName FROM TCCrelation AS a 
+const queryTCCrelationPage = (teacherId, classId, curriculumId, pageSize, current) => {
+  let sql =`SELECT a.id, a.teacherId, b.username AS teacherName,a.classId, c.className,a.curriculumId, d.name AS courseName
+  FROM TCCrelation AS a 
   LEFT JOIN teacher AS b ON a.teacherId=b.id 
   LEFT JOIN classes AS c on a.classId=c.id
   LEFT JOIN curriculum AS d on a.curriculumId=d.id
-  LEFT JOIN examination AS e on a.examinationId=e.id
-  where 1=1`
-  let countSql = `select count (*) from classes`
+  where 1=1 `
+  let countSql = `select count (*) from TCCrelation`
   if (teacherId) {
     sql += `and teacherId =${teacherId} `
   }
   if (classId) {
-    sql += `and classId =${classId} `
+    sql += `and classId=${classId} `
   }
   if (curriculumId) {
     sql += `and curriculumId =${curriculumId} `
-  }
-  if (examinationId) {
-    sql += `and examinationId =${examinationId} `
   }
   if (pageSize && current) {
     sql += ` limit ${(current - 1) * pageSize},${pageSize} `
@@ -320,11 +311,10 @@ const queryTCCrelationPage = (teacherId, classId, curriculumId,examinationId, pa
  * @param {Number} id 
  */
 const queryTCCrelationId = (id) => {
-  let sql =`SELECT a.id, a.teacherId, b.username AS teacherName,a.classId, c.className,a.curriculumId, d.name AS courseName,a.examinationId, e.name AS examinationName FROM TCCrelation AS a 
+  let sql =`SELECT a.id, a.teacherId, b.username AS teacherName,a.classId, c.className,a.curriculumId, d.name AS courseName FROM TCCrelation AS a 
   LEFT JOIN teacher AS b ON a.teacherId=b.id 
   LEFT JOIN classes AS c on a.classId=c.id
   LEFT JOIN curriculum AS d on a.curriculumId=d.id
-  LEFT JOIN examination AS e on a.examinationId=e.id
   where id=${id}`
   return exec(sql).then(row => {
     return row[0] || {}

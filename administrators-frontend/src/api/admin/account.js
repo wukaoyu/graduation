@@ -127,7 +127,7 @@ export async function deleteAdminAccount(data = {}) {
 * @param {*} data 
 */
 export async function fileAdminAccount(data = {}) {
-return request({
+  return request({
     url:'/admin/account/fileAdminAccount',
     method:'POST',
     data: data

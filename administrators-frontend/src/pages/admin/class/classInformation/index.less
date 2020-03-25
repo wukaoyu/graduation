@@ -121,3 +121,50 @@
     }
   }
 }
+
+.classCourseSearch{
+  display: flex;
+  &-item{
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+  }
+}
+
+.ttc {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.ttcName{
+  overflow: hidden;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+  font-size: 14px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.ttc-handle{
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  &-btn{
+    margin: 0 3px 3px 0px;
+    font-size: 12px;
+    &:nth-child(1) {
+      color: #fff;
+      background-color: #F58A07;
+      border-color: #F58A07;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+    }
+    &:nth-child(2) {
+      color: #fff;
+      background-color: #D17B88;
+      border-color: #D17B88;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+    }
+  }
+}

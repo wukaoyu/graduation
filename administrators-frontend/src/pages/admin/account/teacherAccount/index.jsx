@@ -146,7 +146,7 @@ class TeacherAccount extends React.Component {
                     <Column title='创建者' dataIndex='createName' key='createName' align='center'/>
                     <Column title='创建时间' dataIndex='createTime' key='createTime' align='center'/>
                     <Column title='性别' dataIndex='sex' key='sex' align='center'/>
-                    <Column title='操作' dataIndex='handle' key='handle' align='center' render={(text,record,index) => (
+                    <Column title='操作' dataIndex='handle' key='handle' align='center' width='180px' render={(text,record,index) => (
                         <div>
                             <Button style={{marginRight:'10px'}} onClick={ () => this.handAddAccount(record)}>编辑</Button>
                             <Popover placement="topRight" trigger='click' content = {

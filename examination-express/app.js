@@ -7,6 +7,7 @@ const JwtUtil = require('./public/utils/jwt');
 var FileUpload = require('express-fileupload')
 
 var usersRouter = require('./routes/users');
+var utilsApiRouter = require('./routes/utilsApi');
 var adminAccountRouter = require('./routes/admin/account');
 var classesRouter = require('./routes/admin/classes');
 var courseRouter = require('./routes/admin/course')
@@ -50,6 +51,7 @@ app.use(function (req, res, next) {
   }
 });
 
+app.use('/api/utilsApi', utilsApiRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/admin/account', adminAccountRouter);
 app.use('/api/admin/classes', classesRouter);

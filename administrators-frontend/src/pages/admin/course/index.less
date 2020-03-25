@@ -1,11 +1,36 @@
 .courseCount{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 8px;
-  overflow: hidden;
-  color: rgba(0, 0, 0, 0.85);
-  font-weight: 500;
-  font-size: 14px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  &-text{
+    overflow: hidden;
+    color: rgba(0, 0, 0, 0.85);
+    font-weight: 500;
+    font-size: 14px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  &-handle{
+    &-btn{
+      margin: 0 0px 3px 3px;
+      font-size: 12px;
+      &:nth-child(1) {
+        color: #fff;
+        background-color: #F58A07;
+        border-color: #F58A07;
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+      }
+      &:nth-child(2) {
+        color: #fff;
+        background-color: #D17B88;
+        border-color: #D17B88;
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+      }
+    }
+  }
 }
 .courseIntroduce{
   font-size: 14px;
@@ -18,4 +43,16 @@
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
+}
+
+.form-upload{
+  display: flex;
+  width: 100%;
+  &-text{
+    display: block;
+    box-sizing: border-box;
+    width: 50%;
+    text-align: right;
+    color: rgba(0, 0, 0, 0.85);
+  }
 }

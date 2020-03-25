@@ -9,6 +9,7 @@ import ClassInformation from './pages/admin/class/classInformation/index'
 import ClassEditor from './pages/admin/class/classInformation/classEditor'
 import ClassChooseStudent from './pages/admin/class/classInformation/classChooseStudent'
 import StudentAccount from './pages/admin/class/studentAccount/index'
+import ClassCourse from "./pages/admin/class/classCourse/index";
 import Course from './pages/admin/course/index'
 import jwt_decode from 'jwt-decode'
 
@@ -41,6 +42,7 @@ export default class Router extends React.Component {
                                 <Route path='/admin/class/classEditor' component={ClassEditor}/>
                                 <Route path='/admin/class/classChooseStudent' component={ClassChooseStudent}/>
                                 <Route path='/admin/class/studentAccount' component={StudentAccount}/>
+                                <Route path='/admin/class/arrangement' component={ClassCourse}/>
                                 <Route path='/admin/course' component={Course}/>
                             </AdminMain>
                         }/>

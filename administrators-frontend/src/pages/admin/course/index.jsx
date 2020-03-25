@@ -2,9 +2,10 @@ import React from 'react';
 import ScrollView from 'react-custom-scrollbars'
 import QueueAnim from 'rc-queue-anim';
 import { queryCoursePage, insertCoures, deleteCourse, updataCouerse } from 'api/admin/course'
-import { Card, Input, Button, Modal, message, Popover } from 'antd' 
+import { imgUpload } from 'api/utilsApi';
+import { Card, Input, Button, Modal, message, Popover, Upload } from 'antd' 
 import CreateForm from 'components/formComponent/index.jsx'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { DeleteOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 
 
 import './index.less'
@@ -28,7 +29,11 @@ class Course extends React.Component {
       hasMore: false,
       isScroll: true,
       CreateForm: '',
-      editorData: {}
+      editorData: {},
+      imageUrl: '',
+      imgLoading: false,
+      fileList: [],
+      isUpload: false
     }
     this.funQueryCoursePage()
   }
@@ -58,13 +63,12 @@ class Course extends React.Component {
                     <Card style={{ width: 280, marginTop: 16, marginRight: 16 }} hoverable 
                       cover={
                         <div style={{height:'200px', overflow:'hidden'}}>
-                          <img style={{width: '100%', minHeight:'200px'}} alt="example" src={item.headPortraitUrl || "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"} />
+                          <img style={{width: '100%', minHeight:'200px'}} alt="example" src={item.coverImage || "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"} />
                         </div>
                       }
                       title={item.name}
-                      extra={<div style={{color: '#1DA57A'}} onClick={() => this.toEditor(item.id)}>查看题库</div>}
+                      extra={<div style={{color: '#1DA57A'}} onClick={() => this.getEditorData(item)}>编辑信息</div>}
                       actions={[
-                          <EditOutlined key="edit" onClick={() => this.getEditorData(item)} />,
                           <Popover placement="top" trigger='click' content = {
                             <div>
                                 <p>删除后将无法复原数据，<br/>确认删除改班级吗？</p>
@@ -77,7 +81,15 @@ class Course extends React.Component {
                         </Popover>
                       ]}>
                         <div className='courseCount'>
-                          题目数量：{item.questionCount || 0}
+                          <div className='courseCount-text'>
+                            题目数量：{item.questionCount || 0}
+                          </div>
+                          <div className='courseCount-handle'>
+                            <Button size='small' className='courseCount-handle-btn'>查看题库</Button>
+                            <Button size='small' className='courseCount-handle-btn'>查看试卷</Button>
+                          </div>
+                        </div>
+                        <div>
                         </div>
                         <div className='courseIntroduce'>
                           {item.introduce}
@@ -98,34 +110,61 @@ class Course extends React.Component {
         visible={this.state.addOrEditorCourseModel}
         onCancel={() =>this.handOpenOrCloseModel('addOrEditorCourseModel', false)}
         footer={''}>
+          
           {
-            this.state.addOrEditorCourseModel ? <CreateForm
-            onRef={this.getCreateForm}
-            clickCancel={() => this.handOpenOrCloseModel('addOrEditorCourseModel', false)}
-            clickOk={(val) => this.addOrEditorClass(val)}
-            fromList={[
-              {
-                formItemProp:{
-                  label: '课程名称'
-                },
-                initialValue: this.state.editorData.name || null,
-                name: 'name',
-                rules:[
+            this.state.addOrEditorCourseModel ? <div>
+              <div className='form-upload'>
+                <div className='form-upload-text'>
+                  课程首图：
+                </div>
+                <Upload
+                  name="avatar"
+                  listType="picture-card"
+                  className="avatar-uploader"
+                  showUploadList={false}
+                  fileList={this.state.fileList}
+                  beforeUpload={() => this.getFile()}
+                  accept='.jpg,.jpeg,.png'
+                  onChange={(info) => this.handleChange(info)}
+                >
                   {
-                      required: true,
-                      message: '请输入课程名称',
+                    this.state.imageUrl ? 
+                    <img src={this.state.imageUrl} alt="avatar" style={{ width: '100%' }} /> : 
+                    <div>
+                      {this.state.loading ? <LoadingOutlined /> : <PlusOutlined />}
+                      <div className="ant-upload-text">Upload</div>
+                    </div>
                   }
-                ]
-              },
-              {
-                formItemProp:{
-                  label: '课程简介'
+                </Upload>
+              </div>
+              <CreateForm
+              onRef={this.getCreateForm}
+              clickCancel={() => this.handOpenOrCloseModel('addOrEditorCourseModel', false)}
+              clickOk={(val) => this.addOrEditorClass(val)}
+              fromList={[
+                {
+                  formItemProp:{
+                    label: '课程名称'
+                  },
+                  initialValue: this.state.editorData.name || null,
+                  name: 'name',
+                  rules:[
+                    {
+                        required: true,
+                        message: '请输入课程名称',
+                    }
+                  ]
                 },
-                initialValue: this.state.editorData.introduce || null,
-                name: 'introduce',
-                component: <TextArea style={{width:'200px'}} autoSize={{minRows: 2, maxRows: 6}} />
-              }
-            ]}/> : ''
+                {
+                  formItemProp:{
+                    label: '课程简介'
+                  },
+                  initialValue: this.state.editorData.introduce || null,
+                  name: 'introduce',
+                  component: <TextArea style={{width:'200px'}} autoSize={{minRows: 2, maxRows: 6}} />
+                }
+              ]}/> 
+            </div> : ''
           }
            
         </Modal>
@@ -156,6 +195,22 @@ class Course extends React.Component {
     }
     if (this.state.editorData.id) {
       data.id = this.state.editorData.id
+      if (this.state.isUpload) {
+        imgUpload({imgfiles: this.state.imageUrl}).then(res => {
+          if (res.status !== 100) {
+            message.error(res.msg)
+          }else {
+            data.coverImage = res.imageUrl
+          }
+          updataCouerse(data).then(res => {
+            if (res.errno === 0) {
+              this.handOpenOrCloseModel('addOrEditorCourseModel', false)
+              message.success('修改成功');
+              this.funQueryCoursePage()
+            }
+          })
+        })
+      }
       updataCouerse(data).then(res => {
         if (res.errno === 0) {
           this.handOpenOrCloseModel('addOrEditorCourseModel', false)
@@ -164,12 +219,19 @@ class Course extends React.Component {
         }
       })
     }else {
-      insertCoures(data).then(res => {
-        if (res.errno === 0) {
-          this.handOpenOrCloseModel('addOrEditorCourseModel', false)
-          message.success('添加成功');
-          this.funQueryCoursePage()
+      imgUpload({imgfiles: this.state.imageUrl}).then(res => {
+        if (res.status !== 100) {
+          message.error(res.msg)
+        }else {
+          data.coverImage = res.imageUrl
         }
+        insertCoures(data).then(res => {
+          if (res.errno === 0) {
+            this.handOpenOrCloseModel('addOrEditorCourseModel', false)
+            message.success('添加成功');
+            this.funQueryCoursePage()
+          }
+        })
       })
     }
   }
@@ -190,6 +252,12 @@ class Course extends React.Component {
     this.setState({
       [name]: flag
     })
+    if (!flag) {
+      this.setState({
+        imageUrl: '',
+        isUpload: false
+      })
+    }
   }
   /**
    * @param {String} 搜索的值
@@ -226,7 +294,8 @@ class Course extends React.Component {
   getEditorData = item => {
     this.setState({
       editorData: item,
-      addOrEditorCourseModel: true
+      addOrEditorCourseModel: true,
+      imageUrl: item.coverImage
     })
   }
   onScroll = e => {
@@ -246,14 +315,33 @@ class Course extends React.Component {
       })
     }
   }
-  // 路由跳转
-  toEditor = (id) => {
-    this.props.history.push('/admin/class/classEditor?id=' + id)
-  }
   getCreateForm = (CreateForm) => {
     this.setState({
       CreateForm
     })
+  }
+
+  /**
+   * 文件赋值
+   */
+  getFile = (file) => {
+    return false
+  }
+  handleChange = info => {
+    this.getBase64(info.file, imageUrl => {
+        this.setState({
+          imageUrl,
+          imgLoading: false,
+          fileList: [info.file],
+          isUpload: true
+        })
+      }
+    );
+  }
+  getBase64 = (img, callback) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
   }
 }
 
