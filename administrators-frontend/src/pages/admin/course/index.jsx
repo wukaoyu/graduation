@@ -85,7 +85,6 @@ class Course extends React.Component {
                             题目数量：{item.questionCount || 0}
                           </div>
                           <div className='courseCount-handle'>
-                            <Button size='small' className='courseCount-handle-btn'>查看题库</Button>
                             <Button size='small' className='courseCount-handle-btn'>查看试卷</Button>
                           </div>
                         </div>

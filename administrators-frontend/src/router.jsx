@@ -11,6 +11,9 @@ import ClassChooseStudent from './pages/admin/class/classInformation/classChoose
 import StudentAccount from './pages/admin/class/studentAccount/index'
 import ClassCourse from "./pages/admin/class/classCourse/index";
 import Course from './pages/admin/course/index'
+import TeacherMain from './pages/teacher/components/main/main'
+import TeacherClass from './pages/teacher/class/index'
+
 import jwt_decode from 'jwt-decode'
 
 export default class Router extends React.Component {
@@ -24,9 +27,6 @@ export default class Router extends React.Component {
         }else {
             const userInfo = jwt_decode(localStorage.getItem('token')).data
             window.userInfo = userInfo
-            if (userInfo.identity === 1) {
-                // window.location.href = '/#/admin/account/teacher'
-            }
         }
     }
     render() {
@@ -45,6 +45,11 @@ export default class Router extends React.Component {
                                 <Route path='/admin/class/arrangement' component={ClassCourse}/>
                                 <Route path='/admin/course' component={Course}/>
                             </AdminMain>
+                        }/>
+                        <Route path='/teacher' render={() => 
+                            <TeacherMain>
+                                <Route path='/teacher/class/main' component={TeacherClass}/>
+                            </TeacherMain>
                         }/>
                         <Route path='/' component={Login}/>
                     </Switch>

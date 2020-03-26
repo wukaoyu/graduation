@@ -44,7 +44,8 @@ app.use(function (req, res, next) {
           res.send({status: 403, msg: '登录已过期,请重新登录'});
           // res.render('login.html');
       } else {
-          next();
+        global.userInfo = result
+        next();
       }
   } else {
       next();

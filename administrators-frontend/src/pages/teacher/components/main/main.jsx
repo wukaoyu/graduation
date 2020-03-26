@@ -14,7 +14,7 @@ export default class Main extends React.Component {
         this.state = {
             identity: window.userInfo.identity
         }
-        if (window.userInfo.identity !== 1) {
+        if (window.userInfo.identity !== 2) {
             history.goBack();
         }
     }
@@ -22,7 +22,7 @@ export default class Main extends React.Component {
         return(
             <div>
                 {
-                    this.state.identity === 1 ?
+                    this.state.identity === 2 ?
                     <div className="nav-box">
                         <div className="nav-left">
                             <NavLeft></NavLeft>

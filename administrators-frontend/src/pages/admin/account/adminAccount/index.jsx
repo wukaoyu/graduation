@@ -27,9 +27,13 @@ class AdminAccount extends React.Component {
             fileVisible: false,
             fileList: []
         }
+    }
+
+    componentDidMount() {
         this.funTeacherPage()
         this.funQueryAllAdmin()
     }
+    
     render() {
         const paginationProps = {
             showSizeChanger: true,

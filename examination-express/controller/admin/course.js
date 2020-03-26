@@ -98,6 +98,7 @@ const queryCoursePage = (name, pageSize, current) => {
   })
 }
 
+
 module.exports = {
   insertCoures,
   deleteCourse,
