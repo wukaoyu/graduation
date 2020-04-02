@@ -5,15 +5,19 @@ const adminMenuList = [
     },
     {
         title: '课程管理',
-        key: '/teacher/course'
+        key: '/teacher/course/main'
     },
     {
         title: '试卷管理',
-        key: '/teacher/testPape'
+        key: '/teacher/testPape/main'
     },
     {
         title: '考试记录',
-        key: '/teacher/examinationRecord'
+        key: '/teacher/examinationRecord/main'
+    },
+    {
+        title: '个人中心',
+        key: '/teacher/person/main'
     }
 ];
 export default adminMenuList;

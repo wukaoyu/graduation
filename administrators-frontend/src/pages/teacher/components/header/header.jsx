@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row,Col } from "antd"
+import { Row, Col } from "antd"
 import './header.less'
 export default class Header extends React.Component{
     UNSAFE_componentWillMount(){

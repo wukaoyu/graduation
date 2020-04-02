@@ -11,6 +11,8 @@ var utilsApiRouter = require('./routes/utilsApi');
 var adminAccountRouter = require('./routes/admin/account');
 var classesRouter = require('./routes/admin/classes');
 var courseRouter = require('./routes/admin/course')
+var teacherClassesRouter = require('./routes/teacher/classes')
+var teacherCourseRouter = require('./routes/teacher/course')
 
 
 var app = express();
@@ -57,6 +59,9 @@ app.use('/api/users', usersRouter);
 app.use('/api/admin/account', adminAccountRouter);
 app.use('/api/admin/classes', classesRouter);
 app.use('/api/admin/course', courseRouter);
+
+app.use('/api/teacher/classes', teacherClassesRouter);
+app.use('/api/teacher/course', teacherCourseRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

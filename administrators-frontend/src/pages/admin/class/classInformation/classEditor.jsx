@@ -20,7 +20,7 @@ class ClassesEditor extends React.Component {
   render () {
     return (
       <div>
-        <Tabs defaultActiveKey="2">
+        <Tabs defaultActiveKey="1">
           <TabPane tab="学生管理" key="1">
             <ClassEditorStudent params={this.state.params} history={this.props.history}/>
           </TabPane>
