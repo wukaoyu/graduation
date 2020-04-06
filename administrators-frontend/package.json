@@ -77,10 +77,11 @@
     "webpack-manifest-plugin": "2.1.1",
     "workbox-webpack-plugin": "4.3.1"
   },
+  "homepage": ".",
   "scripts": {
     "start": "cross-env NODE_ENV=development node scripts/start.js",
     "start:prod": "cross-env NODE_ENV=production node scripts/start.js",
-    "build": "node scripts/build.js",
+    "build:dev": "cross-env NODE_ENV=development node scripts/build.js",
     "build:prod": "cross-env NODE_ENV=production node scripts/build.js",
     "test": "node scripts/test.js"
   },
