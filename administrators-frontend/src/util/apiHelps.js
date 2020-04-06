@@ -57,6 +57,7 @@ export const request = (options = {}) => {
     if (res.status === 403) {
       localStorage.removeItem('userInfo');
       localStorage.removeItem('token');
+      window.location.href = '/#/';
     }
   })
   return result

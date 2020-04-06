@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, Input, Icon, Radio } from 'antd'
+import { Button, Form, Input, Icon, Radio, message } from 'antd'
 import { login } from '../../api/login'
 // 引入解析token方法
 import jwt_decode from 'jwt-decode'
@@ -30,17 +30,24 @@ class Login extends React.Component  {
         }
     }
     userLogin = () => {
-        let userInfo = this.props.form.getFieldsValue()
-        login(userInfo).then(res => {
-            if (res.errno === 0) {
-                localStorage.setItem('token',res.data.token)
-                const userInfo = jwt_decode(localStorage.getItem('token')).data
-                window.userInfo = userInfo
-                if (userInfo.identity === 1) {
-                    this.props.history.push('/admin/account/teacher')
-                }else if (userInfo.identity ===2) {
-                    this.props.history.push('/teacher/class/main')
-                }
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            if (!err) {
+                let userInfo = this.props.form.getFieldsValue()
+                login(userInfo).then(res => {
+                    if (res.errno === 0) {
+                        localStorage.setItem('token',res.data.token)
+                        const userInfo = jwt_decode(localStorage.getItem('token')).data
+                        window.userInfo = userInfo
+                        if (userInfo.identity === 1) {
+                            this.props.history.push('/admin/account/teacher')
+                        }else if (userInfo.identity ===2) {
+                            this.props.history.push('/teacher/class/main')
+                        }
+                        message.success(`登录成功，欢迎${userInfo.username}`)
+                    }else if (res.errno === -1) {
+                        message.error('用户名或密码错误')
+                    }
+                })
             }
         })
     }
@@ -54,7 +61,12 @@ class Login extends React.Component  {
                         {
                             getFieldDecorator('account', {
                                 initialValue: '',
-                                rules: []
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: '请输入账号!',
+                                    }
+                                ]
                             })(
                                 <Input prefix={<Icon type="user"/>} placeholder='请输入用户名'/>
                             )
@@ -65,7 +77,12 @@ class Login extends React.Component  {
                         {
                             getFieldDecorator('password', {
                                 initialValue: '',
-                                rules: []
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: '请输入密码!',
+                                    }
+                                ]
                             })(
                                 <Input type='password' prefix={<Icon type="lock"/>} placeholder='请输入密码'/>
                             )
