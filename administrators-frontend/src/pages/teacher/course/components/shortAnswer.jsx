@@ -26,9 +26,15 @@ class ShortAnswer extends React.Component {
           </div>
           <div className='shortAnswer-answer'>
             <div>参考答案：</div>
-            <div>
-              {questionData.answerTrue[0]}
-            </div>
+            {
+              questionData.answerTrue.map((item, index) => {
+                return (
+                  <div key={index}>
+                    {`答案${index + 1}： ${item}`}
+                  </div>
+                )
+              })
+            }
           </div>
           <div className='single-label'>
             <div className='single-label-diff' 
