@@ -30,8 +30,8 @@ router.post('/queryCoursePage', (req, res) => {
 })
 
 router.post('/queryQuestionPage', (req, res) => {
-  const { curriculumId, type, pageSize, current } = req.body
-  const result = queryQuestionPage( curriculumId, type, pageSize, current )
+  const { curriculumId, type, pageSize, current, questionTitle } = req.body
+  const result = queryQuestionPage( curriculumId, questionTitle, type, pageSize, current )
   const resultData = result.then(data => {
     if (data) {
       let pageCount = data.count / pageSize

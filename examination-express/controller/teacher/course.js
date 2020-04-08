@@ -44,18 +44,20 @@ const queryCoursePage = (courseName, pageSize, current) => {
  * @param {*} current 当前第几页 
  */
 const queryQuestionPage = (curriculumId, questionTitle, type, pageSize, current) => {
-  let sql = `SELECT a.*, b.username as createName FROM question  as a LEFT JOIN teacher AS b on a.createBy=b.id WHERE a.curriculumId=${curriculumId} order by a.id desc`
+  let sql = `SELECT a.*, b.username as createName FROM question  as a LEFT JOIN teacher AS b on a.createBy=b.id WHERE a.curriculumId=${curriculumId} `
   let countSql = `select count(*) from question where curriculumId=${curriculumId} `
   let count = 0
   if (type) {
-    sql += `and a.curriculumId like '%${type}%' `
+    sql += `and a.type = ${type} `
   }
   if (questionTitle) {
     sql += `and a.questionTitle like '%${questionTitle}%' `
   }
+  sql += `order by a.id desc`
   if (pageSize && current) {
     sql += ` limit ${(current - 1) * pageSize},${pageSize} `
   }
+  console.log(sql)
   exec(countSql).then(num => {
     count = num[0]['count(*)']
     return num

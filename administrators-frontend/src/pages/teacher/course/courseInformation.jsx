@@ -22,6 +22,7 @@ class courseInformaition extends React.Component {
     this.state = {
       params: paramData,
       questionDataList: [],
+      searchData: {},
       pageData:{
         pageSize:10,// 每页条数
         current: 1,// 当前页数
@@ -49,7 +50,10 @@ class courseInformaition extends React.Component {
           <div style={{minHeight:'calc(100vh - 160px)'}}>
             <div className='search'>
               <Search
+                className='search-item'
                 placeholder="搜索题目名称"
+                onChange={value => this.changeValSearch(value)}
+                onSearch={value => this.searchquestion(value)}
                 style={{ width: 200 }}
               />
               <div className='search-item'>
@@ -57,6 +61,7 @@ class courseInformaition extends React.Component {
                 <Select
                 showSearch
                 allowClear
+                onChange={(val) => this.changeType(val)}
                 filterOption={(input, option) =>
                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
@@ -76,7 +81,7 @@ class courseInformaition extends React.Component {
               </div>
             </div>
             <QueueAnim
-              style={{marginTop:'20px'}}
+              style={{marginBottom:'20px'}}
               duration={600}
               animConfig={[
                 { opacity: [1, 0], translateX: [0, 100] }
@@ -148,10 +153,12 @@ class courseInformaition extends React.Component {
       </div>
     )
   }
-
+  // 查询题目分页信息
   funQueryQuestionPage = () => {
     let data = {
-      curriculumId: this.state.params.id
+      curriculumId: this.state.params.id,
+      ...this.state.searchData,
+      ...this.state.pageData
     }
     queryQuestionPage(data).then(res => {
       if (res.errno === 0) {
@@ -168,6 +175,69 @@ class courseInformaition extends React.Component {
           })
       }
     })
+  }
+  // 查询题目信息
+  searchquestion = (val) => {
+    let data = {
+      ...this.state.searchData,
+      questionTitle: val
+    }
+    this.setState({
+      searchData: data
+    },() => {
+      this.funQueryQuestionPage()
+    })
+  }
+  // 情况搜索条件时显示全部
+  changeValSearch = e => {
+    let val = e.target.value
+    if (val === '') {
+      this.setState({
+        searchData: {
+          ...this.state.searchData,
+          questionTitle: ''
+        }
+      },() => {
+        this.funQueryQuestionPage()
+      })
+    }
+  }
+  // 搜索题目类型
+  changeType = val => {
+    let data = {
+      ...this.state.searchData,
+      type: val
+    }
+    this.setState({
+      searchData: data
+    },() => {
+      this.funQueryQuestionPage()
+    })
+  }
+  /**
+     * 改变每页显示条数
+     * @param {*} pageSize 选择的每页显示条数
+     * @param {*} current 当前第几页
+     */
+    changePageSize = (pageSize,current) => {
+      let newPageData = Object.assign(this.state.pageData, {pageSize, current})
+      this.setState({
+          pageData: newPageData
+      },() => {
+          this.funQueryQuestionPage()
+      })
+  }
+  /**
+   * 改变当前第几页
+   * @param {*} current 当前页数
+   */
+  changePage = (current) => {
+      let newPageData = Object.assign(this.state.pageData, {current})
+      this.setState({
+          pageData: newPageData
+      },() => {
+          this.funQueryQuestionPage()
+      })
   }
 }
 
