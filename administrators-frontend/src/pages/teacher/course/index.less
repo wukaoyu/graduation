@@ -65,18 +65,64 @@
       &-btn {
         margin-left: 10px;
         font-size: 12px;
-        color: #fff;
         text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
         box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
         &:nth-child(1) {
+          color: #fff;
           background-color: #F58A07;
           border-color: #F58A07;
         }
         &:nth-child(2) {
+          color: #fff;
           background-color: #D17B88;
           border-color: #D17B88;
         }
       }
+    }
+  }
+  &-label{
+    display: flex;
+    margin-top: 20px;
+    &-diff{
+      font-size: 12px;
+      color: #fff;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+      // 简单
+      // background-color: #75B09C;
+      // 一般
+      // background-color: #1B998B; 
+      // 困难
+      background-color: #D45113;
+      // 非常困难
+      // background-color: #F40000; 
+      height: 20px;
+      line-height: 20px;
+      padding: 0 6px;
+      border-radius: 2px;
+    }
+    &-test{
+      font-size: 12px;
+      color: #fff;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+      // 练习题
+      // background-color: #48A9A6;
+      // 考试题
+      // background-color: #F40000;
+      // 练习&考试
+      background-color: #F58A07;
+      height: 20px;
+      line-height: 20px;
+      padding: 0 6px;
+      text-align: center;
+      border-radius: 2px;
+      margin-left: 10px;
+    }
+    &-answer{
+      margin-left: 10px;
+      font-size: 12px;
+      line-height: 20px;
     }
   }
 }

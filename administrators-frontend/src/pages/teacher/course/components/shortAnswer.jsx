@@ -1,19 +1,44 @@
 import React from 'react'
-import { Card } from 'antd'
+import { Card, Button } from 'antd'
 
 class ShortAnswer extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      questionData: props.questionData
+    }
   }
   
   render () {
+    const questionData = this.state.questionData
     return (
       // 简答题
       <div>
         <Card>
-          <div className='single-title'>
-            一段很长很长很长很长很长长很长的题目（简答）
+          <div className='single-head'>
+            <div className='single-head-title'>
+              {questionData.quetionJson.questionTitle}
+            </div>
+            <div className='single-head-handle'>
+              <Button className='single-head-handle-btn' size='small'>编辑</Button>
+              <Button className='single-head-handle-btn' size='small'>删除</Button>
+            </div>
+          </div>
+          <div className='shortAnswer-answer'>
+            <div>参考答案：</div>
+            <div>
+              {questionData.answerTrue[0]}
+            </div>
+          </div>
+          <div className='single-label'>
+            <div className='single-label-diff' 
+            style={{backgroundColor: questionData.difficultyArray[questionData.difficulty].color}}>
+              {questionData.difficultyArray[questionData.difficulty].text}
+            </div>
+            <div className='single-label-test'
+            style={{backgroundColor: questionData.isTestArray[questionData.isTest].color}}>
+              {questionData.isTestArray[questionData.isTest].text}
+            </div>
           </div>
         </Card>
       </div>

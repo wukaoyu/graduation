@@ -5,17 +5,20 @@ import '../index.less'
 class SingleElection extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      questionData: props.questionData
+    }
   }
   
   render () {
+    const questionData = this.state.questionData
     return (
       // 单选题
       <div>
         <Card>
           <div className='single-head'>
             <div className='single-head-title'>
-              一段很长很长很长很长很长长很长的题目（单选）
+              {questionData.quetionJson.questionTitle}
             </div>
             <div className='single-head-handle'>
               <Button className='single-head-handle-btn' size='small'>编辑</Button>
@@ -23,12 +26,26 @@ class SingleElection extends React.Component {
             </div>
           </div>
           <div>
-          <Radio.Group >
-            <Radio value={1}>A</Radio>
-            <Radio value={2}>B</Radio>
-            <Radio value={3}>C</Radio>
-            <Radio value={4}>D</Radio>
-          </Radio.Group>
+            <Radio.Group defaultValue={questionData.answerTrue[0]}>
+              {
+                questionData.answerJson.map((item, index) => {
+                  return (
+                    <Radio key={index} value={index}>{item.option}、{item.answer}</Radio>
+                  )
+                })
+              }
+            </Radio.Group>
+          </div>
+          <div className='single-label'>
+            <div className='single-label-diff' 
+            style={{backgroundColor: questionData.difficultyArray[questionData.difficulty].color}}>
+              {questionData.difficultyArray[questionData.difficulty].text}
+            </div>
+            <div className='single-label-test'
+            style={{backgroundColor: questionData.isTestArray[questionData.isTest].color}}>
+              {questionData.isTestArray[questionData.isTest].text}
+            </div>
+            <div className='single-label-answer'>参考答案：{questionData.answerJson[questionData.answerTrue[0]].option}</div>
           </div>
         </Card>
       </div>

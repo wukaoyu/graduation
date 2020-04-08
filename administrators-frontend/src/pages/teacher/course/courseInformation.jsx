@@ -84,18 +84,50 @@ class courseInformaition extends React.Component {
               {
                 this.state.questionDataList.map((item, index) => {
                   let comp = ''
+                  item.difficultyArray = [
+                    {
+                      color: '#48A9A6',
+                      text: '简单'
+                    },
+                    {
+                      color: '#F58A07',
+                      text: '一般'
+                    },
+                    {
+                      color: '#D45113',
+                      text: '困难'
+                    },
+                    {
+                      color: '#F40000',
+                      text: '非常困难'
+                    }
+                  ]
+                  item.isTestArray = [
+                    {
+                      text: '仅练习',
+                      color: '#48A9A6'
+                    },
+                    {
+                      text: '仅考试',
+                      color: '#D17B88'
+                    },
+                    {
+                      text: '练习&考试',
+                      color: '#F58A07'
+                    }
+                  ]
                   switch (item.type) {
                     case 1:
-                      comp = <SingleElection/>
+                      comp = <SingleElection questionData={item}/>
                       break;
                     case 2:
-                      comp = <MultipleChoice/>
+                      comp = <MultipleChoice questionData={item}/>
                       break;
                     case 3:
-                      comp = <Completion/>
+                      comp = <Completion questionData={item}/>
                       break;
                     case 4:
-                      comp = <ShortAnswer/>
+                      comp = <ShortAnswer questionData={item}/>
                       break;
                     default:
                       break;
