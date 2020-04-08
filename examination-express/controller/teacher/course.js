@@ -57,7 +57,6 @@ const queryQuestionPage = (curriculumId, questionTitle, type, pageSize, current)
   if (pageSize && current) {
     sql += ` limit ${(current - 1) * pageSize},${pageSize} `
   }
-  console.log(sql)
   exec(countSql).then(num => {
     count = num[0]['count(*)']
     return num
@@ -72,7 +71,83 @@ const queryQuestionPage = (curriculumId, questionTitle, type, pageSize, current)
   })
 }
 
+/**
+ * 添加题目
+ * @param {*} type 题目类型
+ * @param {*} answerTrue 正确答案
+ * @param {*} curriculumId 课程id
+ * @param {*} createBy 创建者
+ * @param {*} createTime 创建时间
+ * @param {*} difficulty 难度
+ * @param {*} imgUrl 图片地址
+ * @param {*} answerJson 选项数据
+ * @param {*} questionJson 题目数据
+ * @param {*} isTest 是否出现在测试题中
+ * @param {*} questionTitle 题目主文本
+ */
+const insertQuestion = (type, answerTrue, curriculumId, createBy, createTime, difficulty, imgUrl, answerJson, questionJson, isTest, questionTitle) => {
+  let sql = `INSERT INTO question (type, answerTrue, curriculumId, createBy, createTime, difficulty, imgUrl, answerJson, questionJson, isTest, questionTitle) 
+      VALUES (${type}, '${answerTrue}', ${curriculumId}, ${createBy}, '${createTime}', ${difficulty}, '${imgUrl}', '${answerJson}', '${questionJson}', ${isTest}, '${questionTitle}')`
+  return exec(sql).then(row => {
+    return row || {}
+  })
+}
+
+/**
+ * 删除题目
+ * @param {*} id 题目id
+ */
+const deleteQuestion = (id) => {
+  let sql = `DELETE FROM question WHERE id = ${id}`
+    return exec(sql).then(row => {
+        return row || {}
+    })
+}
+
+/**
+ * 修改题目
+ * @param {*} id 题目id
+ * @param {*} answerTrue 正确答案
+ * @param {*} difficulty 难度
+ * @param {*} imgUrl 图片url
+ * @param {*} answerJson 选项json
+ * @param {*} quetionJson 问题json
+ * @param {*} isTest 是否为测试题
+ * @param {*} questionTitle 题目主要内容
+ */
+const updataQuestion = (id, answerTrue, difficulty = -1, imgUrl, answerJson, quetionJson, isTest = -1, questionTitle) => {
+  let sql = `UPDATE question SET `
+  if (answerTrue) {
+    sql += `answerTrue='${answerTrue}' `
+  }
+  if (difficulty > -1) {
+    sql += `difficulty=${difficulty} `
+  }
+  if (imgUrl) {
+    sql += `imgUrl='${imgUrl}' `
+  }
+  if (answerJson) {
+    sql += `answerJson='${answerJson}' `
+  }
+  if (quetionJson) {
+    sql += `quetionJson='${quetionJson}' `
+  }
+  if (isTest > -1) {
+    sql += `isTest=${isTest} `
+  }
+  if (questionTitle) {
+    sql += `questionTitle='${questionTitle}' `
+  }
+  sql += `WHERE id = ${id}`
+  return exec(sql).then(row => {
+      return row || {}
+  })
+}
+
 module.exports = {
   queryCoursePage,
-  queryQuestionPage
+  queryQuestionPage,
+  insertQuestion,
+  deleteQuestion,
+  updataQuestion
 }

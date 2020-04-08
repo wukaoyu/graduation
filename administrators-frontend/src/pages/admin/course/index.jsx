@@ -109,7 +109,6 @@ class Course extends React.Component {
         visible={this.state.addOrEditorCourseModel}
         onCancel={() =>this.handOpenOrCloseModel('addOrEditorCourseModel', false)}
         footer={''}>
-          
           {
             this.state.addOrEditorCourseModel ? <div>
               <div className='form-upload'>
@@ -130,7 +129,7 @@ class Course extends React.Component {
                     this.state.imageUrl ? 
                     <img src={this.state.imageUrl} alt="avatar" style={{ width: '100%' }} /> : 
                     <div>
-                      {this.state.loading ? <LoadingOutlined /> : <PlusOutlined />}
+                      {this.state.imgLoading ? <LoadingOutlined /> : <PlusOutlined />}
                       <div className="ant-upload-text">Upload</div>
                     </div>
                   }
@@ -324,6 +323,9 @@ class Course extends React.Component {
    * 文件赋值
    */
   getFile = (file) => {
+    this.setState({
+      imgLoading: true
+    })
     return false
   }
   handleChange = info => {

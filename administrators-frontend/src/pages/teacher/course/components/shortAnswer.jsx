@@ -17,10 +17,10 @@ class ShortAnswer extends React.Component {
         <Card>
           <div className='single-head'>
             <div className='single-head-title'>
-              {questionData.quetionJson.questionTitle}
+              {questionData.questionJson.questionTitle}
             </div>
             <div className='single-head-handle'>
-              <Button className='single-head-handle-btn' size='small'>编辑</Button>
+              <Button className='single-head-handle-btn' size='small' onClick={() => this.editorQuestion()}>编辑</Button>
               <Button className='single-head-handle-btn' size='small'>删除</Button>
             </div>
           </div>
@@ -49,6 +49,10 @@ class ShortAnswer extends React.Component {
         </Card>
       </div>
     )
+  }
+
+  editorQuestion = () => {
+    this.props.editorQuestion()
   }
 }
 

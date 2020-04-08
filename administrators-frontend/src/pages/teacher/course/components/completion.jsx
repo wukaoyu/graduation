@@ -12,8 +12,8 @@ class Completion extends React.Component {
   render () {
     let questionData = this.state.questionData
     let compTitle = ''
-    questionData.quetionJson.forEach((item, index) => {
-      if (questionData.quetionJson.length - 1 !== index){
+    questionData.questionJson.forEach((item, index) => {
+      if (questionData.questionJson.length - 1 !== index){
         compTitle += item + ' _______ '
       }
     })
@@ -26,7 +26,7 @@ class Completion extends React.Component {
               {compTitle}
             </div>
             <div className='single-head-handle'>
-              <Button className='single-head-handle-btn' size='small'>编辑</Button>
+              <Button className='single-head-handle-btn' size='small' onClick={() => this.editorQuestion()}>编辑</Button>
               <Button className='single-head-handle-btn' size='small'>删除</Button>
             </div>
           </div>
@@ -69,6 +69,11 @@ class Completion extends React.Component {
       </div>
     )
   }
+
+  editorQuestion = () => {
+    this.props.editorQuestion()
+  }
 }
+
 
 export default Completion
