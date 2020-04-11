@@ -1,6 +1,7 @@
 import React from 'react';
-import { Pagination, Input, Select, Button, Modal } from 'antd'
-import { queryQuestionPage } from 'api/teacher/course'
+import { Pagination, Input, Select, Button, Modal, message } from 'antd'
+import { queryQuestionPage, insertQuestion, deleteQuestion, updataQuestion } from 'api/teacher/course'
+import { imgUpload } from 'api/utilsApi';
 import QueueAnim from 'rc-queue-anim';
 import SingleElection from './components/singleElection'
 import SingleElectionEditor from './components/singleElectionEditor'
@@ -80,10 +81,10 @@ class courseInformaition extends React.Component {
             </div>
             <div className='search-item'>
               <div>添加题目：</div>
-              <Button className='search-item-btn' onClick={() => this.editorQuestion(1)}>单选题</Button>
-              <Button className='search-item-btn' onClick={() => this.editorQuestion(2)}>多选题</Button>
-              <Button className='search-item-btn' onClick={() => this.editorQuestion(3)}>填空题</Button>
-              <Button className='search-item-btn' onClick={() => this.editorQuestion(4)}>简答题</Button>
+              <Button className='search-item-btn' onClick={() => this.openEditorModel(1)}>单选题</Button>
+              <Button className='search-item-btn' onClick={() => this.openEditorModel(2)}>多选题</Button>
+              <Button className='search-item-btn' onClick={() => this.openEditorModel(3)}>填空题</Button>
+              <Button className='search-item-btn' onClick={() => this.openEditorModel(4)}>简答题</Button>
             </div>
           </div>
           <QueueAnim
@@ -129,16 +130,24 @@ class courseInformaition extends React.Component {
                 ]
                 switch (item.type) {
                   case 1:
-                    comp = <SingleElection questionData={item} editorQuestion={() => this.editorQuestion(1, item)}/>
+                    comp = <SingleElection questionData={item} 
+                            openEditorModel={() => this.openEditorModel(1, item)}
+                            deleteQuestion={() => this.deleteQuestion(item.id)}/>
                     break;
                   case 2:
-                    comp = <MultipleChoice questionData={item} editorQuestion={() => this.editorQuestion(2, item)}/>
+                    comp = <MultipleChoice questionData={item} 
+                          openEditorModel={() => this.openEditorModel(2, item)}
+                          deleteQuestion={() => this.deleteQuestion(item.id)}/>
                     break;
                   case 3:
-                    comp = <Completion questionData={item} editorQuestion={() => this.editorQuestion(3, item)}/>
+                    comp = <Completion questionData={item} 
+                          openEditorModel={() => this.openEditorModel(3, item)}
+                          deleteQuestion={() => this.deleteQuestion(item.id)}/>
                     break;
                   case 4:
-                    comp = <ShortAnswer questionData={item} editorQuestion={() => this.editorQuestion(4, item)}/>
+                    comp = <ShortAnswer questionData={item} 
+                          openEditorModel={() => this.openEditorModel(4, item)}
+                          deleteQuestion={() => this.deleteQuestion(item.id)}/>
                     break;
                   default:
                     break;
@@ -159,20 +168,28 @@ class courseInformaition extends React.Component {
         visible={this.state.addOrEditorQuestion}
         onCancel={() => this.handOpenOrCloseModel('addOrEditorQuestion', false)}
         footer={''}>
-          {(() => {
+          { this.state.addOrEditorQuestion ? (() => {
             switch (this.state.editorType) {
               case 1:
-                return <SingleElectionEditor questionData={this.state.editorData}/>
+                return <SingleElectionEditor questionData={this.state.editorData} 
+                        closeEditorModel={() => this.handOpenOrCloseModel('addOrEditorQuestion', false)}
+                        addOrEditorQuestion={(val) => this.addOrEditorQuestion(val)}/>
               case 2: 
-                return <MultipleChoiceEditor questionData={this.state.editorData}/>
+                return <MultipleChoiceEditor questionData={this.state.editorData} 
+                        closeEditorModel={() => this.handOpenOrCloseModel('addOrEditorQuestion', false)}
+                        addOrEditorQuestion={(val) => this.addOrEditorQuestion(val)}/>
               case 3: 
-                return <CompletionEditor questionData={this.state.editorData}/>
+                return <CompletionEditor questionData={this.state.editorData} 
+                        closeEditorModel={() => this.handOpenOrCloseModel('addOrEditorQuestion', false)}
+                        addOrEditorQuestion={(val) => this.addOrEditorQuestion(val)}/>
               case 4: 
-                return <ShortAnswerEditor questionData={this.state.editorData}/>
+                return <ShortAnswerEditor questionData={this.state.editorData} 
+                        closeEditorModel={() => this.handOpenOrCloseModel('addOrEditorQuestion', false)}
+                        addOrEditorQuestion={(val) => this.addOrEditorQuestion(val)}/>
               default:
                 break;
             }
-          })()}
+          })() : ''}
         </Modal>
       </div>
     )
@@ -198,6 +215,63 @@ class courseInformaition extends React.Component {
             pageData: newPageData
           })
       }
+    })
+  }
+  addOrEditorQuestion = val => {
+    val.curriculumId = this.state.params.id
+    val.answerJson = JSON.stringify(val.answerJson)
+    val.answerTrue = JSON.stringify(val.answerTrue)
+    val.questionJson = JSON.stringify(val.questionJson)
+    if (val.imgUrl) {
+      imgUpload({imgfiles: val.imgUrl}).then(res => {
+        if (res.status === 100) {
+          val.imgUrl = res.imageUrl
+          if (val.id) {
+            updataQuestion(val).then(res => {
+              if (res.errno === 0) {
+                message.success('修改成功')
+                this.funQueryQuestionPage()
+                this.handOpenOrCloseModel('addOrEditorQuestion', false)
+              }
+            })
+          }else {
+            insertQuestion(val).then(res => {
+              if (res.errno === 0) {
+                message.success('修改成功')
+                this.funQueryQuestionPage()
+                this.handOpenOrCloseModel('addOrEditorQuestion', false)
+              }
+            })
+          }
+        }else {
+          message.error(res.msg)
+        }
+      })
+    }else {
+      if (val.id) {
+        updataQuestion(val).then(res => {
+          if (res.errno === 0) {
+            message.success('修改成功')
+            this.funQueryQuestionPage()
+            this.handOpenOrCloseModel('addOrEditorQuestion', false)
+          }
+        })
+      }else {
+        insertQuestion(val).then(res => {
+          if (res.errno === 0) {
+            message.success('添加成功')
+            this.funQueryQuestionPage()
+            this.handOpenOrCloseModel('addOrEditorQuestion', false)
+          }
+        })
+      }
+    }
+  }
+  // 删除题目
+  deleteQuestion = id => {
+    deleteQuestion({id}).then(res => {
+      message.success('删除成功')
+      this.funQueryQuestionPage()
     })
   }
   // 查询题目信息
@@ -239,17 +313,17 @@ class courseInformaition extends React.Component {
     })
   }
   /**
-     * 改变每页显示条数
-     * @param {*} pageSize 选择的每页显示条数
-     * @param {*} current 当前第几页
-     */
-    changePageSize = (pageSize,current) => {
-      let newPageData = Object.assign(this.state.pageData, {pageSize, current})
-      this.setState({
-          pageData: newPageData
-      },() => {
-          this.funQueryQuestionPage()
-      })
+   * 改变每页显示条数
+   * @param {*} pageSize 选择的每页显示条数
+   * @param {*} current 当前第几页
+   */
+  changePageSize = (pageSize,current) => {
+    let newPageData = Object.assign(this.state.pageData, {pageSize, current})
+    this.setState({
+        pageData: newPageData
+    },() => {
+        this.funQueryQuestionPage()
+    })
   }
   /**
    * 改变当前第几页
@@ -279,7 +353,7 @@ class courseInformaition extends React.Component {
    * @param {*} type 题目类型
    * @param {*} item 题目数据
    */
-  editorQuestion = (type, item = {}) => {
+  openEditorModel = (type, item = {}) => {
     this.setState({
       editorType: type,
       editorData: item

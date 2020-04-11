@@ -56,7 +56,7 @@ const queryQuestionPage = (curriculumId, questionTitle, type, pageSize, current)
   sql += `order by a.id desc`
   if (pageSize && current) {
     sql += ` limit ${(current - 1) * pageSize},${pageSize} `
-  }
+  }  
   exec(countSql).then(num => {
     count = num[0]['count(*)']
     return num
@@ -88,6 +88,7 @@ const queryQuestionPage = (curriculumId, questionTitle, type, pageSize, current)
 const insertQuestion = (type, answerTrue, curriculumId, createBy, createTime, difficulty, imgUrl, answerJson, questionJson, isTest, questionTitle) => {
   let sql = `INSERT INTO question (type, answerTrue, curriculumId, createBy, createTime, difficulty, imgUrl, answerJson, questionJson, isTest, questionTitle) 
       VALUES (${type}, '${answerTrue}', ${curriculumId}, ${createBy}, '${createTime}', ${difficulty}, '${imgUrl}', '${answerJson}', '${questionJson}', ${isTest}, '${questionTitle}')`
+  console.log(sql)
   return exec(sql).then(row => {
     return row || {}
   })
@@ -111,34 +112,37 @@ const deleteQuestion = (id) => {
  * @param {*} difficulty 难度
  * @param {*} imgUrl 图片url
  * @param {*} answerJson 选项json
- * @param {*} quetionJson 问题json
+ * @param {*} questionJson 问题json
  * @param {*} isTest 是否为测试题
  * @param {*} questionTitle 题目主要内容
  */
-const updataQuestion = (id, answerTrue, difficulty = -1, imgUrl, answerJson, quetionJson, isTest = -1, questionTitle) => {
+const updataQuestion = (id, answerTrue, difficulty = -1, imgUrl, answerJson, questionJson, isTest = -1, questionTitle) => {
   let sql = `UPDATE question SET `
   if (answerTrue) {
-    sql += `answerTrue='${answerTrue}' `
+    sql += `answerTrue='${answerTrue}',`
   }
   if (difficulty > -1) {
-    sql += `difficulty=${difficulty} `
+    sql += `difficulty=${difficulty},`
   }
-  if (imgUrl) {
-    sql += `imgUrl='${imgUrl}' `
+  if (imgUrl === null) {
+    sql += `imgUrl=${null},`
+  }else if (imgUrl) {
+    sql += `imgUrl='${imgUrl}',`
   }
   if (answerJson) {
-    sql += `answerJson='${answerJson}' `
+    sql += `answerJson='${answerJson}',`
   }
-  if (quetionJson) {
-    sql += `quetionJson='${quetionJson}' `
+  if (questionJson) {
+    sql += `questionJson='${questionJson}',`
   }
   if (isTest > -1) {
-    sql += `isTest=${isTest} `
+    sql += `isTest=${isTest},`
   }
   if (questionTitle) {
-    sql += `questionTitle='${questionTitle}' `
+    sql += `questionTitle='${questionTitle}',`
   }
-  sql += `WHERE id = ${id}`
+  sql = sql.substring(0, sql.length - 1)
+  sql += ` WHERE id = ${id}`
   return exec(sql).then(row => {
       return row || {}
   })

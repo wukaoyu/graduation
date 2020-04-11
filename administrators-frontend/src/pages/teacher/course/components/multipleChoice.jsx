@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Button, Checkbox } from 'antd'
+import { Card, Button, Checkbox, Popover } from 'antd'
 
 class MultipleChoice extends React.Component {
   constructor(props) {
@@ -8,7 +8,16 @@ class MultipleChoice extends React.Component {
       questionData: props.questionData
     }
   }
-  
+
+  static getDerivedStateFromProps(nextProps, preState) {
+    const newData = JSON.stringify(nextProps)
+    const oldData = JSON.stringify(preState)
+    if (newData !== oldData) {
+      return {questionData: nextProps.questionData}
+    }
+    return null
+  }
+
   render () {
     const questionData = this.state.questionData
     return (
@@ -21,15 +30,28 @@ class MultipleChoice extends React.Component {
             </div>
             <div className='single-head-handle'>
               <Button className='single-head-handle-btn' size='small' onClick={() => this.editorQuestion()}>编辑</Button>
-              <Button className='single-head-handle-btn' size='small'>删除</Button>
+              <Popover placement="top" trigger='click' content = {
+                  <div>
+                      <p>删除后将无法复原数据，<br/>确认删除改题目吗？</p>
+                      <div className='teacher-delete-btn'>
+                          <Button type="danger" size={'small'} onClick={() => this.deleteQuestion()}>确认</Button>
+                      </div>
+                  </div>
+                }>            
+                <Button className='single-head-handle-btn' size='small'>删除</Button>
+              </Popover>
             </div>
           </div>
+          {
+            questionData.imgUrl ? 
+            <img src={questionData.imgUrl} alt="avatar" style={{marginBottom:'10px'}} /> : ''
+          }
           <div>
-            <Checkbox.Group  defaultValue={questionData.answerTrue}>
+            <Checkbox.Group  value={questionData.answerTrue}>
             {
                 questionData.answerJson.map((item, index) => {
                   return (
-                    <Checkbox key={index} value={index}>{item.option}、{item.answer}</Checkbox>
+                    <Checkbox key={index} value={index}>{String.fromCharCode(index + 65)}、{item.answer}</Checkbox>
                   )
                 })
               }
@@ -48,7 +70,7 @@ class MultipleChoice extends React.Component {
               参考答案：
               {
                 questionData.answerTrue.map(item => {
-                  return questionData.answerJson[item].option
+                  return String.fromCharCode(item + 65)
                 })
               }
             </div>
@@ -57,9 +79,14 @@ class MultipleChoice extends React.Component {
       </div>
     )
   }
-
+  // 编辑题目
   editorQuestion = () => {
-    this.props.editorQuestion()
+    this.props.openEditorModel()
+  }
+
+  // 删除题目
+  deleteQuestion = () => {
+    this.props.deleteQuestion()
   }
 }
 

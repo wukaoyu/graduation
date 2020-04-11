@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Button } from 'antd'
+import { Card, Button, Popover } from 'antd'
 
 class Completion extends React.Component {
   constructor(props) {
@@ -8,13 +8,24 @@ class Completion extends React.Component {
       questionData: props.questionData
     }
   }
-  
+
+  static getDerivedStateFromProps(nextProps, preState) {
+    const newData = JSON.stringify(nextProps)
+    const oldData = JSON.stringify(preState)
+    if (newData !== oldData) {
+      return {questionData: nextProps.questionData}
+    }
+    return null
+  }
+
   render () {
     let questionData = this.state.questionData
     let compTitle = ''
     questionData.questionJson.forEach((item, index) => {
-      if (questionData.questionJson.length - 1 !== index){
-        compTitle += item + ' _______ '
+      if (item.type) {
+        compTitle += item.title
+      }else {
+        compTitle += ' _______ '
       }
     })
     return (
@@ -27,9 +38,22 @@ class Completion extends React.Component {
             </div>
             <div className='single-head-handle'>
               <Button className='single-head-handle-btn' size='small' onClick={() => this.editorQuestion()}>编辑</Button>
-              <Button className='single-head-handle-btn' size='small'>删除</Button>
+              <Popover placement="top" trigger='click' content = {
+                  <div>
+                      <p>删除后将无法复原数据，<br/>确认删除改题目吗？</p>
+                      <div className='teacher-delete-btn'>
+                          <Button type="danger" size={'small'} onClick={() => this.deleteQuestion()}>确认</Button>
+                      </div>
+                  </div>
+                }>            
+                <Button className='single-head-handle-btn' size='small'>删除</Button>
+              </Popover>
             </div>
           </div>
+          {
+            questionData.imgUrl ? 
+            <img src={questionData.imgUrl} alt="avatar" style={{marginBottom:'10px'}} /> : ''
+          }
           <div className='completion-answer'>
             <div>
               参考答案：
@@ -44,7 +68,7 @@ class Completion extends React.Component {
                         item.map((itemText, itemTextIndex) => {
                           return (
                             <div key={itemTextIndex} style={{marginRight:'5px'}}>
-                              {`[${itemText}]`}
+                              {`[${itemText.text}]`}
                             </div>
                           )
                         })
@@ -69,9 +93,13 @@ class Completion extends React.Component {
       </div>
     )
   }
-
+  // 编辑题目
   editorQuestion = () => {
-    this.props.editorQuestion()
+    this.props.openEditorModel()
+  }
+  // 删除题目
+  deleteQuestion = () => {
+    this.props.deleteQuestion()
   }
 }
 

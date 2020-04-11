@@ -76,7 +76,7 @@ class Course extends React.Component {
                                     <Button type="danger" size={'small'} onClick={() => this.deleteCourse(item.id)}>确认</Button>
                                 </div>
                             </div>
-                        }>
+                          }>
                             <DeleteOutlined/>
                         </Popover>
                       ]}>
