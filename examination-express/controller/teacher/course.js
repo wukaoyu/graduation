@@ -43,12 +43,15 @@ const queryCoursePage = (courseName, pageSize, current) => {
  * @param {*} pageSize 每页显示的条数
  * @param {*} current 当前第几页 
  */
-const queryQuestionPage = (curriculumId, questionTitle, type, pageSize, current) => {
+const queryQuestionPage = (curriculumId, questionTitle, difficulty, type, pageSize, current) => {
   let sql = `SELECT a.*, b.username as createName FROM question  as a LEFT JOIN teacher AS b on a.createBy=b.id WHERE a.curriculumId=${curriculumId} `
   let countSql = `select count(*) from question where curriculumId=${curriculumId} `
   let count = 0
   if (type) {
     sql += `and a.type = ${type} `
+  }
+  if (difficulty > -1) {
+    sql += `and a.difficulty = ${difficulty} `
   }
   if (questionTitle) {
     sql += `and a.questionTitle like '%${questionTitle}%' `
@@ -88,7 +91,7 @@ const queryQuestionPage = (curriculumId, questionTitle, type, pageSize, current)
 const insertQuestion = (type, answerTrue, curriculumId, createBy, createTime, difficulty, imgUrl, answerJson, questionJson, isTest, questionTitle) => {
   let sql = `INSERT INTO question (type, answerTrue, curriculumId, createBy, createTime, difficulty, imgUrl, answerJson, questionJson, isTest, questionTitle) 
       VALUES (${type}, '${answerTrue}', ${curriculumId}, ${createBy}, '${createTime}', ${difficulty}, '${imgUrl}', '${answerJson}', '${questionJson}', ${isTest}, '${questionTitle}')`
-  console.log(sql)
+  // console.log(sql)
   return exec(sql).then(row => {
     return row || {}
   })

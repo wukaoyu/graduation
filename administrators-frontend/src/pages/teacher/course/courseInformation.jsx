@@ -79,6 +79,23 @@ class courseInformaition extends React.Component {
                 <Option key={4} value={4}>简答题</Option>
               </Select>
             </div>
+
+            <div className='search-item'>
+              <div>题目难度：</div>
+              <Select
+              showSearch
+              allowClear
+              onChange={(val) => this.changeDifficulty(val)}
+              filterOption={(input, option) =>
+                  option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              style={{ width: 150 }}>
+                <Option key={0} value={0}>简答</Option>
+                <Option key={1} value={1}>一般</Option>
+                <Option key={2} value={2}>困难</Option>
+                <Option key={3} value={3}>非常困难</Option>
+              </Select>
+            </div>
             <div className='search-item'>
               <div>添加题目：</div>
               <Button className='search-item-btn' onClick={() => this.openEditorModel(1)}>单选题</Button>
@@ -305,6 +322,18 @@ class courseInformaition extends React.Component {
     let data = {
       ...this.state.searchData,
       type: val
+    }
+    this.setState({
+      searchData: data
+    },() => {
+      this.funQueryQuestionPage()
+    })
+  }
+  // 题目难度筛选
+  changeDifficulty = val => {
+    let data = {
+      ...this.state.searchData,
+      difficulty: val
     }
     this.setState({
       searchData: data

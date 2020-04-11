@@ -221,8 +221,9 @@ class SingleElectionEditor extends React.Component {
    */
   removeAnswerOption = (index) => {
     let newArray =  JSON.parse(JSON.stringify(this.state.questionData.answerJson))
-    let answerTrue = this.state.questionData.answerTrue[0] === index ? [0] : this.state.questionData.answerTrue[0]
+    let answerTrue = this.state.questionData.answerTrue[0] === index ? [0] : this.state.questionData.answerTrue
     newArray.splice(index,1) 
+    // console.log(this.state.questionData.answerTrue[0], index, answerTrue)
     this.setState({
       questionData: {
         ...this.state.questionData,
