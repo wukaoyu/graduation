@@ -6,7 +6,12 @@ const {
   queryQuestionPage,
   updataQuestion,
   insertQuestion,
-  deleteQuestion
+  deleteQuestion,
+  queryTestPage,
+  insertTestPaper,
+  upDataTestPaper,
+  deleteTestPaper,
+  queryTestPaperId
 } = require("../../controller/teacher/course")
 const { nowDate } = require("../../public/utils/main")
 
@@ -89,6 +94,88 @@ router.post('/deleteQuestion', (req, res) => {
 router.post('/updataQuestion', (req, res) => {
   const { id, answerTrue, difficulty, imgUrl, answerJson, questionJson, isTest, questionTitle } = req.body
   const result = updataQuestion(id, answerTrue, difficulty, imgUrl, answerJson, questionJson, isTest, questionTitle)
+  const resultData = result.then(data => {
+    if (data) {
+      return new SuccessModel(data)
+    }
+    return new ErrorModel('异常错误')
+  })
+  resultData.then(data => {
+    res.json(data)
+  })
+})
+
+router.post('/queryTestPage', (req, res) => {
+  const { name, curriculumId, pageSize, current } = req.body
+  const result = queryTestPage(name, curriculumId, pageSize, current)
+  const resultData = result.then(data => {
+    if (data) {
+      let pageCount = data.count / pageSize
+      let hasmore = true
+      if (current >= pageCount || !current) {
+        hasmore = false
+      }
+      let pageData = {
+        ...data,
+        hasmore
+      }
+      return new SuccessModel(pageData)
+    }
+    return new ErrorModel('异常错误')
+  })
+  resultData.then(data => {
+    res.json(data)
+  })
+})
+
+router.post('/insertTestPaper', (req, res) => {
+  const { name, fullMarks, rules, curriculumId }  = req.body
+  const createBy = global.userInfo.id
+  const createTime = nowDate()
+  const result = insertTestPaper(name, createBy, createTime, fullMarks, rules, curriculumId)
+  const resultData = result.then(data => {
+    if (data) {
+      return new SuccessModel(data)
+    }
+    return new ErrorModel('异常错误')
+  })
+  resultData.then(data => {
+    res.json(data)
+  })
+})
+
+router.post('/upDataTestPaper', (req, res) => {
+  const { name, fullMarks, rules, id }  = req.body
+  const result = upDataTestPaper(name, fullMarks, rules, id)
+  const resultData = result.then(data => {
+    if (data) {
+      return new SuccessModel(data)
+    }
+    return new ErrorModel('异常错误')
+  })
+  resultData.then(data => {
+    res.json(data)
+  })
+})
+
+router.post('/deleteTestPaper', (req, res) => {
+  const { id } = req.body
+  const result = deleteTestPaper(id)
+  const resultData = result.then(data => {
+    if (data) {
+      return new SuccessModel(data)
+    }
+    return new ErrorModel('异常错误')
+  })
+  resultData.then(data => {
+    res.json(data)
+  })
+})
+
+
+router.post('/queryTestPaperId', (req, res) => {
+  const { id, curriculumId } = req.body
+  const result = queryTestPaperId(id, curriculumId)
   const resultData = result.then(data => {
     if (data) {
       return new SuccessModel(data)

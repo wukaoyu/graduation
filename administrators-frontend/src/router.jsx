@@ -16,6 +16,8 @@ import TeacherClass from './pages/teacher/class/index'
 import TeacherEditorStudent from './pages/teacher/class/editorStudent'
 import TeacherCourse from './pages/teacher/course/index'
 import TeacherCourseInformation from './pages/teacher/course/courseInformation'
+import TestPaper from './pages/teacher/course/testPaper'
+import EditorTestPaper from './pages/teacher/course/editorTestPaper'
 
 import jwt_decode from 'jwt-decode'
 
@@ -55,6 +57,8 @@ export default class Router extends React.Component {
                                 <Route path='/teacher/class/editorStudent' component={TeacherEditorStudent}/>
                                 <Route path='/teacher/course/main' component={TeacherCourse}/>
                                 <Route path='/teacher/course/courseInformation' component={TeacherCourseInformation}/>
+                                <Route path='/teacher/course/testPaper' component={TestPaper}/>
+                                <Route path='/teacher/course/editorTestPaper' component={EditorTestPaper}/>
                             </TeacherMain>
                         }/>
                         <Route path='/' component={Login}/>

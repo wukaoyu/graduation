@@ -8,10 +8,6 @@ const adminMenuList = [
         key: '/teacher/course/main'
     },
     {
-        title: '试卷管理',
-        key: '/teacher/testPape/main'
-    },
-    {
         title: '考试记录',
         key: '/teacher/examinationRecord/main'
     },

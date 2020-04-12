@@ -52,7 +52,13 @@ class TeacherCourse extends React.Component {
                             <Button size='small' className='courseCount-handle-btn' onClick={() => this.toCourseInformaition(item.id)}>详细信息</Button>
                           </div>
                         </div>
-                        <div>
+                        <div className='courseCount'>
+                          <div className='courseCount-text'>
+                            试卷数量：{item.testPaperCount || 0}
+                          </div>
+                          <div className='courseCount-handle'>
+                            <Button size='small' className='courseCount-handle-btn' onClick={() => this.toTestPaper(item.id)}>详细信息</Button>
+                          </div>
                         </div>
                         <div className='courseIntroduce'>
                           {item.introduce}
@@ -103,9 +109,14 @@ class TeacherCourse extends React.Component {
       })
     }
   }
-  // 跳转到课程信息页
+  // 跳转到课程题目信息页
   toCourseInformaition = id => {
     this.props.history.push('/teacher/course/courseInformation?id=' + id)
+  }
+
+  // 跳到试卷页面
+  toTestPaper = id => {
+    this.props.history.push('/teacher/course/testPaper?id=' + id)
   }
 }
 

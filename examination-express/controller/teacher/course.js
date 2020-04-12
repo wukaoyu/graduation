@@ -8,11 +8,12 @@ const { exec } = require('../../db/mysql')
  */
 const queryCoursePage = (courseName, pageSize, current) => {
   let teacherId = global.userInfo.id
-  let sql = `SELECT curTab.*, countTab.questionCount FROM
+  let sql = `SELECT curTab.*, countTab.questionCount, paper.testPaperCount FROM
   (SELECT curriculumId FROM TCCrelation WHERE teacherId=${teacherId} GROUP BY curriculumId ) TCCTab LEFT JOIN
   (SELECT * FROM curriculum) curTab ON TCCTab.curriculumId=curTab.id LEFT JOIN
   (SELECT b.curriculumId, count(b.curriculumId) AS questionCount FROM curriculum AS a LEFT JOIN question AS b ON a.id=b.curriculumId  
-  GROUP BY b.curriculumId) countTab on TCCTab.curriculumId=countTab.curriculumId where 1=1 
+  GROUP BY b.curriculumId) countTab on TCCTab.curriculumId=countTab.curriculumId LEFT JOIN
+	(SELECT curriculumId, count(*) AS testPaperCount FROM testPaper GROUP BY curriculumId) paper ON TCCTab.curriculumId=paper.curriculumId
   `
   let countSql = `select count(teacherId) from TCCrelation where teacherId=${teacherId} GROUP BY teacherId`
   if (courseName) {
@@ -151,10 +152,109 @@ const updataQuestion = (id, answerTrue, difficulty = -1, imgUrl, answerJson, que
   })
 }
 
+/**
+ * 查询试卷分页信息
+ * @param {*} name 试卷名称
+ * @param {*} curriculumId 班级id
+ * @param {*} pageSize 每页显示的条数
+ * @param {*} current 当前第几页 
+ */
+const  queryTestPage = (name, curriculumId, pageSize, current) => {
+  let sql = `SELECT a.*, b.username as createName FROM testPaper AS a LEFT JOIN teacher AS b ON a.createBy=b.id WHERE curriculumId=${curriculumId} `
+  let countSql = `select count(*) from testPaper where curriculumId=${curriculumId} `
+  if (name) {
+    sql += `and name like '%${name}%' `
+  }
+  if (pageSize && current) {
+    sql += `limit ${(current - 1) * pageSize},${pageSize} `
+  } 
+  exec(countSql).then(num => {
+    count = num[0]['count(*)']
+    return num
+  })
+  return exec(sql).then(row => {
+    let rowData = row || []
+    let resultData = {
+      row: rowData,
+      count: count
+    }
+    return resultData
+  })
+}
+
+/**
+ * 增加试卷
+ * @param {*} name 试卷名称
+ * @param {*} createBy 创建者
+ * @param {*} createTime 创建试卷
+ * @param {*} fullMarks 满分
+ * @param {*} rules 规则
+ * @param {*} curriculumId 班级ID
+ */
+const insertTestPaper = (name, createBy, createTime, fullMarks, rules, curriculumId) => {
+  let sql = `INSERT INTO testPaper (name, createBy, createTime, fullMarks, rules, curriculumId) 
+  VALUES ('${name}', ${createBy}, '${createTime}', ${fullMarks}, '${rules}', '${curriculumId}')`
+  return exec(sql).then(row => {
+    return row || {}
+  })
+}
+
+/**
+ * 修改试卷信息
+ * @param {*} name 试卷名称
+ * @param {*} fullMarks 满分
+ * @param {*} rules 试卷规则
+ * @param {*} id 试卷id
+ */
+const upDataTestPaper = (name, fullMarks, rules, id) => {
+  let sql = `UPDATE testPaper SET `
+  if (name) {
+    sql += `name='${name}',`
+  }
+  if (fullMarks) {
+    sql += `fullMarks=${fullMarks},`
+  }
+  if (rules) {
+    sql += `rules='${rules}',`
+  }
+  sql = sql.substring(0, sql.length - 1)
+  sql += ` WHERE id = ${id}`
+  return exec(sql).then(row => {
+    return row || {}
+  })
+}
+
+/**
+ * 删除试卷
+ * @param {*} id 试卷id
+ */
+const deleteTestPaper = (id) => {
+  let sql = `DELETE FROM testPaper WHERE id = ${id}`
+    return exec(sql).then(row => {
+        return row || {}
+    })
+}
+
+/**
+ * 根据id查询试卷
+ * @param {*} id 试卷id
+ */
+const queryTestPaperId = (id, curriculumId) => {
+  let sql = `SELECT a.*, b.username as createName FROM testPaper AS a LEFT JOIN teacher AS b ON a.createBy=b.id WHERE a.id=${id} and a.curriculumId=${curriculumId}`
+  return exec(sql).then(row => {
+    return row[0] || {}
+  })
+}
+
 module.exports = {
   queryCoursePage,
   queryQuestionPage,
   insertQuestion,
   deleteQuestion,
-  updataQuestion
+  updataQuestion,
+  queryTestPage,
+  insertTestPaper,
+  upDataTestPaper,
+  deleteTestPaper,
+  queryTestPaperId
 }

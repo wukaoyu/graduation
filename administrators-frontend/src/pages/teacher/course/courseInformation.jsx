@@ -54,7 +54,7 @@ class courseInformaition extends React.Component {
       onShowSizeChange: (current,pageSize) => this.changePageSize(pageSize,current),
       onChange: (current) => this.changePage(current),
       ...this.state.pageData
-  };
+    };
     return(
       <div>
         <div style={{minHeight:'calc(100vh - 160px)'}}>
@@ -82,7 +82,6 @@ class courseInformaition extends React.Component {
                 <Option key={4} value={4}>简答题</Option>
               </Select>
             </div>
-
             <div className='search-item'>
               <div>题目难度：</div>
               <Select

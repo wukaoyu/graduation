@@ -59,3 +59,63 @@ export async function updataQuestion(data = {}) {
     data: data
   })
 }
+
+/**
+ * 查询试卷分页信息
+ * @param {*} data 
+ */
+export async function queryTestPage(data = {}) {
+  return request({
+    url:'/teacher/course/queryTestPage',
+    method:'POST',
+    data: data
+  })
+}
+
+/**
+ * 增加试卷
+ * @param {*} data 
+ */
+export async function insertTestPaper(data = {}) {
+  return request({
+    url:'/teacher/course/insertTestPaper',
+    method:'POST',
+    data: data
+  })
+}
+
+/**
+ * 增加试卷
+ * @param {*} data 
+ */
+export async function upDataTestPaper(data = {}) {
+  return request({
+    url:'/teacher/course/upDataTestPaper',
+    method:'POST',
+    data: data
+  })
+}
+
+/**
+ * 增加试卷
+ * @param {*} data 
+ */
+export async function deleteTestPaper(data = {}) {
+  return request({
+    url:'/teacher/course/deleteTestPaper',
+    method:'POST',
+    data: data
+  })
+}
+
+/**
+ * 增加试卷
+ * @param {*} data 
+ */
+export async function queryTestPaperId(data = {}) {
+  return request({
+    url:'/teacher/course/queryTestPaperId',
+    method:'POST',
+    data: data
+  })
+}
