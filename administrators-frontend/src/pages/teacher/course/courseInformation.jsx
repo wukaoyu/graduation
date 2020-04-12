@@ -13,8 +13,11 @@ import ShortAnswer from './components/shortAnswer'
 import ShortAnswerEditor from './components/shortAnswerEditor'
 import './index.less'
 
+const createHistory = require("history").createHashHistory
+
 const { Search } = Input;
 const { Option } = Select;
+const history = createHistory()
 
 class courseInformaition extends React.Component {
   constructor(props) {
@@ -102,6 +105,7 @@ class courseInformaition extends React.Component {
               <Button className='search-item-btn' onClick={() => this.openEditorModel(2)}>多选题</Button>
               <Button className='search-item-btn' onClick={() => this.openEditorModel(3)}>填空题</Button>
               <Button className='search-item-btn' onClick={() => this.openEditorModel(4)}>简答题</Button>
+              <Button onClick={() => this.goBack()}>返回</Button>
             </div>
           </div>
           <QueueAnim
@@ -389,6 +393,10 @@ class courseInformaition extends React.Component {
     },() => {
       this.handOpenOrCloseModel('addOrEditorQuestion', true)
     })
+  }
+   // 返回到班级首页
+   goBack = () => {
+    history.goBack(); 
   }
 }
 
