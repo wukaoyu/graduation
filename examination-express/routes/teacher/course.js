@@ -11,7 +11,8 @@ const {
   insertTestPaper,
   upDataTestPaper,
   deleteTestPaper,
-  queryTestPaperId
+  queryTestPaperId,
+  queryChooseQuestion
 } = require("../../controller/teacher/course")
 const { nowDate } = require("../../public/utils/main")
 
@@ -179,6 +180,29 @@ router.post('/queryTestPaperId', (req, res) => {
   const resultData = result.then(data => {
     if (data) {
       return new SuccessModel(data)
+    }
+    return new ErrorModel('异常错误')
+  })
+  resultData.then(data => {
+    res.json(data)
+  })
+})
+
+router.post('/queryChooseQuestion', (req, res) => {
+  const { paperId, curriculumId, type, difficulty, pageSize, current, questionTitle } = req.body
+  const result = queryChooseQuestion(paperId, curriculumId, questionTitle, difficulty, type, pageSize, current)
+  const resultData = result.then(data => {
+    if (data) {
+      let pageCount = data.count / pageSize
+      let hasmore = true
+      if (current >= pageCount || !current) {
+        hasmore = false
+      }
+      let pageData = {
+        ...data,
+        hasmore
+      }
+      return new SuccessModel(pageData)
     }
     return new ErrorModel('异常错误')
   })

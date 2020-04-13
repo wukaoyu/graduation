@@ -45,78 +45,80 @@ class TestPaper extends React.Component {
     };
     return (
       <div>
-        <div className='search'>
-          <Search
-            className='search-item'
-            placeholder="搜索试卷名称"
-            onChange={value => this.changeValSearch(value)}
-            onSearch={value => this.searchTestPaper(value)}
-            style={{ width: 200 }}
-          />
-          <div className='search-item'>
-            <Button type='primary' onClick={() =>this.handOpenOrCloseModel('addOrEditorPaper', true)}>添加试卷</Button>
-            <Button onClick={() => this.goBack()} style={{marginLeft: '10px'}}>返回</Button>
+        <div style={{minHeight:'calc(100vh - 160px)'}}>
+          <div className='search'>
+            <Search
+              className='search-item'
+              placeholder="搜索试卷名称"
+              onChange={value => this.changeValSearch(value)}
+              onSearch={value => this.searchTestPaper(value)}
+              style={{ width: 200 }}
+            />
+            <div className='search-item'>
+              <Button type='primary' onClick={() =>this.handOpenOrCloseModel('addOrEditorPaper', true)}>添加试卷</Button>
+              <Button onClick={() => this.goBack()} style={{marginLeft: '10px'}}>返回</Button>
+            </div>
           </div>
-        </div>
-        <QueueAnim
-          style={{marginBottom:'20px', display: 'flex', flexWrap: 'wrap'}}
-          duration={600}
-          animConfig={[
-            { opacity: [1, 0], translateX: [0, 100] }
-          ]}>
-            {
-              this.state.testPaperDataList.map((item, index) => {
-                return (
-                  <div key={item.id}>
-                    <Card style={{ width: 280, marginTop: 16, marginRight: 16 }} hoverable title={item.name}>
-                      <div className='paper-list'>
-                        <div className='paper-list-child'>
-                          <div className='paper-list-label'>
-                            满分：
+          <QueueAnim
+            style={{marginBottom:'20px', display: 'flex', flexWrap: 'wrap'}}
+            duration={600}
+            animConfig={[
+              { opacity: [1, 0], translateX: [0, 100] }
+            ]}>
+              {
+                this.state.testPaperDataList.map((item, index) => {
+                  return (
+                    <div key={item.id}>
+                      <Card style={{ width: 280, marginTop: 16, marginRight: 16 }} hoverable title={item.name}>
+                        <div className='paper-list'>
+                          <div className='paper-list-child'>
+                            <div className='paper-list-label'>
+                              满分：
+                            </div>
+                            <div className='paper-list-fullText'>
+                              {item.fullMarks}
+                            </div>
                           </div>
-                          <div className='paper-list-fullText'>
-                            {item.fullMarks}
+                          <div className='paper-list-child'>
+                            <div className='paper-list-label'>
+                              创建者：
+                            </div>
+                            <div>
+                              {item.createName}
+                            </div>
                           </div>
                         </div>
-                        <div className='paper-list-child'>
+                        <div className='paper-list'>
                           <div className='paper-list-label'>
-                            创建者：
+                            创建时间：
                           </div>
                           <div>
-                            {item.createName}
+                            {item.createTime}
                           </div>
                         </div>
-                      </div>
-                      <div className='paper-list'>
-                        <div className='paper-list-label'>
-                          创建时间：
-                        </div>
                         <div>
-                          {item.createTime}
+                          <div className='paper-list-handle'>
+                            <Button size='small' className='paper-list-handle-btn' onClick={() => this.toEditorTestPaperQuestion(item.id)}>编辑题目</Button>
+                            <Button size='small' className='paper-list-handle-btn' onClick={() => this.editorPaper(item)}>编辑信息</Button>
+                            <Popover placement="top" trigger='click' content = {
+                                <div>
+                                    <p>删除后将无法复原数据，<br/>确认删除该试卷吗？</p>
+                                    <div className='teacher-delete-btn'>
+                                        <Button type="danger" size={'small'} onClick={() => this.funDeleteTestPaper(item.id)}>确认</Button>
+                                    </div>
+                                </div>
+                              }>            
+                              <Button size='small' className='paper-list-handle-btn'>删除试卷</Button>
+                            </Popover>
+                          </div>
                         </div>
-                      </div>
-                      <div>
-                        <div className='paper-list-handle'>
-                          <Button size='small' className='paper-list-handle-btn' onClick={() => this.toEditorTestPaperQuestion(item.id)}>编辑题目</Button>
-                          <Button size='small' className='paper-list-handle-btn' onClick={() => this.editorPaper(item)}>编辑信息</Button>
-                          <Popover placement="top" trigger='click' content = {
-                              <div>
-                                  <p>删除后将无法复原数据，<br/>确认删除该试卷吗？</p>
-                                  <div className='teacher-delete-btn'>
-                                      <Button type="danger" size={'small'} onClick={() => this.funDeleteTestPaper(item.id)}>确认</Button>
-                                  </div>
-                              </div>
-                            }>            
-                            <Button size='small' className='paper-list-handle-btn'>删除试卷</Button>
-                          </Popover>
-                        </div>
-                      </div>
-                    </Card>
-                  </div>
-                )
-              })
-            }
-        </QueueAnim>
+                      </Card>
+                    </div>
+                  )
+                })
+              }
+          </QueueAnim>
+        </div>
         <div className='bottom'>  
           <Pagination {...paginationProps}></Pagination>
         </div>
@@ -209,6 +211,26 @@ class TestPaper extends React.Component {
         paperData: {},
       })
     }
+  }
+  changePageSize = (pageSize,current) => {
+    let newPageData = Object.assign(this.state.pageData, {pageSize, current})
+    this.setState({
+        pageData: newPageData
+    },() => {
+        this.funQueryTestPage()
+    })
+  }
+  /**
+   * 改变当前第几页
+   * @param {*} current 当前页数
+   */
+  changePage = (current) => {
+      let newPageData = Object.assign(this.state.pageData, {current})
+      this.setState({
+          pageData: newPageData
+      },() => {
+          this.funQueryTestPage()
+      })
   }
   editorPaper = data => {
     this.setState({

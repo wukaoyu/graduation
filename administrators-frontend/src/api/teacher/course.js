@@ -119,3 +119,16 @@ export async function queryTestPaperId(data = {}) {
     data: data
   })
 }
+
+
+/**
+ * 查询可以试卷可添加题目的分页信息
+ * @param {*} data 
+ */
+export async function queryChooseQuestion(data = {}) {
+  return request({
+    url:'/teacher/course/queryChooseQuestion',
+    method:'POST',
+    data: data
+  })
+}

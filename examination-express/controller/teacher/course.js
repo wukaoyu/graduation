@@ -238,11 +238,63 @@ const deleteTestPaper = (id) => {
 /**
  * 根据id查询试卷
  * @param {*} id 试卷id
+ * @param {*} curriculumId 班级id
  */
 const queryTestPaperId = (id, curriculumId) => {
   let sql = `SELECT a.*, b.username as createName FROM testPaper AS a LEFT JOIN teacher AS b ON a.createBy=b.id WHERE a.id=${id} and a.curriculumId=${curriculumId}`
   return exec(sql).then(row => {
     return row[0] || {}
+  })
+}
+
+/**
+ * 添加试卷中的题目，需要排除试卷中已经存在的
+ * @param {*} paperId 试卷id
+ */
+const queryChooseQuestion = (paperId, curriculumId, questionTitle, difficulty, type, pageSize, current) => {
+  let paperSql = `select * from testPaper where id = ${paperId}`
+  let curriculumSql = `SELECT a.*, b.username as createName FROM question  as a LEFT JOIN teacher AS b on a.createBy=b.id WHERE a.curriculumId=${curriculumId} `
+  let notIdArray = exec(paperSql).then(row => {
+    let notIdArray = []
+    let nowRules = JSON.parse(row[0].rules)
+    nowRules.forEach(item => {
+      notIdArray.push(item.id)
+    })
+    return notIdArray
+  })
+  return notIdArray.then(data => {
+    let countSql = `select count(*) from question where curriculumId=${curriculumId} `
+    let count = 0
+    if (type) {
+      curriculumSql += `and a.type = ${type} `
+    }
+    if (difficulty > -1) {
+      curriculumSql += `and a.difficulty = ${difficulty} `
+    }
+    if (questionTitle) {
+      curriculumSql += `and a.questionTitle like '%${questionTitle}%' `
+    }
+    if (data.length > 0) {
+      countSql += `and id not in (${data.toString()}) `
+      curriculumSql += `and a.id not in (${data.toString()}) `
+    }
+    curriculumSql += `order by a.id desc`
+    if (pageSize && current) {
+      curriculumSql += ` limit ${(current - 1) * pageSize},${pageSize} `
+    }  
+    console.log(pageSize)
+    exec(countSql).then(num => {
+      count = num[0]['count(*)']
+      return num
+    })
+    return exec(curriculumSql).then(row => {
+      let rowData = row || []
+      let resultData = {
+        row: rowData,
+        count: count
+      }
+      return resultData
+    })
   })
 }
 
@@ -256,5 +308,6 @@ module.exports = {
   insertTestPaper,
   upDataTestPaper,
   deleteTestPaper,
-  queryTestPaperId
+  queryTestPaperId,
+  queryChooseQuestion
 }

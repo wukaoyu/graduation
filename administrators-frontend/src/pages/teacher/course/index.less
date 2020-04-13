@@ -84,7 +84,7 @@
   }
   &-label{
     display: flex;
-    margin-top: 20px;
+    margin-top: 10px;
     &-diff{
       font-size: 12px;
       color: #fff;
@@ -125,6 +125,10 @@
       margin-left: 10px;
       font-size: 12px;
       line-height: 20px;
+    }
+    &-answerChoose{
+      font-size: 12px;
+      margin-top: 10px;
     }
   }
 }
@@ -249,4 +253,63 @@
       }
     }
   }
+}
+.completion-answer{
+  font-size: 12px;
+}
+.paper-head{
+  text-align: center;
+  font-size: 24px;
+  color: #000;
+}
+.paper-fullMarks{
+  text-align: center;
+}
+.editor-handle{
+  display: flex;
+  margin-top: 15px;
+  align-items: center;
+  &-btn{
+    font-size: 12px;
+    margin-right: 10px;
+    &:nth-child(1) {
+      color: #fff;
+      background-color: #00CC99;
+      border-color: #00CC99;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+    }
+    &:nth-child(2) {
+      color: #fff;
+      background-color: #F58A07;
+      border-color: #F58A07;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+    }
+    &:nth-child(3) {
+      color: #fff;
+      background-color: #D17B88;
+      border-color: #D17B88;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+    }
+  }
+  &-score{
+    display: flex;
+    align-items: center;
+    &-label{
+      font-size: 12px;
+    }
+    &-input{
+      width: 55px;
+      height: 24px;
+      text-align: center;
+    }
+  }
+}
+.ant-checkbox-wrapper{
+  margin-left: 0px !important;
+}
+.shortAnswer-answer{
+  font-size: 12px;
 }
