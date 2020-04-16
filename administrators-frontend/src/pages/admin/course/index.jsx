@@ -82,10 +82,10 @@ class Course extends React.Component {
                       ]}>
                         <div className='courseCount'>
                           <div className='courseCount-text'>
-                            题目数量：{item.questionCount || 0}
+                            试卷数量：{item.testPaperCount || 0}
                           </div>
                           <div className='courseCount-handle'>
-                            <Button size='small' className='courseCount-handle-btn'>查看试卷</Button>
+                            <Button size='small' className='courseCount-handle-btn' onClick={() => this.toTestPaper(item.id)}>查看试卷</Button>
                           </div>
                         </div>
                         <div>
@@ -343,6 +343,10 @@ class Course extends React.Component {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
+  }
+  // 跳转到试卷页面
+  toTestPaper = id => {
+    this.props.history.push('/admin/course/testPaper?id=' + id)
   }
 }
 

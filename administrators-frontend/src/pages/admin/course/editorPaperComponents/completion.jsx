@@ -1,22 +1,12 @@
 import React from 'react'
-import { Card, Button, Popover, Input } from 'antd'
+import { Card } from 'antd'
 
 class Completion extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      questionData: props.questionData,
-      questionLength: props.questionLength
+      questionData: props.questionData
     }
-  }
-
-  static getDerivedStateFromProps(nextProps, preState) {
-    const newData = JSON.stringify(nextProps)
-    const oldData = JSON.stringify(preState)
-    if (newData !== oldData) {
-      return {questionData: nextProps.questionData}
-    }
-    return null
   }
 
   render () {
@@ -52,36 +42,18 @@ class Completion extends React.Component {
                 })
               }
             </div>
-            <div className='single-label-diff' 
-            style={{backgroundColor: questionData.difficultyArray[questionData.difficulty].color}}>
-              {questionData.difficultyArray[questionData.difficulty].text}
-            </div>
           </div>
           {
             questionData.imgUrl ? 
             <img src={questionData.imgUrl} alt="avatar" style={{marginBottom:'10px'}} /> : ''
           }
           <div className='editor-handle'>
-            {
-              questionData.index ? <Button size='small' className='editor-handle-btn-up' onClick={() => this.upQuestion()}>上移</Button> : ''
-            }
-            {
-              this.state.questionLength > questionData.index + 1 ? 
-              <Button size='small' className='editor-handle-btn-down' onClick={() => this.downQuestion()}>下移</Button> : ''
-            }
-            <Popover placement="top" trigger='click' content = {
-                <div>
-                    <p>确认从试卷中删除该题目吗？</p>
-                    <div className='teacher-delete-btn'>
-                        <Button type="danger" size={'small'} onClick={() => this.deleteQuestion()}>确认</Button>
-                    </div>
-                </div>
-              }>            
-              <Button size='small' className='editor-handle-btn-delete'>删除</Button>
-            </Popover>
+            <div className='single-label-diff' 
+            style={{backgroundColor: questionData.difficultyArray[questionData.difficulty].color, marginRight:'10px'}}>
+              {questionData.difficultyArray[questionData.difficulty].text}
+            </div>
             <div className='editor-handle-score'>
-              <div className='editor-handle-score-label'>得分：</div>
-              <Input className='editor-handle-score-input' defaultValue={questionData.score} onBlur={(e) => this.changeMarks(e)}/>
+              <div className='editor-handle-score-label'>得分：{questionData.score}</div>
             </div>
           </div>
         </Card>

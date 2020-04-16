@@ -73,10 +73,13 @@ const queryAllCourse = () => {
  * @param {*} current 当前第几页
  */
 const queryCoursePage = (name, pageSize, current) => {
-  let sql = `SELECT informTab.*, countTab.questionCount FROM 
-  (SELECT a.*, b.username as createName FROM curriculum AS a LEFT JOIN users AS b ON a.createBy=b.id) informTab LEFT JOIN
-  (SELECT b.curriculumId, count(b.curriculumId) AS questionCount FROM curriculum AS a LEFT JOIN question AS b ON a.id=b.curriculumId  GROUP BY b.curriculumId) countTab 
-  on informTab.id = countTab.curriculumId where 1=1 `
+  let sql = `SELECT curTab.*, countTab.questionCount, paper.testPaperCount FROM
+  (SELECT curriculumId FROM TCCrelation  GROUP BY curriculumId ) TCCTab LEFT JOIN
+  (SELECT * FROM curriculum) curTab ON TCCTab.curriculumId=curTab.id LEFT JOIN
+  (SELECT b.curriculumId, count(b.curriculumId) AS questionCount FROM curriculum AS a LEFT JOIN question AS b ON a.id=b.curriculumId  
+  GROUP BY b.curriculumId) countTab on TCCTab.curriculumId=countTab.curriculumId LEFT JOIN
+	(SELECT curriculumId, count(*) AS testPaperCount FROM testPaper GROUP BY curriculumId) paper ON TCCTab.curriculumId=paper.curriculumId
+   `
   let countSql = `select count (*) from curriculum`
   if (name) {
     sql += `and name like '%${name}%' `

@@ -11,6 +11,8 @@ import ClassChooseStudent from './pages/admin/class/classInformation/classChoose
 import StudentAccount from './pages/admin/class/studentAccount/index'
 import ClassCourse from "./pages/admin/class/classCourse/index";
 import Course from './pages/admin/course/index'
+import AdminCourseTestPaper from './pages/admin/course/testPaper'
+import AdminEditorTestPaper from './pages/admin/course/editorTestPaper'
 import TeacherMain from './pages/teacher/components/main/main'
 import TeacherClass from './pages/teacher/class/index'
 import TeacherEditorStudent from './pages/teacher/class/editorStudent'
@@ -49,7 +51,9 @@ export default class Router extends React.Component {
                                 <Route path='/admin/class/classChooseStudent' component={ClassChooseStudent}/>
                                 <Route path='/admin/class/studentAccount' component={StudentAccount}/>
                                 <Route path='/admin/class/arrangement' component={ClassCourse}/>
-                                <Route path='/admin/course' component={Course}/>
+                                <Route path='/admin/course/index' component={Course}/>
+                                <Route path='/admin/course/testPaper' component={AdminCourseTestPaper}/>
+                                <Route path='/admin/course/editorTestPaper' component={AdminEditorTestPaper}/>
                             </AdminMain>
                         }/>
                         <Route path='/teacher' render={() => 

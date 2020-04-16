@@ -33,11 +33,7 @@ const adminMenuList = [
     },
     {
         title: '课程管理',
-        key: '/admin/course'
-    },
-    {
-        title: '试卷管理',
-        key: '/admin/testPape'
+        key: '/admin/course/index'
     },
     {
         title: '考试记录',
