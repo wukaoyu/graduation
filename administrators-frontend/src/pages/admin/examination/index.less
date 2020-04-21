@@ -1,0 +1,68 @@
+.exam-card-list {
+  display: flex;
+  width: 100%;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  &:last-child {
+    margin-bottom: 0px;
+  }
+  &-inform{
+    display: flex;
+    width: 25%;
+    min-width: 200px;
+    padding-right: 10px;
+    box-sizing: border-box;
+    &-label {
+      color: #000;
+      min-width: 50px;
+    }
+    &-item {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  &-enterTime{
+    display: flex;
+  }
+  &-handle {
+    display: flex;
+    align-items: center;
+    &-result{
+      font-size: 12px;
+      margin-right: 10px;
+      color: #fff !important;
+      background-color: #00CC99 !important;
+      border-color: #00CC99 !important;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+    }
+    &-editor{
+      font-size: 12px;
+      margin-right: 10px;
+      color: #fff !important;
+      background-color: #F58A07 !important;
+      border-color: #F58A07 !important;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+    }
+    &-delete{
+      font-size: 12px;
+      margin-right: 10px;
+      color: #fff !important;
+      background-color: #D17B88 !important;
+      border-color: #D17B88 !important;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+    }
+    &-correction{
+      font-size: 12px;
+      margin-right: 10px;
+      color: #fff !important;
+      background-color: #D17B88 !important;
+      border-color: #D17B88 !important;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+    }
+  }
+}

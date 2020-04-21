@@ -15,7 +15,7 @@ const queryCoursePage = (courseName, pageSize, current) => {
   GROUP BY b.curriculumId) countTab on TCCTab.curriculumId=countTab.curriculumId LEFT JOIN
 	(SELECT curriculumId, count(*) AS testPaperCount FROM testPaper GROUP BY curriculumId) paper ON TCCTab.curriculumId=paper.curriculumId
   `
-  let countSql = `select count(teacherId) from TCCrelation where teacherId=${teacherId} GROUP BY teacherId`
+  let countSql = `select count(curriculumId) from TCCrelation where teacherId=${teacherId} GROUP BY curriculumId`
   if (courseName) {
     sql += `and curTab.name like '%${courseName}%' `
   }
@@ -24,7 +24,7 @@ const queryCoursePage = (courseName, pageSize, current) => {
   }
   let count = 0
   exec(countSql).then(num => {
-    count = num[0]['count(teacherId)']
+    count = num.length
     return num
   })
   return exec(sql).then(row => {
@@ -253,7 +253,7 @@ const queryTestPaperId = (id, curriculumId) => {
  */
 const queryChooseQuestion = (paperId, curriculumId, questionTitle, difficulty, type, pageSize, current) => {
   let paperSql = `select * from testPaper where id = ${paperId}`
-  let curriculumSql = `SELECT a.*, b.username as createName FROM question  as a LEFT JOIN teacher AS b on a.createBy=b.id WHERE a.curriculumId=${curriculumId} `
+  let curriculumSql = `SELECT a.*, b.username as createName FROM question  as a LEFT JOIN teacher AS b on a.createBy=b.id WHERE a.curriculumId=${curriculumId} and a.isTest not in (0)`
   let notIdArray = exec(paperSql).then(row => {
     let notIdArray = []
     let nowRules = JSON.parse(row[0].rules)
@@ -282,7 +282,6 @@ const queryChooseQuestion = (paperId, curriculumId, questionTitle, difficulty, t
     if (pageSize && current) {
       curriculumSql += ` limit ${(current - 1) * pageSize},${pageSize} `
     }  
-    console.log(pageSize)
     exec(countSql).then(num => {
       count = num[0]['count(*)']
       return num

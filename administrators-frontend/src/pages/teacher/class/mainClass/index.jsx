@@ -5,7 +5,7 @@ import { queryMainClassPage } from 'api/teacher/classes';
 
 const { Search } = Input;
 
-class TeacherClass extends React.Component {
+class TeacherMainClass extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -114,4 +114,4 @@ class TeacherClass extends React.Component {
   }
 }
 
-export default TeacherClass
+export default TeacherMainClass

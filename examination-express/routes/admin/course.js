@@ -90,5 +90,4 @@ router.post('/queryCoursePage', (req, res, next) => {
   })
 })
 
-
 module.exports = router

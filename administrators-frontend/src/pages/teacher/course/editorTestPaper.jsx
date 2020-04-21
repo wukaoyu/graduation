@@ -182,10 +182,12 @@ class EditorTestPaper extends React.Component {
   // 删除题目
   deleteQuestion = index => {
     let rules = JSON.parse(JSON.stringify(this.state.testPaperData.rules)) 
+    let fullMarks = parseInt(this.state.testPaperData.fullMarks) - parseInt(rules[index].score)
     rules.splice(index, 1)
     let data = {
       rules: JSON.stringify(rules),
-      id: this.state.params.id 
+      id: this.state.params.id,
+      fullMarks
     }
     upDataTestPaper(data).then(res => {
       if (res.errno === 0) {

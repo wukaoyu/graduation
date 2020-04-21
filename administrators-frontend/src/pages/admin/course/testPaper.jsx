@@ -125,7 +125,6 @@ class AdminTestPaper extends React.Component {
         visible={this.state.addOrEditorPaper}
         onCancel={() =>this.handOpenOrCloseModel('addOrEditorPaper', false)}
         footer={''}>
-          {}
           {
             this.state.addOrEditorPaper ? <CreateForm
             clickCancel={() => this.handOpenOrCloseModel('addOrEditorPaper', false)}
