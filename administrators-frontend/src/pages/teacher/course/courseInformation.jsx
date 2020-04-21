@@ -25,7 +25,7 @@ class courseInformaition extends React.Component {
     let paramData = {}, searchArray = this.props.location.search.substr(1).split('&')
     searchArray.forEach(item => {
     let newArray = item.split('=')
-        paramData[newArray[0]] = parseInt(newArray[1])
+      paramData[newArray[0]] = parseInt(newArray[1])
     })
     this.state = {
       params: paramData,

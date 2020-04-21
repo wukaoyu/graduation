@@ -40,7 +40,29 @@ const nowDate = () => {
 function conver(s) {
     return s < 10 ? '0' + s : s;
 }
+
+/**
+ * 生成若干个随机不重复的数字
+ * @param {*} len 数据长度
+ * @param {*} start 最小值
+ * @param {*} end 最大值
+ */
+const myRandom = (len, start, end) => {
+    var arr = [];
+    function _inner(start, end) {
+        var span = end - start;
+        return parseInt(Math.random() * span + start)
+    }
+    while (arr.length < len) {
+        var num = _inner(start, end);
+        if (arr.indexOf(num) == -1) {
+            arr.push(num);
+        }
+    }
+    return arr;
+}
 module.exports = {
     getPage,
-    nowDate
+    nowDate,
+    myRandom
 }

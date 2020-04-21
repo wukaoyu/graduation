@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, Input, Icon, Radio, message } from 'antd'
+import { Button, Form, Input, Icon, message } from 'antd'
 import { login } from '../../api/login'
 // 引入解析token方法
 import jwt_decode from 'jwt-decode'
@@ -10,10 +10,8 @@ class Login extends React.Component  {
         super(props)
         if (localStorage.getItem('token')) { 
             const userInfo = jwt_decode(localStorage.getItem('token')).data
-            if (userInfo.identity === 1) {
-                window.location.href = '/#/admin/account/teacher'
-            }else if (userInfo.identity === 2) {
-                window.location.href = '/#/teacher/class/main'
+            if (userInfo.id) {
+                this.props.history.push('/student/course/main')
             }
         }
         this.state = {
@@ -33,16 +31,13 @@ class Login extends React.Component  {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 let userInfo = this.props.form.getFieldsValue()
+                userInfo.identity = 3
                 login(userInfo).then(res => {
                     if (res.errno === 0) {
                         localStorage.setItem('token',res.data.token)
                         const userInfo = jwt_decode(localStorage.getItem('token')).data
                         window.userInfo = userInfo
-                        if (userInfo.identity === 1) {
-                            this.props.history.push('/admin/account/teacher')
-                        }else if (userInfo.identity ===2) {
-                            this.props.history.push('/teacher/class/main')
-                        }
+                        this.props.history.push('/student/course/main')
                         message.success(`登录成功，欢迎${userInfo.username}`)
                     }else if (res.errno === -1) {
                         message.error('用户名或密码错误')
@@ -58,7 +53,7 @@ class Login extends React.Component  {
                 <div className='login-center-head'>
                     <div className='login-center-head-text'>
                         <img src="/assets/logo-ant.svg" className='login-center-head-img' alt='logo'/>
-                        欢迎登录考试管理系统
+                        欢迎登录考试系统
                     </div>
                 </div>
                 <Form  className="login-box" {...this.state.formItemLayout}>
@@ -91,20 +86,6 @@ class Login extends React.Component  {
                                 ]
                             })(
                                 <Input type='password' prefix={<Icon type="lock"/>} placeholder='请输入密码'/>
-                            )
-                        }
-                    </FormItem>
-                    <FormItem
-                    className="login-item">
-                        {
-                            getFieldDecorator('identity', {
-                                initialValue: 2,
-                                rules: []
-                            })(
-                                <Radio.Group>
-                                    <Radio value={2}>教师</Radio>
-                                    <Radio value={1}>管理员</Radio>
-                                </Radio.Group>
                             )
                         }
                     </FormItem>

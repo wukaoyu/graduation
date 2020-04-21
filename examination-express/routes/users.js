@@ -11,15 +11,8 @@ router.post('/login', function(req, res, next) {
         // console.log(data)
         if (data.username) {
             // 将用户信息传入并生成token
-            const tokenData = {
-                id: data.id,
-                username: data.username,
-                account: data.account,
-                createBy: data.createBy,
-                createTime: data.createTime,
-                identity: data.identity,
-                createName: data.createName
-            }
+            delete data.password
+            const tokenData = data
             let jwt = new JwtUtil(tokenData);
             let token = jwt.generateToken();
             data.token = token

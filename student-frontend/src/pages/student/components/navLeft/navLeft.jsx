@@ -1,7 +1,7 @@
 import React from 'react'
 import { Menu } from 'antd'
 import { NavLink } from 'react-router-dom'
-import MenuConfig from '../../../../config/teacherMenuConfig'
+import MenuConfig from '../../../../config/studentMenuConfig'
 
 import './navLeft.less'
 
@@ -35,7 +35,7 @@ export default class NavLeft extends React.Component{
             <div>
                 <div className="logo">
                     <img src="/assets/logo-ant.svg" alt='logo'/>
-                    <h1>考试管理系统</h1>
+                    <h1>树大考试系统</h1>
                 </div>
                 <Menu theme="dark">
                     { this.state.menuTree }
