@@ -13,7 +13,7 @@ class Login extends React.Component  {
             if (userInfo.identity === 1) {
                 window.location.href = '/#/admin/account/teacher'
             }else if (userInfo.identity === 2) {
-                window.location.href = '/#/teacher/class/main'
+                window.location.href = '/#/teacher/class/mainClass'
             }
         }
         this.state = {

@@ -37,7 +37,7 @@ class courseMain extends React.Component {
                       }
                       title={item.name}>
                         <div className='courseCount'>
-                          <Button size='small' className='courseCount-handle-btn'>考试安排</Button>
+                          <Button size='small' className='courseCount-handle-btn' onClick={() => this.toExamtion(item)}>考试安排</Button>
                           <Button size='small' className='courseCount-handle-btn' onClick={() => this.toPractice(item)}>开始练习</Button>
                         </div>
                         <div className='courseIntroduce'>
@@ -65,6 +65,10 @@ class courseMain extends React.Component {
   // 跳转到练习页面
   toPractice = (item) => {
     this.props.history.push('/student/course/practice?id='+ item.id)
+  }
+  // 跳转到考试计划页
+  toExamtion = (item) => {
+    this.props.history.push('/student/course/courseExamation?id='+ item.id)
   }
 }
 

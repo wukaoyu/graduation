@@ -139,6 +139,17 @@ const updataExamination = (name, testPaper, startTime, endTime, testTime, isEnd,
   })
 }
 
+/**
+ * 查询参加考试的学生列表
+ * @param {*} id 考试id
+ */
+const queryStudentResult = (id) => {
+  let sql = `SELECT * FROM studentResult WHERE examinationId = ${id}`
+  return exec(sql).then(row => {
+      return row || []
+  })
+}
+
 
 module.exports = {
   queryPersonalExaminationPage,
@@ -146,5 +157,6 @@ module.exports = {
   queryAllTeacherTestPaper,
   insertExamination,
   deleteExamination,
-  updataExamination
+  updataExamination,
+  queryStudentResult
 }

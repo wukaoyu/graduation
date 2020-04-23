@@ -47,7 +47,6 @@ const updataCouerse = (name, introduce, coverImage, id) => {
   }
   sql = sql.substring(0, sql.length - 1)
   sql += `WHERE id=${id}`
-  console.log(sql)
   return exec(sql).then(row => {
     return row || {}
   })

@@ -16,6 +16,7 @@ var teacherClassesRouter = require('./routes/teacher/classes')
 var teacherCourseRouter = require('./routes/teacher/course')
 var teacherExaminationRouter = require('./routes/teacher/examination')
 var studentCourse = require('./routes/student/course')
+var studentExamination = require('./routes/student/examination')
 
 
 var app = express();
@@ -70,6 +71,7 @@ app.use('/api/teacher/course', teacherCourseRouter);
 app.use('/api/teacher/examination', teacherExaminationRouter);
 
 app.use('/api/student/course', studentCourse)
+app.use('/api/student/examination', studentExamination)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

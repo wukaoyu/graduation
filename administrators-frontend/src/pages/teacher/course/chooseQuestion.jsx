@@ -291,7 +291,7 @@ class chooseQuestion extends React.Component {
     }else {
       let newData = JSON.parse(JSON.stringify(this.state.chooseData))
       let newRules = this.state.oldRules
-      newData.forEach(item => {
+      newData.forEach((item, index) => {
         delete item.curriculumId
         delete item.questionTitle
         delete item.createName

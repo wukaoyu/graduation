@@ -27,12 +27,29 @@ const queryPracticeQuestion = (courseId) => {
       row,
       courseName
     }
-    console.log(newData)
     return newData || {}
+  })
+}
+
+/**
+ * 查询不同课程对应的考试计划
+ * @param {*} courseId 课程id
+ */
+const quertCourseExam = (courseId) => {
+  let studentId = global.userInfo.id
+  let sql = `SELECT a.*, c.name AS testPaperName, d.className, e.name AS courseName FROM examination AS a 
+  LEFT JOIN student AS b on a.classId=b.classId 
+  LEFT JOIN testPaper AS c on a.testPaper=c.id
+  LEFT JOIN classes AS d ON a.classId=d.id
+  LEFT JOIN curriculum AS e ON a.curriculumId=e.id
+  WHERE b.id=${studentId} AND a.curriculumId = ${courseId} order by a.isEnd, a.startTime`
+  return exec(sql).then(row => {
+    return row || []
   })
 }
 
 module.exports = {
   queryStudentCourse,
-  queryPracticeQuestion
+  queryPracticeQuestion,
+  quertCourseExam
 }

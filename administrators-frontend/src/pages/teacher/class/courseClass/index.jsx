@@ -117,7 +117,7 @@ class TeacherCourseClass extends React.Component {
                                         </Popover>
                                       </div> : 
                                       nowTime > item.maxEndTime ?
-                                      <Button size='small' className='exam-card-list-handle-correction'>试卷批改</Button> : 
+                                      <Button size='small' className='exam-card-list-handle-correction' onClick={() => this.toCorrection(item.id)}>试卷批改</Button> : 
                                       <div>考试进行中，无法操作...</div>
                                     }
                                   </div>
@@ -464,6 +464,9 @@ class TeacherCourseClass extends React.Component {
     },() => {
       this.handOpenOrCloseModel('editorExaminationModel', true)
     })
+  }
+  toCorrection = (id) => {
+    this.props.history.push('/teacher/examinationRecord/correction?id=' + id)
   }
 }
 

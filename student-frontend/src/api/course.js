@@ -16,3 +16,13 @@ export async function queryPracticeQuestion(data = {}) {
     data: data
   })
 }
+
+// 查询不同课程的考试安排
+export async function quertCourseExam(data = {}) {
+  return request({
+    url:'/student/course/quertCourseExam',
+    method:'POST',
+    data: data
+  })
+}
+

@@ -24,6 +24,7 @@ import TestPaper from './pages/teacher/course/testPaper'
 import EditorTestPaper from './pages/teacher/course/editorTestPaper'
 import ChooseQuestion from './pages/teacher/course/chooseQuestion'
 import ExaminationMain from './pages/teacher/examination/index'
+import TestPaperCorrection from './pages/teacher/examination/testPaperCorrection'
 
 import jwt_decode from 'jwt-decode'
 
@@ -71,6 +72,7 @@ export default class Router extends React.Component {
                                 <Route path='/teacher/course/editorTestPaper' component={EditorTestPaper}/>
                                 <Route path='/teacher/course/chooseQuestion' component={ChooseQuestion}/>
                                 <Route path='/teacher/examinationRecord/main' component={ExaminationMain}/>
+                                <Route path='/teacher/examinationRecord/correction' component={TestPaperCorrection}/>
                             </TeacherMain>
                         }/>
                         <Route path='/' component={Login}/>

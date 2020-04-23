@@ -5,9 +5,10 @@ import MultipleChoice from './editorPaperComponents/multipleChoice'
 import QueueAnim from 'rc-queue-anim';
 import './index.less'
 import { Button, notification } from 'antd';
-const createHistory = require("history").createHashHistory
 
+const createHistory = require("history").createHashHistory
 const history = createHistory()
+
 class practice extends React.Component {
   constructor (props) {
     super(props)

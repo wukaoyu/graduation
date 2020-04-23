@@ -3,7 +3,8 @@ var router = express.Router();
 const { SuccessModel, ErrorModel } = require("../../model/resModel");
 const {
   queryStudentCourse,
-  queryPracticeQuestion
+  queryPracticeQuestion,
+  quertCourseExam
 } = require("../../controller/student/course")
 const { myRandom } = require('../../public/utils/main');
 
@@ -35,6 +36,20 @@ router.post('/queryPracticeQuestion', (req, res) => {
         newData.row.push(data.row[item])
       })
       return new SuccessModel(newData)
+    }
+    return new ErrorModel('异常错误')
+  })
+  resultData.then(data => {
+    res.json(data)
+  })
+})
+
+router.post('/quertCourseExam', (req, res) => {
+  const { courseId } = req.body
+  const result = quertCourseExam(courseId)
+  const resultData = result.then(data => {
+    if (data) {
+      return new SuccessModel(data)
     }
     return new ErrorModel('异常错误')
   })
