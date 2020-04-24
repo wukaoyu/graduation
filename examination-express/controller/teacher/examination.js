@@ -142,11 +142,47 @@ const updataExamination = (name, testPaper, startTime, endTime, testTime, isEnd,
 /**
  * 查询参加考试的学生列表
  * @param {*} id 考试id
+ * @param {*} pageSize 每页显示的条数
+ * @param {*} current 当前第几页
  */
-const queryStudentResult = (id) => {
-  let sql = `SELECT * FROM studentResult WHERE examinationId = ${id}`
+const queryStudentResult = (id, pageSize, current) => {
+  let sql = `SELECT a.*, b.username, b.headPortraitUrl, b.sex, c.className FROM studentResult as a 
+  LEFT JOIN student AS b on a.studentId=b.id 
+  LEFT JOIN classes AS c on b.classId=c.id
+  WHERE a.examinationId = ${id}`
+  let countSql = `SELECT count(*) as count FROM studentResult WHERE examinationId = ${id}`
+  let examSql = `SELECT a.*, b.className FROM examination as a left join classes as b on a.classId=b.id WHERE a.id = ${id}`
+  let examData = {}
+  if (pageSize && current) {
+    sql += ` limit ${(current - 1) * pageSize},${pageSize} `
+  }
+  let count = 0
+  exec(countSql).then(num => {
+    count = num[0].count
+    return num
+  })
+  exec(examSql).then(row => {
+    examData = row[0]
+  })
   return exec(sql).then(row => {
-      return row || []
+    let rowData = row || []
+    let resultData = {
+      row: rowData,
+      count: count,
+      examData
+    }
+    return resultData
+  })
+}
+
+/**
+ *  根据id查询考试结果
+ * @param {*} id 
+ */
+const queryResultById = (id) => {
+  let sql = `SELECT a.*, b.name FROM studentResult as a left join examination as b on a.examinationId=b.id WHERE a.id = ${id}`
+  return exec(sql).then(row => {
+      return row[0] || {}
   })
 }
 
@@ -158,5 +194,6 @@ module.exports = {
   insertExamination,
   deleteExamination,
   updataExamination,
-  queryStudentResult
+  queryStudentResult,
+  queryResultById
 }

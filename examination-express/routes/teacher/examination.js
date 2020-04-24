@@ -8,7 +8,9 @@ const {
   queryAllTeacherTestPaper,
   insertExamination,
   deleteExamination,
-  updataExamination
+  updataExamination,
+  queryStudentResult,
+  queryResultById
 } = require("../../controller/teacher/examination")
 
 router.post('/queryPersonalExaminationPage', (req, res) => {
@@ -94,6 +96,51 @@ router.post('/updataExamination', (req, res) => {
   const result = updataExamination(name, testPaper, startTime, endTime, testTime, isEnd, id)
   const resultData = result.then(data => {
     if (data) {
+      return new SuccessModel(data)
+    }
+    return new ErrorModel('异常错误')
+  })
+  resultData.then(data => {
+    res.json(data)
+  })
+})
+
+router.post('/queryStudentResult', (req, res) => {
+  const { id, pageSize, current } = req.body
+  const result = queryStudentResult(id, pageSize, current) 
+  const resultData = result.then(data => {
+    if (data) {
+      let pageCount = data.count / pageSize
+      let hasmore = true
+      if (current >= pageCount || !current) {
+        hasmore = false
+      }
+      data.row.forEach(item => {
+        item.result = JSON.parse(item.result)
+        item.answerJson = JSON.parse(item.answerJson)
+        item.questionJson = JSON.parse(item.questionJson)
+      });
+      let pageData = {
+        ...data,
+        hasmore
+      }
+      return new SuccessModel(pageData)
+    }
+    return new ErrorModel('异常错误')
+  })
+  resultData.then(data => {
+    res.json(data)
+  })
+})
+
+router.post('/queryResultById', (req, res) => {
+  const { id } = req.body
+  const result = queryResultById(id)
+  const resultData = result.then(data => {
+    if (data) {
+      data.result = JSON.parse(data.result)
+      data.questionJson = JSON.parse(data.questionJson)
+      data.answerJson = JSON.parse(data.answerJson)
       return new SuccessModel(data)
     }
     return new ErrorModel('异常错误')

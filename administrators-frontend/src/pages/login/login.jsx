@@ -41,7 +41,7 @@ class Login extends React.Component  {
                         if (userInfo.identity === 1) {
                             this.props.history.push('/admin/account/teacher')
                         }else if (userInfo.identity ===2) {
-                            this.props.history.push('/teacher/class/main')
+                            this.props.history.push('/teacher/class/mainClass')
                         }
                         message.success(`登录成功，欢迎${userInfo.username}`)
                     }else if (res.errno === -1) {

@@ -74,6 +74,7 @@ router.post('/updataResult', (req, res) => {
 router.post('/examCorrection', (req, res) => {
   const { examinationId } = req.body
   const result = queryStudentTestPaper(examinationId)
+  const nowDate = nowDate()
   const resultData = result.then(data => {
     if (data.length) {
       let newQuestionJson = JSON.parse(data[0].questionJson)
@@ -97,7 +98,7 @@ router.post('/examCorrection', (req, res) => {
         delete item.difficultyArray
       })
       nowResult.subjective = fullMarks
-      updataResult(data[0].id, JSON.stringify(newAnswerJson), JSON.stringify(nowResult), 1, JSON.stringify(newQuestionJson))
+      updataResult(data[0].id, JSON.stringify(newAnswerJson), JSON.stringify(nowResult), 1, JSON.stringify(newQuestionJson), nowDate)
       return new SuccessModel({fullMarks})
     }else if (data.length === 0) {
       return new ErrorModel('暂无数据')

@@ -71,3 +71,27 @@ export async function updataExamination(data = {}) {
     data: data
   })
 }
+
+/**
+ * 修改考试计划
+ * @param {*} data 
+ */
+export async function queryStudentResult(data = {}) {
+  return request({
+    url:'/teacher/examination/queryStudentResult',
+    method:'POST',
+    data: data
+  })
+}
+
+/**
+ * 根据id查询答题信息
+ * @param {*} data 
+ */
+export async function queryResultById(data = {}) {
+  return request({
+    url:'/teacher/examination/queryResultById',
+    method:'POST',
+    data: data
+  })
+}

@@ -43,12 +43,14 @@ const queryExaminationById = (examinationId) => {
 
 /**
  * 修改考试结果
- * @param {*} id 
- * @param {*} answerJson 
- * @param {*} result 
- * @param {*} isEnd 
+ * @param {*} id 记录id
+ * @param {*} answerJson 答题结果
+ * @param {*} result 批改结果
+ * @param {*} isEnd 是否结束
+ * @param {*} questionJson 问题数据
+ * @param {*} endTime 提交时间
  */
-const updataResult = (id, answerJson, result, isEnd, questionJson) => {
+const updataResult = (id, answerJson, result, isEnd, questionJson, endTime) => {
   let sql = `UPDATE studentResult SET `
   if (answerJson) {
     sql += `answerJson='${answerJson}',`
@@ -61,6 +63,9 @@ const updataResult = (id, answerJson, result, isEnd, questionJson) => {
   }
   if (questionJson) {
     sql += `questionJson='${questionJson}',`
+  }
+  if (endTime) {
+    sql += `endTime='${endTime}',`
   }
   sql = sql.substring(0, sql.length - 1)
   sql += ` WHERE id=${id}`
