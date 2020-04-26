@@ -95,3 +95,12 @@ export async function queryResultById(data = {}) {
     data: data
   })
 }
+
+// 修改考试结果
+export async function updataResult(data = {}) {
+  return request({
+    url:'/student/examination/updataResult',
+    method:'POST',
+    data: data
+  })
+}

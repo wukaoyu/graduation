@@ -99,7 +99,7 @@ class Completion extends React.Component {
   }
   // 改变题目分数
   changeMarks = (e) => {
-    this.props.changeMarks(e.target.value)
+    this.props.changeMarks(parseInt(e.target.value))
   }
 }
 

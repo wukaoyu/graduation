@@ -145,7 +145,7 @@ class AdminAccount extends React.Component {
                     <Column title="序号" dataIndex="index" key="index" align='center' width='150' render={(text,record,index) => (
                         index+1
                     )} />
-                    <Column title='姓名' dataIndex='username' key='username' align='center' width='150'/>
+                    <Column title='管理员姓名' dataIndex='username' key='username' align='center' width='150'/>
                     <Column title='账号' dataIndex='account' key='account' align='center' width='150'/>
                     <Column title='创建者' dataIndex='createName' key='createName' align='center'/>
                     <Column title='创建时间' dataIndex='createTime' key='createTime' align='center'/>

@@ -204,7 +204,7 @@ class ExaminationMain extends React.Component {
                                 </Popover>
                               </div> : 
                               nowTime > item.maxEndTime ?
-                              <Button size='small' className='exam-card-list-handle-correction'>试卷批改</Button> : 
+                              <div>试卷批改中...</div> : 
                               <div>考试进行中，无法操作...</div>
                             }
                           </div>

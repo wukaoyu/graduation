@@ -1,5 +1,5 @@
 import React from 'react'
-import { queryResultById } from 'api/teacher/examination';
+import { queryResultById, updataResult } from 'api/teacher/examination';
 import QueueAnim from 'rc-queue-anim';
 import { Button } from 'antd'
 import Completion from './correctionComponents/completion'
@@ -113,7 +113,27 @@ class TestPapergetMarks extends React.Component {
   }
   // 修改题目分数
   changeMarks = (index, value) => {
-
+    let result = this.state.testPaperData.result
+    result.allResultArray[index] = value
+    let data = {
+      result: JSON.stringify(result),
+      id: this.state.params.id
+    }
+    updataResult(data).then(res => {
+      if (res.errno === 0) {
+        let fullMarks = 0
+        result.allResultArray.forEach(item => {
+          fullMarks += item || 0
+        })
+        this.setState({
+          fullMarks,
+          testPaperData: {
+            ...this.state.testPaperData,
+            result
+          }
+        })
+      }
+    })
   }
 }
 
