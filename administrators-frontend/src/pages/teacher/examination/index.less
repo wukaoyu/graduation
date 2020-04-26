@@ -66,22 +66,48 @@
     }
   }
 }
-.studentResult-head{
-  min-width: 60px;
-  max-width: 60px;
-  border-radius: 100%;
-  overflow: hidden;
-}
-.studentResult-describe{
-  margin-left: 10px;
-  display: flex;
-  font-size: 13px;
-  align-items: center;
-  height: 20px;
-  &-key {
-    width: 66px;
-    color: #000;
-    text-align: right;
+.studentResult{
+  &-head {
+    min-width: 60px;
+    max-width: 60px;
+    border-radius: 100%;
+    overflow: hidden;
+  }
+  &-describe{
+    margin-left: 10px;
+    display: flex;
+    font-size: 13px;
+    align-items: center;
+    height: 20px;
+    &-key {
+      width: 66px;
+      color: #000;
+      text-align: right;
+    }
+  }
+  &-headList {
+    min-width: 50px;
+    max-width: 50px;
+    border-radius: 100%;
+    overflow: hidden;
+  }
+  &-sort{
+    display: flex;
+    width: 100px;
+  }
+  &-list{
+    display: flex;
+    align-items: center;
+    width: 30%;
+    &-key {
+      width: 80px;
+      text-align: right;
+    }
+  }
+  &-marks{
+    display: flex;
+    width: 10%;
+    align-items: center;
   }
 }
 .result-list{
@@ -168,6 +194,49 @@
   background-color: #D45113;
   height: 22px;
   line-height: 22px;
+  padding: 0 6px;
+  border-radius: 2px;
+}
+.card-showAnswer{
+  display: flex;
+  &-text {
+    min-width: 30px;
+    text-align: center;
+    font-size: 12px;
+    margin-left: 10px;
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+    background-color: #F40000;
+    height: 22px;
+    line-height: 22px;
+    padding: 0 6px;
+    border-radius: 2px;
+  }
+}
+.card-showTrue {
+  min-width: 30px;
+  text-align: center;
+  font-size: 12px;
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+  background-color: #48A9A6;
+  height: 20px;
+  line-height: 20px;
+  padding: 0 6px;
+  border-radius: 2px;
+}
+.card-showFalse {
+  min-width: 30px;
+  text-align: center;
+  font-size: 12px;
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+  background-color: #F40000;
+  height: 20px;
+  line-height: 20px;
   padding: 0 6px;
   border-radius: 2px;
 }

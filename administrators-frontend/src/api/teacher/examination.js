@@ -96,6 +96,15 @@ export async function queryResultById(data = {}) {
   })
 }
 
+// 查询考试结果
+export async function queryEndExaminationResult(data = {}) {
+  return request({
+    url:'/teacher/examination/queryEndExaminationResult',
+    method:'POST',
+    data: data
+  })
+}
+
 // 修改考试结果
 export async function updataResult(data = {}) {
   return request({

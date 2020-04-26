@@ -186,7 +186,7 @@ class ExaminationMain extends React.Component {
                           <div>
                             {
                               item.isEnd ? 
-                              <Button size='small' className='exam-card-list-handle-result'>查看结果</Button> :
+                              <Button size='small' className='exam-card-list-handle-result' onClick={() => this.toResult(item.id)}>查看结果</Button> :
                               nowTime < item.startTime ? 
                               <div>
                                 <Button size='small' className='exam-card-list-handle-editor' onClick={() => this.openEditroModel(item)}>编辑</Button>
@@ -554,6 +554,9 @@ class ExaminationMain extends React.Component {
   }
   toCorrection = (id) => {
     this.props.history.push('/teacher/examinationRecord/correction?id=' + id)
+  }
+  toResult = (id) => {
+    this.props.history.push('/teacher/examinationRecord/testPaperResult?id=' + id)
   }
 }
 

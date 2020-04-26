@@ -10,7 +10,8 @@ const {
   deleteExamination,
   updataExamination,
   queryStudentResult,
-  queryResultById
+  queryResultById,
+  queryEndExaminationResult
 } = require("../../controller/teacher/examination")
 
 router.post('/queryPersonalExaminationPage', (req, res) => {
@@ -141,6 +142,25 @@ router.post('/queryResultById', (req, res) => {
       data.result = JSON.parse(data.result)
       data.questionJson = JSON.parse(data.questionJson)
       data.answerJson = JSON.parse(data.answerJson)
+      return new SuccessModel(data)
+    }
+    return new ErrorModel('异常错误')
+  })
+  resultData.then(data => {
+    res.json(data)
+  })
+})
+
+router.post('/queryEndExaminationResult', (req, res) => {
+  const { id } = req.body
+  const result = queryEndExaminationResult(id)
+  const resultData = result.then(data => {
+    if (data) {
+      data.row.forEach(item => {
+        item.result = JSON.parse(item.result)
+        item.answerJson = JSON.parse(item.answerJson)
+        item.questionJson = JSON.parse(item.questionJson)
+      });
       return new SuccessModel(data)
     }
     return new ErrorModel('异常错误')

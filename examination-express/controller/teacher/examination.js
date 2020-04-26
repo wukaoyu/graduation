@@ -186,6 +186,29 @@ const queryResultById = (id) => {
   })
 }
 
+/**
+ * 查询已结束的考试成绩
+ * @param {*} id 考试id
+ */
+const queryEndExaminationResult = (id) => {
+  let sql = `SELECT a.account, a.username, a.classId, a.sex, a.headPortraitUrl,
+  b.name,b.startTime AS examStartTime, b.endTime AS examEndTime, b.testTime, c.* FROM student AS a LEFT JOIN examination AS b on a.classId=b.classId LEFT JOIN 
+  (SELECT * FROM studentResult WHERE examinationId = ${id}) AS c
+  on a.id=c.studentId WHERE b.id=${id} `
+  let examSql = `SELECT a.*, b.className, c.fullMarks FROM examination as a left join classes as b on a.classId=b.id left join testPaper as c on a.testPaper=c.id WHERE a.id = ${id}`
+  let examData = {}
+  exec(examSql).then(row => {
+    examData = row[0]
+  })
+  return exec(sql).then(row => {
+    let rowData = row || []
+    let resultData = {
+      row: rowData,
+      examData
+    }
+    return resultData || []
+  })
+}
 
 module.exports = {
   queryPersonalExaminationPage,
@@ -195,5 +218,6 @@ module.exports = {
   deleteExamination,
   updataExamination,
   queryStudentResult,
-  queryResultById
+  queryResultById,
+  queryEndExaminationResult
 }

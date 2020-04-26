@@ -2,6 +2,8 @@ import React from 'react'
 import { queryResultById, updataResult } from 'api/teacher/examination';
 import QueueAnim from 'rc-queue-anim';
 import { Button } from 'antd'
+import SingleElection from './correctionComponents/singleElection'
+import MultipleChoice from './correctionComponents/multipleChoice'
 import Completion from './correctionComponents/completion'
 import ShortAnswer from './correctionComponents/shortAnswer'
 
@@ -25,7 +27,8 @@ class TestPapergetMarks extends React.Component {
           subjective: 0
         }
       },
-      fullMarks: 0
+      fullMarks: 0,
+      otherProps: {}
     }
   }
 
@@ -36,7 +39,6 @@ class TestPapergetMarks extends React.Component {
   render() {
     return (
       <div>
-        <Button onClick={() => this.goBack()}>返回</Button>
         <div className='paper-head'>
           {this.state.testPaperData.name}
         </div>
@@ -60,15 +62,29 @@ class TestPapergetMarks extends React.Component {
               item.index = index
               switch (item.type) {
                 case 3:
-                  comp = <Completion questionData={item} 
+                  comp = <Completion questionData={item} otherProps={this.state.otherProps}
                         changeMarks={(value) => this.changeMarks(index, value)}/>
                   break;
                 case 4:
-                  comp = <ShortAnswer questionData={item} 
+                  comp = <ShortAnswer questionData={item} otherProps={this.state.otherProps}
                         changeMarks={(value) => this.changeMarks(index, value)}/>
                   break;
                 default:
                   break;
+              }
+              if (this.state.otherProps.isEnd) {
+                switch (item.type) {
+                  case 1:
+                    comp = <SingleElection questionData={item} otherProps={this.state.otherProps}
+                          changeMarks={(value) => this.changeMarks(index, value)}/>
+                    break;
+                  case 2:
+                    comp = <MultipleChoice questionData={item} otherProps={this.state.otherProps}
+                          changeMarks={(value) => this.changeMarks(index, value)}/>
+                    break;
+                  default:
+                    break;
+                }
               }
               return (
                 <div key={index} style={{marginTop:'10px'}}>
@@ -77,6 +93,9 @@ class TestPapergetMarks extends React.Component {
               )
             })
           }
+          <div key={this.state.testPaperData.questionJson.length}>
+            <Button style={{marginTop: '10px'}} onClick={() => this.goBack()}>返回</Button>
+          </div>
         </QueueAnim>
       </div>
     )
@@ -99,9 +118,13 @@ class TestPapergetMarks extends React.Component {
         res.data.result.allResultArray.forEach(item => {
           fullMarks += item || 0
         })
+        let otherProps = {
+          isEnd : res.data.isEnd ? true : false
+        }
         this.setState({
           testPaperData,
-          fullMarks
+          fullMarks,
+          otherProps
         })
       }
     })
