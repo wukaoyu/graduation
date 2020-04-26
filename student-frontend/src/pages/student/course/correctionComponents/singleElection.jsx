@@ -1,8 +1,8 @@
 import React from 'react'
-import { Card, Checkbox, InputNumber } from 'antd'
+import { Card, Radio, InputNumber } from 'antd'
 import '../index.less'
 
-class MultipleChoice extends React.Component {
+class SingleElection extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -49,34 +49,29 @@ class MultipleChoice extends React.Component {
             <img src={questionData.imgUrl} alt="avatar" style={{marginBottom:'10px'}} /> : ''
           }
           <div>
-          <Checkbox.Group defaultValue={questionData.studentAnswer} disabled>
+          <Radio.Group defaultValue={questionData.studentAnswer[0]} disabled>
             {
               questionData.answerJson.map((item, index) => {
                 return (
-                <Checkbox key={index} value={index}>{String.fromCharCode(index + 65)}、{item.answer}</Checkbox>
+                <Radio key={index} value={index}>{String.fromCharCode(index + 65)}、{item.answer}</Radio>
                 )
               })
             }
-          </Checkbox.Group>
+          </Radio.Group>
           </div>
           <div className='correction-handle'>
             <div className='editor-handle-score'>
               <div className='editor-handle-score-label'>得分：</div>
-              <InputNumber disabled={this.state.otherProps.isEnd} min={0} max={parseInt(questionData.score)} size='small' className='getMark-input' defaultValue={questionData.correctionScore}/>
+              <InputNumber disabled={this.state.otherProps.isEnd} min={0} max={parseInt(questionData.score)} size='small' className='getMark-input' defaultValue={questionData.correctionScore} onBlur={(e) => this.changeMarks(e)}/>
             </div>
             <div className='getMark-max'>
               分值：{questionData.score}
             </div>
             {
               this.state.otherProps.isEnd ?
-              <div className='card-showAnswer'>
+              <div className='card-showAnswer' style={{margin: '0 0 0 10px'}}>
                 <div className='card-showAnswer-text'>
-                  正确答案：
-                  {
-                    questionData.answerTrue.map(item => {
-                      return String.fromCharCode(item + 65)
-                    })
-                  }
+                  正确答案：{String.fromCharCode(questionData.answerTrue[0] + 65)}
                 </div>
               </div> : ''
             }
@@ -87,4 +82,4 @@ class MultipleChoice extends React.Component {
   }
 }
 
-export default MultipleChoice
+export default SingleElection

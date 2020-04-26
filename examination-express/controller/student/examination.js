@@ -74,9 +74,22 @@ const updataResult = (id, answerJson, result, isEnd, questionJson, endTime) => {
   })
 }
 
+/**
+ * 根据考试id查询学生成绩
+ * @param {*} examinationId 考试id
+ */
+const queryMyResult = (examinationId) => {
+  let studentId = global.userInfo.id
+  let sql = `SELECT a.*, b.name, b.isEnd AS examIsEnd FROM studentResult as a left join examination as b on a.examinationId=b.id WHERE a.studentId = ${studentId} AND a.examinationId = ${examinationId}`
+  return exec(sql).then(row => {
+    return row[0] || {}
+  })
+}
+
 module.exports = {
   queryStudentTestPaper,
   insertStudentResult,
   queryExaminationById,
-  updataResult
+  updataResult,
+  queryMyResult
 }

@@ -135,7 +135,11 @@ class TestPapeResult extends React.Component {
   }
 
   toGetMarks = (id) => {
-    this.props.history.push('/teacher/examinationRecord/testPapergetMarks?id=' + id)
+    if (window.userInfo.identity === 1) {
+      this.props.history.push('/admin/examinationRecord/testPapergetMarks?id=' + id)
+    }else if (window.userInfo.identity === 2) {
+      this.props.history.push('/teacher/examinationRecord/testPapergetMarks?id=' + id)
+    }
   }
   // 打开或关闭弹窗
   openOrCloseModal = (name, flag) => {

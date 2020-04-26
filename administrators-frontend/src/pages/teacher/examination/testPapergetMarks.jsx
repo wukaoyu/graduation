@@ -105,7 +105,6 @@ class TestPapergetMarks extends React.Component {
     queryResultById({id: this.state.params.id}).then(res => {
       if (res.errno === 0) {
         let testPaperData = res.data
-
         res.data.result = res.data.result.allResultArray ? res.data.result : {
           subjective: 0,
           allResultArray: []
@@ -119,7 +118,7 @@ class TestPapergetMarks extends React.Component {
           fullMarks += item || 0
         })
         let otherProps = {
-          isEnd : res.data.isEnd ? true : false
+          isEnd : res.data.examIsEnd ? true : false
         }
         this.setState({
           testPaperData,

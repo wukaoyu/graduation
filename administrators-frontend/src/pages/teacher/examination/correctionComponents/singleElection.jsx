@@ -62,7 +62,7 @@ class SingleElection extends React.Component {
           <div className='correction-handle'>
             <div className='editor-handle-score'>
               <div className='editor-handle-score-label'>得分：</div>
-              <InputNumber disabled={this.state.otherProps.isEnd} min={0} max={parseInt(questionData.score)} size='small' className='getMark-input' defaultValue={questionData.correctionScore} onBlur={(e) => this.changeMarks(e)}/>
+              <InputNumber disabled={this.state.otherProps.isEnd} min={0} max={parseInt(questionData.score)} size='small' className='getMark-input' defaultValue={questionData.correctionScore} />
             </div>
             <div className='getMark-max'>
               分值：{questionData.score}

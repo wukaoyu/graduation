@@ -180,7 +180,7 @@ const queryStudentResult = (id, pageSize, current) => {
  * @param {*} id 
  */
 const queryResultById = (id) => {
-  let sql = `SELECT a.*, b.name FROM studentResult as a left join examination as b on a.examinationId=b.id WHERE a.id = ${id}`
+  let sql = `SELECT a.*, b.name, b.isEnd AS examIsEnd FROM studentResult as a left join examination as b on a.examinationId=b.id WHERE a.id = ${id}`
   return exec(sql).then(row => {
       return row[0] || {}
   })

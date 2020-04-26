@@ -92,7 +92,7 @@ class courseExamation extends React.Component {
                           <div>
                             {
                               item.isEnd ? 
-                              <Button size='small' className='exam-card-list-handle-result'>查看结果</Button> :
+                              <Button size='small' className='exam-card-list-handle-result' onClick={() => this.toResult(item.id)}>查看结果</Button> :
                               nowTime > item.maxEndTime ?
                               <div>试卷批改中，请等待...</div> : 
                               <Button size='small' className='exam-card-list-handle-correction' onClick={() => this.toExamination(item)}>开始考试</Button>
@@ -142,6 +142,9 @@ class courseExamation extends React.Component {
   }
   toExamination = (item) => {
     this.props.history.push('/examination/main?id=' + item.id)
+  }
+  toResult = (id) => {
+    this.props.history.push('/student/course/testPapergetMarks?id=' + id)
   }
   // 返回上一页
   goBack = () => {

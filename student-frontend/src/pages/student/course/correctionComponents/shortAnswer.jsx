@@ -53,7 +53,7 @@ class ShortAnswer extends React.Component {
           <div className='correction-handle'>
             <div className='editor-handle-score'>
               <div className='editor-handle-score-label'>得分：</div>
-              <InputNumber disabled={this.state.otherProps.isEnd} min={0} max={parseInt(questionData.score)} size='small' className='getMark-input' defaultValue={questionData.correctionScore}/>
+              <InputNumber disabled={this.state.otherProps.isEnd} min={0} max={parseInt(questionData.score)} size='small' className='getMark-input' defaultValue={questionData.correctionScore} onBlur={(e) => this.changeMarks(e)}/>
             </div>
             <div className='getMark-max'>
               分值：{questionData.score}
@@ -62,6 +62,10 @@ class ShortAnswer extends React.Component {
         </Card>
       </div>
     )
+  }
+  // 改变题目分数
+  changeMarks = (e) => {
+    this.props.changeMarks(parseInt(e.target.value))
   }
 }
 

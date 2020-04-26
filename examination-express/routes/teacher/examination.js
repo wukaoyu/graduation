@@ -138,7 +138,7 @@ router.post('/queryResultById', (req, res) => {
   const { id } = req.body
   const result = queryResultById(id)
   const resultData = result.then(data => {
-    if (data) {
+    if (data.id) {
       data.result = JSON.parse(data.result)
       data.questionJson = JSON.parse(data.questionJson)
       data.answerJson = JSON.parse(data.answerJson)

@@ -61,6 +61,8 @@ export default class Router extends React.Component {
                                 <Route path='/admin/course/testPaper' component={AdminCourseTestPaper}/>
                                 <Route path='/admin/course/editorTestPaper' component={AdminEditorTestPaper}/>
                                 <Route path='/admin/examinationRecord/main' component={AdminExaminationMain}/>
+                                <Route path='/admin/examinationRecord/testPapergetMarks' component={TestPapergetMarks}/>
+                                <Route path='/admin/examinationRecord/testPaperResult' component={TestPaperResult}/>
                             </AdminMain>
                         }/>
                         <Route path='/teacher' render={() => 

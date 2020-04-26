@@ -5,7 +5,8 @@ const {
   queryStudentTestPaper,
   insertStudentResult,
   queryExaminationById,
-  updataResult
+  updataResult,
+  queryMyResult
 } = require("../../controller/student/examination")
 const { nowDate } = require('../../public/utils/main');
 
@@ -103,6 +104,23 @@ router.post('/examCorrection', (req, res) => {
     }else if (data.length === 0) {
       return new ErrorModel('暂无数据')
     }
+  })
+  resultData.then(data => {
+    res.json(data)
+  })
+})
+
+router.post('/queryMyResult', (req, res) => {
+  const { examinationId } = req.body
+  const result = queryMyResult(examinationId)
+  const resultData = result.then(data => {
+    if (data.id) {
+      data.result = JSON.parse(data.result)
+      data.questionJson = JSON.parse(data.questionJson)
+      data.answerJson = JSON.parse(data.answerJson)
+      return new SuccessModel(data)
+    }
+    return new ErrorModel('异常错误')
   })
   resultData.then(data => {
     res.json(data)

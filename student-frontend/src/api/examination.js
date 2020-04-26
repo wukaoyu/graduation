@@ -35,3 +35,15 @@ export async function examCorrection(data = {}) {
     data: data
   })
 }
+
+/**
+ * 根据id查询答题信息
+ * @param {*} data 
+ */
+export async function queryMyResult(data = {}) {
+  return request({
+    url:'/student/examination/queryMyResult',
+    method:'POST',
+    data: data
+  })
+}

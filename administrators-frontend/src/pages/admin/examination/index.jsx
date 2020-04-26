@@ -189,7 +189,7 @@ class ExaminationMain extends React.Component {
                           <div>
                             {
                               item.isEnd ? 
-                              <Button size='small' className='exam-card-list-handle-result'>查看结果</Button> :
+                              <Button size='small' className='exam-card-list-handle-result' onClick={() => this.toResult(item.id)}>查看结果</Button> :
                               nowTime < item.startTime ? 
                               <div>
                                 <Popover placement="top" trigger='click' content = {
@@ -412,8 +412,8 @@ class ExaminationMain extends React.Component {
       this.handOpenOrCloseModel('editorExaminationModel', true)
     })
   }
-  toAddExamination = () => {
-    this.props.history.push('/teacher/class/courseClass')
+  toResult = (id) => {
+    this.props.history.push('/admin/examinationRecord/testPaperResult?id=' + id)
   }
 }
 
