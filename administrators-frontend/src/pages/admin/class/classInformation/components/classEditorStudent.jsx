@@ -72,7 +72,7 @@ class ClassEditorStudent extends React.Component {
                       }>
                         <div className="studentMain">
                           <div className='studentMain-head'>
-                            <img className='studentMain-head-img' src={item.headPortraitUrl || "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"} alt="head"/>
+                            <img className='studentMain-head-img' src={item.headPortraitUrl || "http://wkydegraduation.oss-cn-beijing.aliyuncs.com/image/headPortraitUrl.png"} alt="head"/>
                           </div>
                           <div>
                             <div className='studentMain-describe'>
@@ -84,7 +84,6 @@ class ClassEditorStudent extends React.Component {
                         <div className='studentMain-operation'>
                           <div className='studentMain-operation-key'>操作：</div>
                           <div className='studentMain-operation-val'>
-                            <Button size='small' className='studentMain-operation-val-btn'>查看详情</Button>
                             <Popover placement="top" trigger='click' content = {
                                 <div>
                                     <p>确认退出该班级吗？</p>

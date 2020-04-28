@@ -74,7 +74,7 @@ class ClassInformation extends React.Component {
                       extra={<div style={{color: '#1DA57A'}} onClick={() => this.toEditor(item.id)}>详细信息</div>}>
                         <div className="classMain">
                           <div className='classMain-head'>
-                            <img className='classMain-head-img' src={item.headPortraitUrl || "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"} alt="head"/>
+                            <img className='classMain-head-img' src={item.headPortraitUrl || "http://wkydegraduation.oss-cn-beijing.aliyuncs.com/image/headPortraitUrl.png"} alt="head"/>
                           </div>
                           <div>
                             <div className='classMain-describe'>

@@ -14,6 +14,7 @@ import Course from './pages/admin/course/index'
 import AdminCourseTestPaper from './pages/admin/course/testPaper'
 import AdminEditorTestPaper from './pages/admin/course/editorTestPaper'
 import AdminExaminationMain from './pages/admin/examination/index'
+import AdminPersonal from './components/personal/index'
 import TeacherMain from './pages/teacher/components/main/main'
 import TeacherClass from './pages/teacher/class/mainClass/index'
 import TeacherEditorStudent from './pages/teacher/class/mainClass/editorStudent'
@@ -27,6 +28,7 @@ import ExaminationMain from './pages/teacher/examination/index'
 import TestPaperCorrection from './pages/teacher/examination/testPaperCorrection'
 import TestPapergetMarks from './pages/teacher/examination/testPapergetMarks'
 import TestPaperResult from './pages/teacher/examination/testPaperResult'
+import TeacherPersonal from './components/personal/index'
 
 import jwt_decode from 'jwt-decode'
 
@@ -63,6 +65,7 @@ export default class Router extends React.Component {
                                 <Route path='/admin/examinationRecord/main' component={AdminExaminationMain}/>
                                 <Route path='/admin/examinationRecord/testPapergetMarks' component={TestPapergetMarks}/>
                                 <Route path='/admin/examinationRecord/testPaperResult' component={TestPaperResult}/>
+                                <Route path='/admin/personal/main' component={AdminPersonal}/>
                             </AdminMain>
                         }/>
                         <Route path='/teacher' render={() => 
@@ -79,6 +82,7 @@ export default class Router extends React.Component {
                                 <Route path='/teacher/examinationRecord/correction' component={TestPaperCorrection}/>
                                 <Route path='/teacher/examinationRecord/testPapergetMarks' component={TestPapergetMarks}/>
                                 <Route path='/teacher/examinationRecord/testPaperResult' component={TestPaperResult}/>
+                                <Route path='/teacher/person/main' component={TeacherPersonal}/>
                             </TeacherMain>
                         }/>
                         <Route path='/' component={Login}/>

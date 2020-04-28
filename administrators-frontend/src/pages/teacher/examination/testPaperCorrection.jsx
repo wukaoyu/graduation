@@ -59,7 +59,7 @@ class TestPaperCorrection extends React.Component {
                       extra={<Button className='exam-card-list-handle-correction' size='small' onClick={() => this.toGetMarks(item.id)}>继续批改</Button>}>
                         <div className="studentMain">
                           <div className='studentResult-head'>
-                            <img className='studentMain-head-img' src={item.headPortraitUrl || "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"} alt="head"/>
+                            <img className='studentMain-head-img' src={item.headPortraitUrl || "http://wkydegraduation.oss-cn-beijing.aliyuncs.com/image/headPortraitUrl.png"} alt="head"/>
                           </div>
                           <div>
                             <div className='studentResult-describe'>

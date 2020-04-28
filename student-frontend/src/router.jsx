@@ -8,6 +8,7 @@ import Practice from './pages/student/course/practice'
 import CourseExamation from './pages/student/course/courseExamation'
 import TestPapergetMarks from './pages/student/course/testPapergetMarks'
 import ExaminationMain from './pages/examination/index'
+import StudentPersonal from './components/personal/index'
 
 import jwt_decode from 'jwt-decode'
 
@@ -35,6 +36,7 @@ export default class Router extends React.Component {
                                 <Route path='/student/course/practice' component={Practice}/>
                                 <Route path='/student/course/courseExamation' component={CourseExamation}/>
                                 <Route path='/student/course/testPapergetMarks' component={TestPapergetMarks}/>
+                                <Route path='/student/personal/main' component={StudentPersonal}/>
                             </Main>
                         }/>
                         <Route path='/examination/main' component={ExaminationMain}/>

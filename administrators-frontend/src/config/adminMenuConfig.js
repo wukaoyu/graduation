@@ -38,6 +38,10 @@ const adminMenuList = [
     {
         title: '考试记录',
         key: '/admin/examinationRecord/main'
+    },
+    {
+        title: '个人中心',
+        key: '/admin/personal/main'
     }
 ];
 export default adminMenuList;

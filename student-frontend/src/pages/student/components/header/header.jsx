@@ -14,17 +14,15 @@ export default class Header extends React.Component{
         return (
             <div className="header">
                 <Row className="header-top">
-                        <Col span={6}>
-                            <span>欢迎，{this.state.userInfo.username}</span>
-                        </Col>
-                        <Col span={14} style={{
-                            textAlign:"right"
-                        }}>
-                            <span className="date">{this.state.sysTime}</span>
-                        </Col>
-                        <Col span={4}>
-                            <a href="/" onClick={this.loginOut}>退出</a>
-                        </Col>
+                    <Col span={20} style={{display:'flex',alignItems:'center'}}>
+                        <div className='header-top-headPortraitUrl'>
+                            <img src={this.state.userInfo.headPortraitUrl || 'http://wkydegraduation.oss-cn-beijing.aliyuncs.com/image/headPortraitUrl.png'} alt='头像'/>
+                        </div>
+                        <span>欢迎，{this.state.userInfo.username}</span>
+                    </Col>
+                    <Col span={4}>
+                        <a href="/" onClick={this.loginOut}>退出</a>
+                    </Col>
                 </Row>
             </div>
         );
