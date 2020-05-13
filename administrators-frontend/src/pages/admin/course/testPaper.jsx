@@ -252,7 +252,7 @@ class AdminTestPaper extends React.Component {
       })
     }else {
       val.fullMarks = 0
-      val.rules = '{}'
+      val.rules = '[]'
       val.curriculumId = this.state.params.id
       insertTestPaper(val).then(res => {
         if (res.errno === 0) {

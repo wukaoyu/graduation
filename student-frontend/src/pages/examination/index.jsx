@@ -116,7 +116,7 @@ class practice extends React.Component {
             </Modal>
           </div> :
           <div className='examination-nowEnd'>
-            主观题得分为：{this.state.allData.result.subjective}分，客观题得分请等待批改结果...
+            客观题得分为：{this.state.allData.result.subjective}分，客观题得分请等待批改结果...
           </div>
         }
       </div>
@@ -177,6 +177,7 @@ class practice extends React.Component {
       answerJson: JSON.stringify(newAnswerList), 
       id: this.state.allData.id
     }
+    console.log(this.state.allData)
     updataResult(data)
   }
   // 倒计时计算
@@ -208,6 +209,7 @@ class practice extends React.Component {
   handleSubmit = () => {
     let newData = this.state.allData
     newData.isEnd = 1
+    newData.result = {}
     examCorrection({examinationId: this.state.params.id}).then(res => {
       if (res.errno === 0) {
         newData.result.subjective = res.data.fullMarks

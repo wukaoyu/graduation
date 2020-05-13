@@ -217,12 +217,23 @@ class Course extends React.Component {
         }
       })
     }else {
-      imgUpload({imgfiles: this.state.imageUrl}).then(res => {
-        if (res.status !== 100) {
-          message.error(res.msg)
-        }else {
-          data.coverImage = res.imageUrl
-        }
+      if (this.state.imageUrl) {
+        imgUpload({imgfiles: this.state.imageUrl}).then(res => {
+          if (res.status !== 100) {
+            message.error(res.msg)
+          }else {
+            data.coverImage = res.imageUrl
+          }
+          insertCoures(data).then(res => {
+            if (res.errno === 0) {
+              this.handOpenOrCloseModel('addOrEditorCourseModel', false)
+              message.success('添加成功');
+              this.funQueryCoursePage()
+            }
+          })
+        })
+      }else {
+        data.coverImage = ''
         insertCoures(data).then(res => {
           if (res.errno === 0) {
             this.handOpenOrCloseModel('addOrEditorCourseModel', false)
@@ -230,7 +241,7 @@ class Course extends React.Component {
             this.funQueryCoursePage()
           }
         })
-      })
+      }
     }
   }
   // 删除班级

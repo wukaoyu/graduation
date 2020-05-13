@@ -73,12 +73,11 @@ const queryAllCourse = () => {
  */
 const queryCoursePage = (name, pageSize, current) => {
   let sql = `SELECT curTab.*, countTab.questionCount, paper.testPaperCount FROM
-  (SELECT curriculumId FROM TCCrelation  GROUP BY curriculumId ) TCCTab LEFT JOIN
-  (SELECT * FROM curriculum) curTab ON TCCTab.curriculumId=curTab.id LEFT JOIN
+  (SELECT * FROM curriculum) curTab  LEFT JOIN
+  (SELECT curriculumId FROM TCCrelation  GROUP BY curriculumId ) TCCTab ON TCCTab.curriculumId=curTab.id LEFT JOIN
   (SELECT b.curriculumId, count(b.curriculumId) AS questionCount FROM curriculum AS a LEFT JOIN question AS b ON a.id=b.curriculumId  
   GROUP BY b.curriculumId) countTab on TCCTab.curriculumId=countTab.curriculumId LEFT JOIN
-	(SELECT curriculumId, count(*) AS testPaperCount FROM testPaper GROUP BY curriculumId) paper ON TCCTab.curriculumId=paper.curriculumId
-   `
+	(SELECT curriculumId, count(*) AS testPaperCount FROM testPaper GROUP BY curriculumId) paper ON TCCTab.curriculumId=paper.curriculumId`
   let countSql = `select count (*) from curriculum`
   if (name) {
     sql += `and name like '%${name}%' `

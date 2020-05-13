@@ -1,6 +1,6 @@
 import React from 'react';
-import { Pagination, Input, Select, Button, Modal, message } from 'antd'
-import { queryQuestionPage, insertQuestion, deleteQuestion, updataQuestion } from 'api/teacher/course'
+import { Pagination, Input, Select, Button, Modal, message, Upload, Icon } from 'antd'
+import { queryQuestionPage, insertQuestion, deleteQuestion, updataQuestion, fileInsertQuestion } from 'api/teacher/course'
 import { imgUpload } from 'api/utilsApi';
 import QueueAnim from 'rc-queue-anim';
 import SingleElection from './components/singleElection'
@@ -13,6 +13,7 @@ import ShortAnswer from './components/shortAnswer'
 import ShortAnswerEditor from './components/shortAnswerEditor'
 import './index.less'
 
+const { Dragger } = Upload;
 const createHistory = require("history").createHashHistory
 
 const { Search } = Input;
@@ -22,6 +23,7 @@ const history = createHistory()
 class courseInformaition extends React.Component {
   constructor(props) {
     super(props)
+    console.log(props)
     let paramData = {}, searchArray = this.props.location.search.substr(1).split('&')
     searchArray.forEach(item => {
     let newArray = item.split('=')
@@ -38,7 +40,10 @@ class courseInformaition extends React.Component {
       },
       addOrEditorQuestion: false,
       editorType: 1,
-      editorData: {}
+      editorData: {},
+      fileVisible: false,
+      fileList:[],
+      isFileLoading: false
     }
   }
 
@@ -100,6 +105,7 @@ class courseInformaition extends React.Component {
             </div>
             <div className='search-item'>
               <div>添加题目：</div>
+              <Button className='search-item-btn' type='primary' onClick={() => this.handOpenOrCloseModel('fileVisible', true)}>批量导入</Button>
               <Button className='search-item-btn' onClick={() => this.openEditorModel(1)}>单选题</Button>
               <Button className='search-item-btn' onClick={() => this.openEditorModel(2)}>多选题</Button>
               <Button className='search-item-btn' onClick={() => this.openEditorModel(3)}>填空题</Button>
@@ -184,6 +190,30 @@ class courseInformaition extends React.Component {
         <div className='bottom'>  
           <Pagination {...paginationProps}></Pagination>
         </div>
+        <Modal
+          title={'批量导入'}
+          visible={this.state.fileVisible}
+          onCancel={() => this.handOpenOrCloseModel('fileVisible', false)}
+          footer={
+              <div>
+                  <Button onClick={() => this.handOpenOrCloseModel('fileVisible', false)}>取消</Button>
+                  <a href="http://wkydegraduation.oss-cn-beijing.aliyuncs.com/questions.xls" style={{margin: '0 8px'}}>
+                    <Button type="primary">下载模板</Button>
+                  </a>
+                  <Button type="primary" loading={this.state.isFileLoading} onClick={() => this.fileUpload()}>上传文件</Button>
+              </div>
+          }>
+          <Dragger
+            accept='.xls,.xlsx'
+            onChange={this.changeFile}
+            fileList={this.state.fileList}
+            beforeUpload={this.getFile}>
+                <p className="ant-upload-drag-icon">
+                    <Icon type="inbox" />
+                </p>
+                <p className="ant-upload-text">单击或拖动Excel文件到此区域上传文件</p>
+            </Dragger>
+        </Modal>
         <Modal
         visible={this.state.addOrEditorQuestion}
         onCancel={() => this.handOpenOrCloseModel('addOrEditorQuestion', false)}
@@ -287,6 +317,28 @@ class courseInformaition extends React.Component {
       }
     }
   }
+  /**
+   * 上传文件
+   */
+  fileUpload = () => {
+    let formData = new FormData()
+    formData.append('file', this.state.fileList[0])
+    formData.append('curriculumId', this.state.params.id)
+    this.setState({
+      isFileLoading: true
+    })
+    fileInsertQuestion(formData).then(res => {
+      if(res.errno === 0) {
+        this.setState({
+          isFileLoading: false,
+          fileList: []
+        })
+        message.success(res.data)
+        this.funQueryQuestionPage()
+        this.handOpenOrCloseModel('fileVisible', false)
+      }
+    })
+  }
   // 删除题目
   deleteQuestion = id => {
     deleteQuestion({id}).then(res => {
@@ -364,10 +416,27 @@ class courseInformaition extends React.Component {
   changePage = (current) => {
       let newPageData = Object.assign(this.state.pageData, {current})
       this.setState({
-          pageData: newPageData
+        pageData: newPageData
       },() => {
           this.funQueryQuestionPage()
       })
+  }
+
+  /**
+   * 文件赋值
+   */
+  getFile = (file) => {
+    this.setState({
+        fileList: [file]
+    })
+    return false
+  }
+  changeFile = (info) => {
+    if (info.fileList.length === 0) {
+      this.setState({
+        fileList: info.fileList
+      })
+    }
   }
   /**
    * 打开或关闭弹窗

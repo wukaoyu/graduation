@@ -129,6 +129,7 @@ class courseExamation extends React.Component {
           let m = time.getMinutes(); //获取当前分钟数(0-59)
           let s = time.getSeconds();
           item.maxEndTime = year + '-' + this.conver(month) + "-" + this.conver(date) + " " + this.conver(h) + ':' + this.conver(m) + ":" + this.conver(s);
+          console.log(item.maxEndTime)
         })
         this.setState({
           examList: res.data

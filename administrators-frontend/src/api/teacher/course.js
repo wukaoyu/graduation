@@ -132,3 +132,16 @@ export async function queryChooseQuestion(data = {}) {
     data: data
   })
 }
+
+
+/**
+ * 批量添加问题
+ * @param {*} data 
+ */
+export async function fileInsertQuestion(data = {}) {
+  return request({
+    url:'/teacher/course/fileInsertQuestion',
+    method:'POST',
+    data: data
+  })
+}

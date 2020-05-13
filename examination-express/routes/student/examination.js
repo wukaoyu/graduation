@@ -38,10 +38,9 @@ router.post('/insertStudentResult', (req, res) => {
   const { examinationId } = req.body
   const queryExamin = queryExaminationById(examinationId)
   const result = queryExamin.then(examinData => {
-    console.log(nowDate(), examinData.startTime)
     if (nowDate() < examinData.startTime) {
       return '考试时间未到，请耐心等待！'
-    }else if (nowDate > examinData.endTime) {
+    }else if (nowDate() > examinData.endTime) {
       return '考试时间已过'
     }else {
       return insertStudentResult(examinationId, examinData.rules)
@@ -75,7 +74,7 @@ router.post('/updataResult', (req, res) => {
 router.post('/examCorrection', (req, res) => {
   const { examinationId } = req.body
   const result = queryStudentTestPaper(examinationId)
-  const nowDate = nowDate()
+  let nowDateTiem = nowDate()
   const resultData = result.then(data => {
     if (data.length) {
       let newQuestionJson = JSON.parse(data[0].questionJson)
@@ -99,7 +98,7 @@ router.post('/examCorrection', (req, res) => {
         delete item.difficultyArray
       })
       nowResult.subjective = fullMarks
-      updataResult(data[0].id, JSON.stringify(newAnswerJson), JSON.stringify(nowResult), 1, JSON.stringify(newQuestionJson), nowDate)
+      updataResult(data[0].id, JSON.stringify(newAnswerJson), JSON.stringify(nowResult), 1, JSON.stringify(newQuestionJson), nowDateTiem)
       return new SuccessModel({fullMarks})
     }else if (data.length === 0) {
       return new ErrorModel('暂无数据')

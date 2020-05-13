@@ -23,8 +23,8 @@ const queryStudentTestPaper = (examinationId) => {
 const insertStudentResult = (examinationId, questionJson) => {
   let studentId = global.userInfo.id
   const startTime = nowDate()
-  let sql = `INSERT INTO studentResult (studentId, examinationId, startTime, isEnd, questionJson) 
-  VALUES (${studentId}, ${examinationId}, '${startTime}', 0, '${questionJson}')`
+  let sql = `INSERT INTO studentResult (studentId, examinationId, startTime, isEnd, questionJson,answerJson) 
+  VALUES (${studentId}, ${examinationId}, '${startTime}', 0, '${questionJson}','[]')`
   return exec(sql).then(row => {
     return row || {}
   })

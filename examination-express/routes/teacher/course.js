@@ -15,6 +15,7 @@ const {
   queryChooseQuestion
 } = require("../../controller/teacher/course")
 const { nowDate } = require("../../public/utils/main")
+const XLSX= require('xlsx');
 
 router.post('/queryCoursePage', (req, res) => {
   const { courseName, pageSize, current } = req.body
@@ -209,6 +210,97 @@ router.post('/queryChooseQuestion', (req, res) => {
   resultData.then(data => {
     res.json(data)
   })
+})
+
+// 批量添加问题
+router.post('/fileInsertQuestion', (req, res) => {
+  let excelFile = req.files.file.data;
+  let excelData = [];
+  let nowSex = []
+  const workbook = XLSX.read(excelFile);
+  const sheetNames = workbook.SheetNames[0];
+  const createBy = global.userInfo.id
+  const curriculumId = req.body.curriculumId    
+  const createTime = nowDate()
+  // console.log(workbook.Sheets[sheetNames])
+  if (workbook.Sheets.hasOwnProperty(sheetNames)) {
+      fromTo = workbook.Sheets[sheetNames]['!ref'];
+      //解析excel文件得到数据
+      excelData = excelData.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames]));
+  }
+  let difficultyArray = ['简单', '中等', '难', '非常困难']
+  if (excelData[0]['答案'] !== undefined && excelData[0]['试题题干'] !== undefined && excelData[0]['难度等级'] !== undefined && excelData[0]['题型'] !== undefined){
+    let addLength = 0
+    excelData.forEach((item, index) => {
+      let result
+      let difficulty = difficultyArray.indexOf(item['难度等级'])
+      let questionJson = {
+        questionTitle: item['试题题干']
+      }
+      let questionTitle = item['试题题干']
+      let answerTrue = []
+      let answerJson = []
+      switch (item['题型']) {
+        case '判断题':
+          if (item['答案'] === '正确') {
+            answerTrue = [0]
+          }else {
+            answerTrue = [1]
+          }
+          answerJson = [
+            {key: 0, answer: "正确"},
+            {key: 0, answer: "错误"},
+          ]
+          answerTrue = JSON.stringify(answerTrue)
+          answerJson = JSON.stringify(answerJson)
+          questionJson = JSON.stringify(questionJson)
+          result = insertQuestion(1, answerTrue, curriculumId, createBy, createTime, difficulty, '', answerJson, questionJson, 0, questionTitle)
+          addLength++
+          break;
+        case '单选题':
+          let answerJsonArray = item['试题选项'].split('##')
+          for(let i = 0; i < answerJsonArray.length; i++) {
+            answerJson[i] = {
+              key: i,
+              answer: answerJsonArray[i]
+            }
+          }
+          answerTrue = [item['答案'].charCodeAt() - 65]
+          answerTrue = JSON.stringify(answerTrue)
+          answerJson = JSON.stringify(answerJson)
+          questionJson = JSON.stringify(questionJson)
+          result = insertQuestion(1, answerTrue, curriculumId, createBy, createTime, difficulty, '', answerJson, questionJson, 2, questionTitle)
+          addLength++
+          break;
+        case '多选题':
+          let mulAnswerJsonArray = item['试题选项'].split('##')
+          let mulAnswerTrueArray = item['答案'].split('')
+          for(let i = 0; i < mulAnswerJsonArray.length; i++) {
+            answerJson[i] = {
+              key: i,
+              answer: mulAnswerJsonArray[i]
+            }
+          }
+          for (let i = 0; i < mulAnswerTrueArray.length; i++) {
+            answerTrue[i] = mulAnswerTrueArray[i].charCodeAt() - 65
+          }
+          answerTrue = JSON.stringify(answerTrue)
+          answerJson = JSON.stringify(answerJson)
+          questionJson = JSON.stringify(questionJson)
+          result = insertQuestion(2, answerTrue, curriculumId, createBy, createTime, difficulty, '', answerJson, questionJson, 0, questionTitle)
+          addLength++
+          break;
+        default:
+          break;
+      }
+    })
+    const successData = new SuccessModel(`成功添加${addLength}条数据`)
+    res.json(successData)
+    
+  }else {
+    const errorData =  new ErrorModel('Excel内容有误')
+    res.json(errorData)
+  }
 })
 
 module.exports = router
