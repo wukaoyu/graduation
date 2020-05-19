@@ -50,12 +50,15 @@ const queryQuestionPage = (curriculumId, questionTitle, difficulty, type, pageSi
   let count = 0
   if (type) {
     sql += `and a.type = ${type} `
+    countSql += `and type = ${type} `
   }
   if (difficulty > -1) {
     sql += `and a.difficulty = ${difficulty} `
+    countSql += `and difficulty = ${difficulty} `
   }
   if (questionTitle) {
     sql += `and a.questionTitle like '%${questionTitle}%' `
+    countSql += `and questionTitle like '%${questionTitle}%' `
   }
   sql += `order by a.id desc`
   if (pageSize && current) {
@@ -147,6 +150,7 @@ const updataQuestion = (id, answerTrue, difficulty = -1, imgUrl, answerJson, que
   }
   sql = sql.substring(0, sql.length - 1)
   sql += ` WHERE id = ${id}`
+  console.log(sql)
   return exec(sql).then(row => {
       return row || {}
   })
@@ -230,9 +234,9 @@ const upDataTestPaper = (name, fullMarks, rules, id) => {
  */
 const deleteTestPaper = (id) => {
   let sql = `DELETE FROM testPaper WHERE id = ${id}`
-    return exec(sql).then(row => {
-        return row || {}
-    })
+  return exec(sql).then(row => {
+      return row || {}
+  })
 }
 
 /**
@@ -297,6 +301,17 @@ const queryChooseQuestion = (paperId, curriculumId, questionTitle, difficulty, t
   })
 }
 
+/**
+ * 删除某门课程的全部题目
+ * @param {*} courseId 课程id
+ */
+const deleteAllCourseQuetion = (courseId) => {
+  let sql = `DELETE FROM question WHERE curriculumId = ${courseId} and (type=1 or type=2) `
+  return exec(sql).then(row => {
+    return row || {}
+  })
+}
+
 module.exports = {
   queryCoursePage,
   queryQuestionPage,
@@ -308,5 +323,6 @@ module.exports = {
   upDataTestPaper,
   deleteTestPaper,
   queryTestPaperId,
-  queryChooseQuestion
+  queryChooseQuestion,
+  deleteAllCourseQuetion
 }

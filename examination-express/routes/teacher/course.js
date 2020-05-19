@@ -12,7 +12,8 @@ const {
   upDataTestPaper,
   deleteTestPaper,
   queryTestPaperId,
-  queryChooseQuestion
+  queryChooseQuestion,
+  deleteAllCourseQuetion
 } = require("../../controller/teacher/course")
 const { nowDate } = require("../../public/utils/main")
 const XLSX= require('xlsx');
@@ -216,18 +217,19 @@ router.post('/queryChooseQuestion', (req, res) => {
 router.post('/fileInsertQuestion', (req, res) => {
   let excelFile = req.files.file.data;
   let excelData = [];
-  let nowSex = []
   const workbook = XLSX.read(excelFile);
   const sheetNames = workbook.SheetNames[0];
   const createBy = global.userInfo.id
   const curriculumId = req.body.curriculumId    
   const createTime = nowDate()
+  
   // console.log(workbook.Sheets[sheetNames])
   if (workbook.Sheets.hasOwnProperty(sheetNames)) {
       fromTo = workbook.Sheets[sheetNames]['!ref'];
       //解析excel文件得到数据
       excelData = excelData.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames]));
   }
+  deleteAllCourseQuetion(curriculumId)
   let difficultyArray = ['简单', '中等', '难', '非常困难']
   if (excelData[0]['答案'] !== undefined && excelData[0]['试题题干'] !== undefined && excelData[0]['难度等级'] !== undefined && excelData[0]['题型'] !== undefined){
     let addLength = 0
@@ -249,7 +251,7 @@ router.post('/fileInsertQuestion', (req, res) => {
           }
           answerJson = [
             {key: 0, answer: "正确"},
-            {key: 0, answer: "错误"},
+            {key: 0, answer: "错误"}
           ]
           answerTrue = JSON.stringify(answerTrue)
           answerJson = JSON.stringify(answerJson)
@@ -269,7 +271,7 @@ router.post('/fileInsertQuestion', (req, res) => {
           answerTrue = JSON.stringify(answerTrue)
           answerJson = JSON.stringify(answerJson)
           questionJson = JSON.stringify(questionJson)
-          result = insertQuestion(1, answerTrue, curriculumId, createBy, createTime, difficulty, '', answerJson, questionJson, 2, questionTitle)
+          result = insertQuestion(1, answerTrue, curriculumId, createBy, createTime, difficulty, '', answerJson, questionJson, 0, questionTitle)
           addLength++
           break;
         case '多选题':

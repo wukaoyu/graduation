@@ -205,9 +205,9 @@ class ShortAnswerEditor extends React.Component {
   // 标题赋值
   changeTitle = e => {
     let newQuestionData = JSON.parse(JSON.stringify(this.state.addOrEditorData))
-    newQuestionData.questionTitle = e.target.value
+    newQuestionData.questionTitle = e.target.value.replace(/"/g,`&quot;`)
     newQuestionData.questionJson = {
-      questionTitle: e.target.value
+      questionTitle: e.target.value.replace(/"/g,`&quot;`)
     }
     this.setState({
       addOrEditorData: newQuestionData
@@ -251,7 +251,7 @@ class ShortAnswerEditor extends React.Component {
   // 改变参考答案内容
   changeAnswer = (e, index) => {
     let newAnswertrue = JSON.parse(JSON.stringify(this.state.questionData.answerTrue))
-    newAnswertrue[index].answer = e.target.value
+    newAnswertrue[index].answer = e.target.value.replace(/"/g,`&quot;`)
     this.setState({
       questionData: {
         ...this.state.questionData,

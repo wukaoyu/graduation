@@ -364,7 +364,7 @@ class CompletionEditor extends React.Component {
   // 修改题目内容
   changeQuestionTitle = (index, e) => {
     let newQuestion = JSON.parse(JSON.stringify(this.state.questionData.questionJson))
-    newQuestion[index].title = e.target.value
+    newQuestion[index].title = e.target.value.replace(/"/g,`&quot;`)
     this.setState({
       questionData: {
         ...this.state.questionData,
@@ -375,7 +375,7 @@ class CompletionEditor extends React.Component {
   // 修改参考答案内容
   changeAnswerTitle = (index, answerIndex, e) => {
     let newAnswer = JSON.parse(JSON.stringify(this.state.questionData.answerTrue))
-    newAnswer[index][answerIndex].text = e.target.value
+    newAnswer[index][answerIndex].text = e.target.value.replace(/"/g,`&quot;`)
     this.setState({
       questionData: {
         ...this.state.questionData,

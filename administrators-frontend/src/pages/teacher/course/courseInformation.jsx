@@ -23,7 +23,6 @@ const history = createHistory()
 class courseInformaition extends React.Component {
   constructor(props) {
     super(props)
-    console.log(props)
     let paramData = {}, searchArray = this.props.location.search.substr(1).split('&')
     searchArray.forEach(item => {
     let newArray = item.split('=')
@@ -43,7 +42,8 @@ class courseInformaition extends React.Component {
       editorData: {},
       fileVisible: false,
       fileList:[],
-      isFileLoading: false
+      isFileLoading: false,
+      sureGetNewQuestion: false
     }
   }
 
@@ -200,7 +200,7 @@ class courseInformaition extends React.Component {
                   <a href="http://wkydegraduation.oss-cn-beijing.aliyuncs.com/questions.xls" style={{margin: '0 8px'}}>
                     <Button type="primary">下载模板</Button>
                   </a>
-                  <Button type="primary" loading={this.state.isFileLoading} onClick={() => this.fileUpload()}>上传文件</Button>
+                  <Button type="primary" onClick={() => this.fileUpload()}>上传文件</Button>
               </div>
           }>
           <Dragger
@@ -213,6 +213,17 @@ class courseInformaition extends React.Component {
                 </p>
                 <p className="ant-upload-text">单击或拖动Excel文件到此区域上传文件</p>
             </Dragger>
+        </Modal>
+        <Modal title={'提醒！'}
+        visible={this.state.sureGetNewQuestion}
+        footer={
+          <div>
+              <Button onClick={() => this.handOpenOrCloseModel('sureGetNewQuestion', false)}>取消</Button>
+              <Button type="primary" loading={this.state.isFileLoading} onClick={() => this.sureUpdataNewQuestion()}>确认</Button>
+          </div>
+        }
+        onCancel={() => this.handOpenOrCloseModel('sureGetNewQuestion', false)}>
+          本次导入会覆盖原有的单选题和多选题，且数据无法恢复，确认要导入吗？
         </Modal>
         <Modal
         visible={this.state.addOrEditorQuestion}
@@ -258,6 +269,34 @@ class courseInformaition extends React.Component {
           item.answerJson = JSON.parse(item.answerJson)
           item.answerTrue = JSON.parse(item.answerTrue)
           item.questionJson = JSON.parse(item.questionJson)
+          item.questionTitle = item.questionTitle.replace(/&quot;/g,`"`)
+          switch (item.type) {
+            case 1:
+            case 2: 
+              item.questionJson.questionTitle = item.questionJson.questionTitle.replace(/&quot;/g,`"`)
+              item.answerJson.forEach(answerJsonItem => {
+                answerJsonItem.answer = answerJsonItem.answer.replace(/&quot;/g,`"`)
+              })
+              break;
+            case 3:
+              item.questionJson.forEach(questionJsonItem => {
+                questionJsonItem.title = questionJsonItem.title.replace(/&quot;/g,`"`)
+              })
+              item.answerTrue.forEach(answerTrueItem => {
+                answerTrueItem.forEach(answerTrueSecondItem => {
+                  answerTrueSecondItem = answerTrueSecondItem.text.replace(/&quot;/g,`"`)
+                })
+              })
+              break;
+            case 4:
+              item.questionJson.questionTitle = item.questionJson.questionTitle.replace(/&quot;/g,`"`)
+              item.answerTrue.forEach(answerTrueItem => {
+                answerTrueItem.answer = answerTrueItem.answer.replace(/&quot;/g,`"`)
+              })
+              break;
+            default:
+              break;
+          }
         })
         let newPageData = Object.assign(this.state.pageData, {total: res.data.count})
           this.setState({
@@ -317,10 +356,17 @@ class courseInformaition extends React.Component {
       }
     }
   }
+  fileUpload = () => {
+    if (this.state.fileList.length) {
+      this.handOpenOrCloseModel('sureGetNewQuestion', true)
+    }else {
+      message.warning('请选择文件')
+    }
+  }
   /**
    * 上传文件
    */
-  fileUpload = () => {
+  sureUpdataNewQuestion = () => {
     let formData = new FormData()
     formData.append('file', this.state.fileList[0])
     formData.append('curriculumId', this.state.params.id)
@@ -336,6 +382,7 @@ class courseInformaition extends React.Component {
         message.success(res.data)
         this.funQueryQuestionPage()
         this.handOpenOrCloseModel('fileVisible', false)
+        this.handOpenOrCloseModel('sureGetNewQuestion', false)
       }
     })
   }

@@ -542,7 +542,6 @@ class ExaminationMain extends React.Component {
     item.startTimeHour = item.startTime.split(' ')[1]
     item.endTimeDate = item.endTime.split(' ')[0]
     item.endTimeHour = item.endTime.split(' ')[1]
-    console.log(item)
     this.setState({
       examinationData: item
     },() => {
