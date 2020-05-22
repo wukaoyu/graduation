@@ -2,7 +2,7 @@ import React from 'react';
 import ScrollView from 'react-custom-scrollbars'
 import QueueAnim from 'rc-queue-anim';
 import { queryCoursePage, insertCoures, deleteCourse, updataCouerse } from 'api/admin/course'
-import { imgUpload } from 'api/utilsApi';
+import { uploadLocalPicture } from 'api/utilsApi';
 import { Card, Input, Button, Modal, message, Popover, Upload } from 'antd' 
 import CreateForm from 'components/formComponent/index.jsx'
 import { DeleteOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons'
@@ -194,11 +194,11 @@ class Course extends React.Component {
     if (this.state.editorData.id) {
       data.id = this.state.editorData.id
       if (this.state.isUpload) {
-        imgUpload({imgfiles: this.state.imageUrl}).then(res => {
+        uploadLocalPicture({imgData: this.state.imageUrl}).then(res => {
           if (res.status !== 100) {
             message.error(res.msg)
           }else {
-            data.coverImage = res.imageUrl
+            data.coverImage = res.result.imageUrl
           }
           updataCouerse(data).then(res => {
             if (res.errno === 0) {
@@ -208,21 +208,22 @@ class Course extends React.Component {
             }
           })
         })
+      }else {
+        updataCouerse(data).then(res => {
+          if (res.errno === 0) {
+            this.handOpenOrCloseModel('addOrEditorCourseModel', false)
+            message.success('修改成功');
+            this.funQueryCoursePage()
+          }
+        })
       }
-      updataCouerse(data).then(res => {
-        if (res.errno === 0) {
-          this.handOpenOrCloseModel('addOrEditorCourseModel', false)
-          message.success('修改成功');
-          this.funQueryCoursePage()
-        }
-      })
     }else {
       if (this.state.imageUrl) {
-        imgUpload({imgfiles: this.state.imageUrl}).then(res => {
+        uploadLocalPicture({imgData: this.state.imageUrl}).then(res => {
           if (res.status !== 100) {
             message.error(res.msg)
           }else {
-            data.coverImage = res.imageUrl
+            data.coverImage = res.result.imageUrl
           }
           insertCoures(data).then(res => {
             if (res.errno === 0) {

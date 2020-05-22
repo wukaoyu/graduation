@@ -26,3 +26,11 @@ export async function quertCourseExam(data = {}) {
   })
 }
 
+// 查询不同课程的考试安排
+export async function queryQuestionLength(data = {}) {
+  return request({
+    url:'/student/course/queryQuestionLength',
+    method:'POST',
+    data: data
+  })
+}

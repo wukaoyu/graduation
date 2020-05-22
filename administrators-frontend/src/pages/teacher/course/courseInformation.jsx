@@ -1,8 +1,7 @@
 import React from 'react';
 import { Pagination, Input, Select, Button, Modal, message, Upload, Icon } from 'antd'
 import { queryQuestionPage, insertQuestion, deleteQuestion, updataQuestion, fileInsertQuestion } from 'api/teacher/course'
-import { imgUpload } from 'api/utilsApi';
-import QueueAnim from 'rc-queue-anim';
+import { uploadLocalPicture } from 'api/utilsApi';
 import SingleElection from './components/singleElection'
 import SingleElectionEditor from './components/singleElectionEditor'
 import MultipleChoice from './components/multipleChoice'
@@ -113,12 +112,6 @@ class courseInformaition extends React.Component {
               <Button onClick={() => this.goBack()}>返回</Button>
             </div>
           </div>
-          <QueueAnim
-            style={{marginBottom:'20px'}}
-            duration={600}
-            animConfig={[
-              { opacity: [1, 0], translateX: [0, 100] }
-            ]}>
             {
               this.state.questionDataList.map((item, index) => {
                 let comp = ''
@@ -179,13 +172,12 @@ class courseInformaition extends React.Component {
                     break;
                 }
                 return (
-                  <div key={-item.id} style={{marginTop:'10px'}}>
+                  <div key={-item.id} style={{marginTop:'10px', marginBottom: '20px'}}>
                     { comp }
                   </div>
                 )
               })
             }
-          </QueueAnim>
         </div>
         <div className='bottom'>  
           <Pagination {...paginationProps}></Pagination>
@@ -312,9 +304,9 @@ class courseInformaition extends React.Component {
     val.answerTrue = JSON.stringify(val.answerTrue)
     val.questionJson = JSON.stringify(val.questionJson)
     if (val.imgUrl) {
-      imgUpload({imgfiles: val.imgUrl}).then(res => {
+      uploadLocalPicture({imgData: val.imgUrl}).then(res => {
         if (res.status === 100) {
-          val.imgUrl = res.imageUrl
+          val.imgUrl = res.result.imageUrl
           if (val.id) {
             updataQuestion(val).then(res => {
               if (res.errno === 0) {

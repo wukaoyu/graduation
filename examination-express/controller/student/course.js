@@ -16,7 +16,7 @@ const queryStudentCourse = () => {
  * @param {*} courseId 
  */
 const queryPracticeQuestion = (courseId) => {
-  let sql = `SELECT * FROM question WHERE curriculumId = ${courseId}  and isTest !=1 and type=1 or type=2`
+  let sql = `SELECT * FROM question WHERE curriculumId = ${courseId}  and isTest !=1 and (type=1 or type=2)`
   let courseSql = `SELECT * FROM curriculum WHERE id = ${courseId}`
   let courseName 
   exec(courseSql).then(row => {

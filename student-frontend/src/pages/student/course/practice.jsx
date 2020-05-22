@@ -1,10 +1,9 @@
 import React from 'react'
-import { queryPracticeQuestion } from 'api/course'
+import { queryPracticeQuestion, queryQuestionLength } from 'api/course'
 import SingleElection from './editorPaperComponents/singleElection'
 import MultipleChoice from './editorPaperComponents/multipleChoice'
-import QueueAnim from 'rc-queue-anim';
 import './index.less'
-import { Button, notification } from 'antd';
+import { Button, notification, Card, InputNumber, message } from 'antd';
 
 const createHistory = require("history").createHashHistory
 const history = createHistory()
@@ -24,66 +23,109 @@ class practice extends React.Component {
       answerList: [],
       isEnd: false,
       allMarks: 0,
-      isShowBtn: true
+      isShowBtn: true,
+      isChooseQuestion: true,
+      questionRule: {},
+      questionMax: {
+        singLength: 0,
+        multipleLength: 0
+      }
     }
   }
 
   componentDidMount() {
-    this.funQueryPracticeQuestion()
+    this.funQueryQuestionLength()
   }
 
   render() {
     return (
       <div>
-        <div className='paper-head'>
-          {this.state.courseName}
-        </div>
         {
-          this.state.isEnd ? 
-          <div className='paper-marks'>
-            得分：{this.state.allMarks}
-          </div> : ''
-        }
-        <QueueAnim
-          style={{marginBottom:'20px'}}
-          duration={600}
-          animConfig={[
-            { opacity: [1, 0], translateX: [0, 100] }
-          ]}>
-          {
-            this.state.questionDataList.map((item, index) => {
-              let comp = ''
-              item.index = index
-              switch (item.type) {
-                case 1:
-                  comp = <SingleElection questionData={item} isEnd={this.state.isEnd} chanegAnswer={(val) => this.changeAnswer(val)}/>
-                  break;
-                case 2:
-                  comp = <MultipleChoice questionData={item} isEnd={this.state.isEnd} chanegAnswer={(val) => this.changeAnswer(val)}/>
-                  break;
-                default:
-                  break;
-              }
-              return (
-                <div key={index} style={{marginTop:'10px'}}>
-                  { comp }
+          this.state.isChooseQuestion ? 
+          <div>
+            <Card title="题目数量选择">
+              <div className='chooseBox'>
+                <div className='chooseNum'>
+                  <div>
+                    单选题数量：
+                  </div>
+                  <InputNumber 
+                  onBlur={(e) => this.changeQuestion(e, 'singleNum')}
+                  min={this.state.questionMax.singLength > 5 ? 5 : this.state.questionMax.singLength} 
+                  max={this.state.questionMax.singLength} ></InputNumber>
                 </div>
-              )
-            })
-          }
-          <div key={this.state.questionDataList.length} style={{marginTop: '20px'}}>
-            <Button type='primary' onClick={() => this.correction()} style={{marginRight: '10px'}}>
-              { this.state.isEnd ? '再练一次' : '提交'} 
-            </Button>
-            <Button onClick={() => this.goBack()}>返回</Button>
+                <div className='chooseNum'>
+                  <div>
+                    多选题数量：
+                  </div>
+                  <InputNumber 
+                  onBlur={(e) => this.changeQuestion(e, 'multipleNum')}
+                  min={this.state.questionMax.multipleLength > 5 ? 5 : this.state.questionMax.multipleLength} 
+                  max={this.state.questionMax.multipleLength} ></InputNumber>
+                </div>
+                <Button onClick={() => this.goBack()}>返回</Button>
+                <Button type='primary' style={{marginLeft: '10px'}} onClick={() => this.sureQuestionLength()}>确认</Button>
+              </div>
+            </Card>
+          </div> : 
+          <div>
+            <div className='paper-head'>
+              {this.state.courseName}
+            </div>
+            {
+              this.state.isEnd ? 
+              <div className='paper-marks'>
+                得分：{this.state.allMarks}
+              </div> : ''
+            }
+            {
+              this.state.questionDataList.map((item, index) => {
+                let comp = ''
+                item.index = index
+                switch (item.type) {
+                  case 1:
+                    comp = <SingleElection questionData={item} isEnd={this.state.isEnd} chanegAnswer={(val) => this.changeAnswer(val)}/>
+                    break;
+                  case 2:
+                    comp = <MultipleChoice questionData={item} isEnd={this.state.isEnd} chanegAnswer={(val) => this.changeAnswer(val)}/>
+                    break;
+                  default:
+                    break;
+                }
+                return (
+                  <div key={index} style={{marginTop:'10px'}}>
+                    { comp }
+                  </div>
+                )
+              })
+            }
+            <div key={this.state.questionDataList.length} style={{marginTop: '20px'}}>
+              <Button type='primary' onClick={() => this.correction()} style={{marginRight: '10px'}}>
+                { this.state.isEnd ? '再练一次' : '提交'} 
+              </Button>
+              <Button onClick={() => this.goBack()}>返回</Button>
+            </div>
           </div>
-        </QueueAnim>
+        }
       </div>
     )
   }
-
+  funQueryQuestionLength = () => {
+    let data = { courseId: this.state.params.id }
+    queryQuestionLength(data).then(res => {
+      if (res.errno === 0) {
+        this.setState({
+          questionMax: res.data
+        })
+      }
+    })
+  }
   funQueryPracticeQuestion = () => {
-    queryPracticeQuestion({courseId: this.state.params.id}).then(res => {
+    let data = {
+      ...this.state.questionRule,
+      courseId: this.state.params.id
+    }
+    queryPracticeQuestion(data).then(res => {
       if (res.errno === 0) {
         let questionData = res.data.row
         questionData.forEach(item => {
@@ -99,6 +141,27 @@ class practice extends React.Component {
       }
     })
   }
+  sureQuestionLength = () => {
+    if (this.state.questionRule.singleNum && this.state.questionRule.multipleNum) {
+      this.setState({
+        isChooseQuestion: false
+      },() => {
+        this.funQueryPracticeQuestion()
+      })
+    }else {
+      message.warning('请输入题目数量')
+    }
+  }
+  changeQuestion = (e, name) => {
+    let newData = {
+      ...this.state.questionRule,
+      [name]: parseInt(e.target.value)
+    }
+    console.log(newData)
+    this.setState({
+      questionRule: newData
+    })
+  }
   changeAnswer = answer => {
     let newAnswerList = this.state.answerList
     newAnswerList[answer.key] = answer.val
@@ -108,23 +171,32 @@ class practice extends React.Component {
   }
   correction = () => {
     if (this.state.isEnd) {
-      history.go(0)
+      this.setState({
+        isEnd: false,
+      },() => {
+        this.funQueryPracticeQuestion()
+      })
     }else {
-      let oneMarks = 100 / this.state.questionDataList.length
+      let oneMarks = 100 / (this.state.questionRule.singleNum + this.state.questionRule.multipleNum * 2)
       let myAnswer = this.state.answerList
-      let myAnswerTrueLength = 0
+      let myAnswerTrueSingleLength = 0
+      let myAnswerTrueMultipleLength = 0
       let myMarks = 0
       let questionDataList = this.state.questionDataList
       questionDataList.forEach((item, index) => {
         if (JSON.stringify(item.answerTrue) === JSON.stringify(myAnswer[index])) {
-          myAnswerTrueLength++
+          if (item.type === 1) {
+            myAnswerTrueSingleLength++
+          }else {
+            myAnswerTrueMultipleLength++
+          }
           item.isTrue = true
         }else {
           item.isTrue = false
         }
       })
       if (this.state.questionDataList.length) {
-        myMarks = myAnswerTrueLength * oneMarks
+        myMarks = myAnswerTrueSingleLength * oneMarks + myAnswerTrueMultipleLength * oneMarks * 2
       }
       notification.success({
         message: '本次测试得分：' + myMarks

@@ -39,6 +39,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/serverImage', express.static(path.join(__dirname, 'serverImage')));
 
 app.use(function (req, res, next) {
   if (req.url != '/api/users/login') {

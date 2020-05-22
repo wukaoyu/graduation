@@ -55,4 +55,23 @@ router.post('/imgUpload', function(req, res, next){
   });
 });
 
+/* 上传图片到本地 */
+router.post('/uploadLocalPicture', (req, res) => {
+  //接收前台POST过来的base64
+  var imgData = req.body.imgData;
+  //过滤data:URL
+  var base64Data = imgData.replace(/^data:image\/\w+;base64,/, "");
+  var dataBuffer = new Buffer(base64Data, 'base64');
+  let time = new Date().getTime();
+  let num = Math.floor(Math.random() * 8999 + 10000);
+  let imageName = `${time}_${num}.png`
+  fs.writeFile(`serverImage/${imageName}`, dataBuffer, function(err) {
+      if(err){
+        res.send(err);
+      }else{
+        return res.send({'status': 100, 'msg': '图片上传成功', result: {imageUrl: `http://localhost:5000/serverImage/${imageName}`}});
+      }
+  });
+});
+
 module.exports = router;

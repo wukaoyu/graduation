@@ -3,7 +3,7 @@ import CreateForm from 'components/formComponent/index.jsx'
 import { Radio, Upload, Button, message, Modal, Input } from 'antd'
 import { LoadingOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons'
 import { updataPersonal, updataPassword } from 'api/login'
-import { imgUpload } from 'api/utilsApi'
+import { uploadLocalPicture } from 'api/utilsApi'
 import './index.less'
 class teacherPersonal extends React.Component {
   constructor(props) {
@@ -225,9 +225,9 @@ class teacherPersonal extends React.Component {
       sex: val.sex,
     }
     if (this.state.imageUrl !== this.state.userInfo.headPortraitUrl) {
-      imgUpload({imgfiles:this.state.imageUrl}).then(res => {
+      uploadLocalPicture({imgData:this.state.imageUrl}).then(res => {
         if (res.status === 100) {
-          data.headPortraitUrl = res.imageUrl
+          data.headPortraitUrl = res.result.imageUrl
           updataPersonal(data).then(res => {
             if (res.errno === 0) {
               message.success('修改成功')
