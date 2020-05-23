@@ -5,6 +5,8 @@ import 'es6-promise'
 let commonUrl
 if (process.env.NODE_ENV === 'development') {
   commonUrl = 'http://localhost:5000/api'
+}else if  (process.env.NODE_ENV === 'production') {
+  commonUrl = 'http://localhost:5000/api'
 }
 export const baseUrl = () => {
   return commonUrl

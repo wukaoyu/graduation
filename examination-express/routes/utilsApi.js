@@ -69,7 +69,7 @@ router.post('/uploadLocalPicture', (req, res) => {
       if(err){
         res.send(err);
       }else{
-        return res.send({'status': 100, 'msg': '图片上传成功', result: {imageUrl: `http://localhost:5000/serverImage/${imageName}`}});
+        return res.send({'status': 100, 'msg': '图片上传成功', result: {imageUrl: `${global.baseUrl}/serverImage/${imageName}`}});
       }
   });
 });

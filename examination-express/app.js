@@ -21,6 +21,14 @@ var studentExamination = require('./routes/student/examination')
 
 var app = express();
 
+const ENV = process.env.NODE_ENV
+
+if (ENV === 'production') {
+  global.baseUrl = ''
+}else if (ENV === 'development') {
+  global.baseUrl = 'http://localhost:5000'
+}
+
 app.all('*', function (req, res, next) {    
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Content-type,token");

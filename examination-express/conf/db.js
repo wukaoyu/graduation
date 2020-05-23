@@ -3,7 +3,7 @@ const env = process.env.NODE_ENV
 //配置
 let MYSQL_CONF
 
-if (env === 'dev') {
+if (env === 'development') {
     MYSQL_CONF = {
         host: "localhost",
         user: "root",
