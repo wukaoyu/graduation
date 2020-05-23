@@ -32,6 +32,7 @@ import TeacherPersonal from './components/personal/index'
 
 import jwt_decode from 'jwt-decode'
 
+const baseEnv = process.env.NODE_ENV
 export default class Router extends React.Component {
     constructor(props) {
         super(props)
@@ -43,6 +44,11 @@ export default class Router extends React.Component {
         }else {
             const userInfo = jwt_decode(localStorage.getItem('token')).data
             window.userInfo = userInfo
+        }
+        if (baseEnv === 'development') {
+            window.baseUrl = 'http://localhost:5000'
+        }else if (baseEnv === 'production') {
+            window.baseUrl = ''
         }
     }
     render() {

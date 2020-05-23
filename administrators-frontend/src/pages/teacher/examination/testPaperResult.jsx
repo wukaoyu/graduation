@@ -23,7 +23,8 @@ class TestPapeResult extends React.Component {
       },
       studentList: [],
       examData: {},
-      releaseVisible: false
+      releaseVisible: false,
+      baseUrl: window.baseUrl
     }
   }
 
@@ -61,7 +62,7 @@ class TestPapeResult extends React.Component {
                       }>
                         <div className="studentMain">
                           <div className='studentResult-headList'>
-                            <img className='studentMain-head-img' src={item.headPortraitUrl || "http://wkydegraduation.oss-cn-beijing.aliyuncs.com/image/headPortraitUrl.png"} alt="head"/>
+                            <img className='studentMain-head-img' src={item.headPortraitUrl || `${this.state.baseUrl}/image/headPortraitUrl.png`} alt="head"/>
                           </div>
                           <div className='studentResult-sort'>
                             <div className='studentResult-list-key'>排名：</div>

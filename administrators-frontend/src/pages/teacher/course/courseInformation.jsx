@@ -42,7 +42,8 @@ class courseInformaition extends React.Component {
       fileVisible: false,
       fileList:[],
       isFileLoading: false,
-      sureGetNewQuestion: false
+      sureGetNewQuestion: false,
+      baseUrl: window.baseUrl
     }
   }
 
@@ -189,7 +190,7 @@ class courseInformaition extends React.Component {
           footer={
               <div>
                   <Button onClick={() => this.handOpenOrCloseModel('fileVisible', false)}>取消</Button>
-                  <a href="http://wkydegraduation.oss-cn-beijing.aliyuncs.com/questions.xls" style={{margin: '0 8px'}}>
+                  <a href={`${this.state.baseUrl}/api/utilsApi/download?file=questions.xls`} style={{margin: '0 8px'}}>
                     <Button type="primary">下载模板</Button>
                   </a>
                   <Button type="primary" onClick={() => this.fileUpload()}>上传文件</Button>

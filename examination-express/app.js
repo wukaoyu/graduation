@@ -38,11 +38,11 @@ app.use(FileUpload());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/serverImage', express.static(path.join(__dirname, 'serverImage')));
 
 app.use(function (req, res, next) {
-  if (req.url != '/api/users/login') {
+  if (req.url != '/api/users/login' && req.method === 'POST') {
       let token = req.headers.token;
       let jwt = new JwtUtil(token);
       let result = jwt.verifyToken();

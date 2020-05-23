@@ -74,4 +74,9 @@ router.post('/uploadLocalPicture', (req, res) => {
   });
 });
 
+router.get('/download', function(req, res, next) {
+  let filename = __dirname + '/downFile/' + req.query.file 
+  res.download(filename)  
+})
+
 module.exports = router;

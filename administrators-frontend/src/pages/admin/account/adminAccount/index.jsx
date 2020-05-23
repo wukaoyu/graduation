@@ -25,7 +25,8 @@ class AdminAccount extends React.Component {
             userInfo: window.userInfo,
             isShowTeacherForm: true,
             fileVisible: false,
-            fileList: []
+            fileList: [],
+            baseUrl: window.baseUrl
         }
     }
 
@@ -186,7 +187,7 @@ class AdminAccount extends React.Component {
                 footer={
                     <div>
                         <Button onClick={this.handCloseFile}>取消</Button>
-                        <a href="https://wkydegraduation.oss-cn-beijing.aliyuncs.com/teacherAccount.xls" style={{margin: '0 8px'}}>
+                        <a href={`${this.state.baseUrl}/api/utilsApi/download?file=teacherAccount.xls`} style={{margin: '0 8px'}}>
                             <Button type="primary" >下载模板</Button>
                         </a>
                         <Button type="primary" onClick={this.fileUpload}>上传文件</Button>

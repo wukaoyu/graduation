@@ -4,7 +4,8 @@ import './header.less'
 export default class Header extends React.Component{
     UNSAFE_componentWillMount(){
         this.setState({
-            userInfo:window.userInfo
+            userInfo:window.userInfo,
+            baseUrl: window.baseUrl
         })
     }
     loginOut = () => {
@@ -16,7 +17,7 @@ export default class Header extends React.Component{
                 <Row className="header-top">
                         <Col span={20} style={{display:'flex',alignItems:'center'}}>
                             <div className='header-top-headPortraitUrl'>
-                               <img src={this.state.userInfo.headPortraitUrl || 'http://wkydegraduation.oss-cn-beijing.aliyuncs.com/image/headPortraitUrl.png'} alt='头像'/>
+                               <img src={this.state.userInfo.headPortraitUrl || `${this.state.baseUrl}/public/image/headPortraitUrl.png`} alt='头像'/>
                             </div>
                             <span>欢迎，{this.state.userInfo.username}</span>
                         </Col>

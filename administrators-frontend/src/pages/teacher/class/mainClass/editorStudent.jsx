@@ -37,7 +37,8 @@ class ClassEditorStudent extends React.Component {
       isScroll: true,
       CreateForm: '',
       fileVisible: false,
-      fileList:[]
+      fileList:[],
+      baseUrl: window.baseUrl
     }
     this.funQueryStudentPage()
   }
@@ -70,12 +71,12 @@ class ClassEditorStudent extends React.Component {
                       title={item.username}
                       extra={
                         item.sex === 1 ? 
-                        <img className='studentHeadImg' src="https://wkydegraduation.oss-cn-beijing.aliyuncs.com/image/man.png" alt="性别"/> : 
-                        <img className='studentHeadImg' src="https://wkydegraduation.oss-cn-beijing.aliyuncs.com/image/woman.png" alt="性别"/> 
+                        <img className='studentHeadImg' src={`${this.state.baseUrl}/public/image/man.png`} alt="性别"/> : 
+                        <img className='studentHeadImg' src={`${this.state.baseUrl}/public/image/woman.png`} alt="性别"/> 
                       }>
                         <div className="studentMain">
                           <div className='studentMain-head'>
-                            <img className='studentMain-head-img' src={item.headPortraitUrl || "http://wkydegraduation.oss-cn-beijing.aliyuncs.com/image/headPortraitUrl.png"} alt="head"/>
+                            <img className='studentMain-head-img' src={item.headPortraitUrl || `${this.state.baseUrl}/public/image/headPortraitUrl.png`} alt="head"/>
                           </div>
                           <div>
                             <div className='studentMain-describe'>
@@ -182,7 +183,7 @@ class ClassEditorStudent extends React.Component {
           footer={
               <div>
                   <Button onClick={() => this.handOpenOrCloseModel('fileVisible', false)}>取消</Button>
-                  <a href="https://wkydegraduation.oss-cn-beijing.aliyuncs.com/teacherAccount.xls" style={{margin: '0 8px'}}>
+                  <a href={`${this.state.baseUrl}/api/utilsApi/download?file=teacherAccount.xls`} style={{margin: '0 8px'}}>
                       <Button type="primary" >下载模板</Button>
                   </a>
                   <Button type="primary" onClick={this.fileUpload}>上传文件</Button>
