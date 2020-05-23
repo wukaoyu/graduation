@@ -62,7 +62,7 @@ class TestPapeResult extends React.Component {
                       }>
                         <div className="studentMain">
                           <div className='studentResult-headList'>
-                            <img className='studentMain-head-img' src={item.headPortraitUrl || `${this.state.baseUrl}/image/headPortraitUrl.png`} alt="head"/>
+                            <img className='studentMain-head-img' src={item.headPortraitUrl || `${this.state.baseUrl}/public/image/headPortraitUrl.png`} alt="head"/>
                           </div>
                           <div className='studentResult-sort'>
                             <div className='studentResult-list-key'>排名：</div>

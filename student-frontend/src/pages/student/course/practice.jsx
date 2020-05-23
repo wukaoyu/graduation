@@ -132,6 +132,34 @@ class practice extends React.Component {
           item.answerJson = JSON.parse(item.answerJson)
           item.answerTrue = JSON.parse(item.answerTrue)
           item.questionJson = JSON.parse(item.questionJson)
+          item.questionTitle = item.questionTitle.replace(/&quot;/g,`"`)
+          switch (item.type) {
+            case 1:
+            case 2: 
+              item.questionJson.questionTitle = item.questionJson.questionTitle.replace(/&quot;/g,`"`)
+              item.answerJson.forEach(answerJsonItem => {
+                answerJsonItem.answer = answerJsonItem.answer.replace(/&quot;/g,`"`)
+              })
+              break;
+            case 3:
+              item.questionJson.forEach(questionJsonItem => {
+                questionJsonItem.title = questionJsonItem.title.replace(/&quot;/g,`"`)
+              })
+              item.answerTrue.forEach(answerTrueItem => {
+                answerTrueItem.forEach(answerTrueSecondItem => {
+                  answerTrueSecondItem = answerTrueSecondItem.text.replace(/&quot;/g,`"`)
+                })
+              })
+              break;
+            case 4:
+              item.questionJson.questionTitle = item.questionJson.questionTitle.replace(/&quot;/g,`"`)
+              item.answerTrue.forEach(answerTrueItem => {
+                answerTrueItem.answer = answerTrueItem.answer.replace(/&quot;/g,`"`)
+              })
+              break;
+            default:
+              break;
+          }
         })
         this.setState({
           questionDataList: questionData,
@@ -157,7 +185,6 @@ class practice extends React.Component {
       ...this.state.questionRule,
       [name]: parseInt(e.target.value)
     }
-    console.log(newData)
     this.setState({
       questionRule: newData
     })
