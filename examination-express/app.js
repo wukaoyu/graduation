@@ -21,11 +21,10 @@ var studentExamination = require('./routes/student/examination')
 
 var app = express();
 
-const ENV = process.env.NODE_ENV
-
-if (ENV === 'production') {
-  global.baseUrl = ''
-}else if (ENV === 'development') {
+const ENV = process.env.NODE_ENV || 'production'
+if (ENV === 'development') {
+  global.baseUrl = 'http://localhost:5000'
+}else if (ENV === 'production') {
   global.baseUrl = 'http://localhost:5000'
 }
 

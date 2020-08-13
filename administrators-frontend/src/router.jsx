@@ -48,7 +48,7 @@ export default class Router extends React.Component {
         if (baseEnv === 'development') {
             window.baseUrl = 'http://localhost:5000'
         }else if (baseEnv === 'production') {
-            window.baseUrl = ''
+            window.baseUrl = 'http://localhost:5000'
         }
     }
     render() {

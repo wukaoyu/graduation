@@ -1,8 +1,7 @@
-const env = process.env.NODE_ENV
+const env = process.env.NODE_ENV || 'production'
 
 //配置
 let MYSQL_CONF
-
 if (env === 'development') {
     MYSQL_CONF = {
         host: "localhost",

@@ -61,7 +61,8 @@ module.exports = (req, res) => {
       if(err) {
         return res.send({'status': -1, 'msg': '图片上传失败', result: ''});
       } else {
-        return res.send({'status': 200, 'msg': '图片上传成功', result: {url: `http://localhost:5000/serverImage/${imageName}`}});
+        console.log(global.baseUrl)
+        return res.send({'status': 200, 'msg': '图片上传成功', result: {url: `${global.baseUrl}/serverImage/${imageName}`}});
       }
     })
   })

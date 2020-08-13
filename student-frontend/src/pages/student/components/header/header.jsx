@@ -7,6 +7,7 @@ export default class Header extends React.Component{
             userInfo:window.userInfo,
             baseUrl: window.baseUrl
         })
+        console.log(process.env.NODE_ENV)
     }
     loginOut = () => {
         localStorage.removeItem('token');

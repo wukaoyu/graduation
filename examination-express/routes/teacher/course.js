@@ -237,7 +237,7 @@ router.post('/fileInsertQuestion', (req, res) => {
       let result
       let difficulty = difficultyArray.indexOf(item['难度等级'])
       let questionJson = {
-        questionTitle: item['试题题干']
+        questionTitle: item['试题题干'].replace(/"/g,`&quot;`)
       }
       let questionTitle = item['试题题干']
       let answerTrue = []
@@ -260,7 +260,7 @@ router.post('/fileInsertQuestion', (req, res) => {
           addLength++
           break;
         case '单选题':
-          let answerJsonArray = item['试题选项'].split('##')
+          let answerJsonArray = item['试题选项'].replace(/"/g,`&quot;`).split('##')
           for(let i = 0; i < answerJsonArray.length; i++) {
             answerJson[i] = {
               key: i,
@@ -275,7 +275,7 @@ router.post('/fileInsertQuestion', (req, res) => {
           addLength++
           break;
         case '多选题':
-          let mulAnswerJsonArray = item['试题选项'].split('##')
+          let mulAnswerJsonArray = item['试题选项'].replace(/"/g,`&quot;`).split('##')
           let mulAnswerTrueArray = item['答案'].split('')
           for(let i = 0; i < mulAnswerJsonArray.length; i++) {
             answerJson[i] = {

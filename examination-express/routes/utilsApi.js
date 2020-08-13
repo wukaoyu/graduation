@@ -9,8 +9,8 @@ var router = express.Router();
 
 var client = new OSS({
   region: 'oss-cn-beijing',//填写你开通的oss
-  accessKeyId: 'LTAI4FkTBVrWgTCvd59Zoju3',
-  accessKeySecret: 'e35pFXCKpepX4YYyp8hC6GFFqrWN8m'
+  accessKeyId: '#####',
+  accessKeySecret: '####'
 });
 
 var ali_oss = {

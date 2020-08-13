@@ -24,10 +24,11 @@ export default class Router extends React.Component {
             const userInfo = jwt_decode(localStorage.getItem('token')).data
             window.userInfo = userInfo
         }
+        console.log(process.env.NODE_ENV)
         if (baseEnv === 'development') {
             window.baseUrl = 'http://localhost:5000'
         }else if (baseEnv === 'production') {
-            window.baseUrl = ''
+            window.baseUrl = 'http://localhost:5000'
         }
     }
     render() {
